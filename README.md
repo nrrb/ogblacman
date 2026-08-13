@@ -4,7 +4,7 @@ Official website project for independent Chicago artist **OG Blacman**.
 
 The site is planned as a mobile-first, statically deployable artist experience that combines music and release content with interactive features designed for memorable portrait screenshots and screen recordings. The complete product and implementation specification is in [PLAN.md](./PLAN.md).
 
-Current implementation status and resume instructions are tracked in [PROGRESS.md](./PROGRESS.md).
+Start with [HANDOFF.md](./HANDOFF.md) to resume implementation. The longer implementation log remains in [PROGRESS.md](./PROGRESS.md).
 
 ## Project Status
 

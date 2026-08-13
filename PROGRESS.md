@@ -50,9 +50,9 @@ The generated release HTML contains its release-specific title, canonical URL, d
 
 ## Deployment Status
 
-Surge support is implemented but **no Surge deployment was performed before this pause**.
+The current checkpoint is deployed at `https://ogblacman.surge.sh`.
 
-To publish the first live preview from an authenticated machine:
+To publish an updated live preview from an authenticated machine:
 
 ```bash
 npm install
@@ -60,6 +60,8 @@ npm run deploy:surge
 ```
 
 Expected preview URL: `https://ogblacman.surge.sh`
+
+Surge overrides `robots.txt` on `*.surge.sh` subdomains with `Disallow: /`. This is appropriate for the preview environment; production hosting must serve the generated allow/sitemap configuration.
 
 ## Next Work
 
