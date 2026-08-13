@@ -4,9 +4,37 @@ Official website project for independent Chicago artist **OG Blacman**.
 
 The site is planned as a mobile-first, statically deployable artist experience that combines music and release content with interactive features designed for memorable portrait screenshots and screen recordings. The complete product and implementation specification is in [PLAN.md](./PLAN.md).
 
+Current implementation status and resume instructions are tracked in [PROGRESS.md](./PROGRESS.md).
+
 ## Project Status
 
-Planning and content inventory. Implementation has not started.
+Foundation implementation is in progress. The current build includes a responsive application shell, typed provisional content, static release routes, metadata, a persistent OGAmp state layer, and a Surge preview workflow.
+
+## Local Development
+
+Install dependencies and start Vite:
+
+```bash
+npm install
+npm run dev
+```
+
+Create and inspect the production static build with:
+
+```bash
+npm run build
+npm run preview
+```
+
+## Live Preview
+
+Publish the current static build to `https://ogblacman.surge.sh`:
+
+```bash
+npm run deploy:surge
+```
+
+The command builds with the Surge preview URL as the canonical site URL, generates the static-host support files, and deploys `dist/`. Surge authentication is required on the publishing machine.
 
 ## V1 Goals
 
