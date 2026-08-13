@@ -8,15 +8,15 @@ test('home presents the artist and core sections', async ({ page }) => {
   await expect(page.getByLabel('OGAmp music player')).toBeVisible()
 
   const layout = await page.evaluate(() => {
-    const gameImage = document.querySelector<HTMLImageElement>('.pixel-window img')
+    const gameScene = document.querySelector<HTMLElement>('.tree-game__scene')
     return {
       hasHorizontalOverflow: document.documentElement.scrollWidth > window.innerWidth,
-      gameImageRatio: gameImage ? gameImage.clientWidth / gameImage.clientHeight : 0,
+      gameSceneRatio: gameScene ? gameScene.clientWidth / gameScene.clientHeight : 0,
     }
   })
 
   expect(layout.hasHorizontalOverflow).toBe(false)
-  expect(layout.gameImageRatio).toBeCloseTo(1, 1)
+  expect(layout.gameSceneRatio).toBeCloseTo(0.8, 1)
 })
 
 test('release deep link renders directly with unique metadata', async ({ page }) => {
@@ -66,4 +66,26 @@ test('OGAmp selects, seeks, and restores a track without forced autoplay', async
   await expect(player.getByText('Overworld Rush', { exact: true })).toBeVisible()
   await expect(player.getByRole('button', { name: 'Play', exact: true })).toBeVisible()
   await expect(timeline).toHaveValue('42')
+})
+
+test('Tree Hugging completes, awards the target score, and resets', async ({ page }) => {
+  await page.goto('/#game')
+
+  const game = page.locator('.tree-game')
+  const hug = page.getByRole('button', { name: 'HUG', exact: true })
+  await hug.focus()
+  await page.keyboard.down('Space')
+  await page.waitForTimeout(4400)
+  await page.keyboard.up('Space')
+
+  await expect(game).toHaveAttribute('data-complete', 'true')
+  await expect(page.getByText('ROOTED IN CHICAGO')).toBeVisible()
+  const scoreText = await game.locator('.tree-game__score strong').innerText()
+  const score = Number(scoreText.replace(/[$,]/g, ''))
+  expect(score).toBeGreaterThanOrEqual(1000)
+  expect(score).toBeLessThanOrEqual(5000)
+
+  await page.getByRole('button', { name: 'Reset game' }).click()
+  await expect(game).toHaveAttribute('data-complete', 'false')
+  await expect(game.locator('.tree-game__score strong')).toHaveText('$0')
 })

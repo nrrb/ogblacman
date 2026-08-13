@@ -8,7 +8,7 @@ Current implementation status and resume instructions are tracked in [PROGRESS.m
 
 ## Project Status
 
-Foundation implementation is in progress. The current build includes a responsive application shell, typed provisional content, static release routes, metadata, a persistent OGAmp state layer, and a Surge preview workflow.
+Implementation is in progress. The current build includes a responsive application shell, typed provisional content, static release routes, metadata, a functional persistent OGAmp sample playlist, the complete Tree Hugging game loop, automated tests, and a Surge preview workflow.
 
 ## Local Development
 

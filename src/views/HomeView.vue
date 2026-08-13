@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ArrowDown, ArrowUpRight, Leaf, Radio } from '@lucide/vue'
+import { ArrowDown, ArrowUpRight, Radio } from '@lucide/vue'
 import { useHead } from '@unhead/vue'
 
 import ReleaseCard from '@/components/ReleaseCard.vue'
+import TreeHuggingGame from '@/components/TreeHuggingGame.vue'
 import { releases } from '@/content/releases'
-import { artist, placeholderImages, projectImages, siteUrl } from '@/content/site'
+import { artist, placeholderImages, siteUrl } from '@/content/site'
 import { usePageMeta } from '@/composables/usePageMeta'
 
 usePageMeta({
@@ -82,29 +83,8 @@ useHead({
   </section>
 
   <section id="game" class="section section--game">
-    <div class="container game-preview">
-      <div class="game-preview__copy">
-        <p class="eyebrow eyebrow--light">Tree Hugging</p>
-        <h2>Put down roots.</h2>
-        <p>A small tree. A little patience. A lot of growth.</p>
-        <button class="button button--light" type="button" disabled>
-          <Leaf :size="18" aria-hidden="true" />
-          Growing soon
-        </button>
-      </div>
-      <figure class="pixel-window">
-        <picture>
-          <source :srcset="projectImages.treeOptimized" type="image/webp" />
-          <img
-            :src="projectImages.tree"
-            alt="A giant pixel-art tree growing within the Chicago skyline"
-            width="1254"
-            height="1254"
-            loading="lazy"
-          />
-        </picture>
-        <figcaption><span>GROWTH</span><strong>$0</strong></figcaption>
-      </figure>
+    <div class="container">
+      <TreeHuggingGame />
     </div>
   </section>
 
