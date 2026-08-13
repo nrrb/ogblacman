@@ -11,7 +11,7 @@ export interface Release {
   artwork: string
   artworkOptimized?: string
   artworkAlt: string
-  audioUrl: string | null
+  previewTrackSlug: string | null
   description: string
   platformLinks: PlatformLink[]
   seo: {
@@ -19,6 +19,15 @@ export interface Release {
     description: string
     image: string
   }
+  provisional?: boolean
+}
+
+export interface Track {
+  slug: string
+  title: string
+  artist: string
+  audioUrl: string
+  durationSeconds: number
   provisional?: boolean
 }
 

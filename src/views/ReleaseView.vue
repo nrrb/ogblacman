@@ -16,6 +16,8 @@ const player = usePlayerStore()
 
 if (!release) throw new Error(`Unknown release: ${props.releaseSlug}`)
 
+const previewTrackSlug = release.previewTrackSlug
+
 usePageMeta({
   title: release.seo.title,
   description: release.seo.description,
@@ -44,7 +46,7 @@ useHead({
 })
 
 function playRelease() {
-  const index = player.playlist.findIndex((item) => item.slug === props.releaseSlug)
+  const index = player.playlist.findIndex((item) => item.slug === previewTrackSlug)
   if (index >= 0) player.selectTrack(index, true)
 }
 </script>
@@ -69,9 +71,9 @@ function playRelease() {
           <h1>{{ release.title }}</h1>
           <p class="release-page__description">{{ release.description }}</p>
           <div class="release-page__actions">
-            <button class="button button--dark" type="button" :disabled="!release.audioUrl" @click="playRelease">
+            <button class="button button--dark" type="button" :disabled="!release.previewTrackSlug" @click="playRelease">
               <Play :size="18" fill="currentColor" aria-hidden="true" />
-              {{ release.audioUrl ? 'Play in OGAmp' : 'Audio coming soon' }}
+              {{ release.previewTrackSlug ? 'Play preview in OGAmp' : 'Audio coming soon' }}
             </button>
             <a
               v-for="platform in release.platformLinks"

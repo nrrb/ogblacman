@@ -10,7 +10,7 @@ export const releases: Release[] = [
     artwork: projectImages.tree,
     artworkOptimized: projectImages.treeOptimized,
     artworkAlt: 'Pixel-art Chicago skyline at night with a giant tree beside an elevated train',
-    audioUrl: null,
+    previewTrackSlug: 'dungeon-crawl',
     description:
       'New OG Blacman music is on the way. Final release details, cover art, audio, and platform links will replace this preview entry.',
     platformLinks: [],

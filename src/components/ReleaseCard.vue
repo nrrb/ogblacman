@@ -11,7 +11,7 @@ const props = defineProps<{
 const player = usePlayerStore()
 
 function playRelease() {
-  const index = player.playlist.findIndex((release) => release.slug === props.release.slug)
+  const index = player.playlist.findIndex((track) => track.slug === props.release.previewTrackSlug)
   if (index >= 0) player.selectTrack(index, true)
 }
 </script>
@@ -39,11 +39,11 @@ function playRelease() {
         <button
           class="button button--solid"
           type="button"
-          :disabled="!release.audioUrl"
+          :disabled="!release.previewTrackSlug"
           @click="playRelease"
         >
           <Play :size="17" fill="currentColor" aria-hidden="true" />
-          {{ release.audioUrl ? 'Play now' : 'Coming soon' }}
+          {{ release.previewTrackSlug ? 'Play preview' : 'Coming soon' }}
         </button>
         <RouterLink class="button button--quiet" :to="`/music/${release.slug}`">
           Details
