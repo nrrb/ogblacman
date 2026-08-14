@@ -1,0 +1,75 @@
+import type { BlackBuddhaDialogue } from '@/features/black-buddha/assistantLogic'
+
+// Provisional voice and presentation copy. Replace here when approved Black Buddha
+// lore, lyrics, and source artwork arrive; trigger behavior lives elsewhere.
+export const blackBuddhaDialogues: readonly BlackBuddhaDialogue[] = [
+  {
+    id: 'manual-welcome',
+    trigger: 'manual-open',
+    label: 'Open channel',
+    message: "I'm Black Buddha—part guide, part witness. Music is north. The tree is where roots get loud.",
+    action: { label: 'Find the music', href: '/#music' },
+    priority: 'moment',
+    provisional: true,
+  },
+  {
+    id: 'arrival-001',
+    trigger: 'initial-visit',
+    label: 'Signal found',
+    message: 'You found the frequency. Take the music with you, then see what patience grows.',
+    action: { label: 'Start here', href: '/#music' },
+    priority: 'ambient',
+    provisional: true,
+  },
+  {
+    id: 'player-001',
+    trigger: 'first-song-play',
+    label: 'Now playing',
+    message: 'There it is. OGAmp keeps the sound moving while you explore every room.',
+    action: { label: 'See the release', href: '/music/next-transmission' },
+    priority: 'moment',
+    provisional: true,
+  },
+  {
+    id: 'roots-001',
+    trigger: 'game-start',
+    label: 'A word on roots',
+    message: 'Hold steady. The tree listens to time, not taps.',
+    priority: 'moment',
+    provisional: true,
+  },
+  {
+    id: 'roots-002',
+    trigger: 'game-complete',
+    label: 'Full bloom',
+    message: "That's what patience looks like with fruit on it. Chicago roots, fully charged.",
+    action: { label: 'Hear the signal', href: '/#music' },
+    priority: 'moment',
+    provisional: true,
+  },
+  {
+    id: 'release-001',
+    trigger: 'release-open',
+    label: 'Inside the release',
+    message: 'Every release gets its own room here. Start the preview and OGAmp will follow you back.',
+    priority: 'moment',
+    provisional: true,
+  },
+  {
+    id: 'story-001',
+    trigger: 'story-section',
+    label: 'The source',
+    message: 'Independent is more than a credit. It is the freedom to build the whole frequency.',
+    priority: 'ambient',
+    provisional: true,
+  },
+  {
+    id: 'idle-001',
+    trigger: 'inactivity',
+    label: 'Still tuned in?',
+    message: 'No rush. A good signal still leaves room to breathe.',
+    action: { label: 'Visit the tree', href: '/#game' },
+    priority: 'ambient',
+    provisional: true,
+  },
+] as const

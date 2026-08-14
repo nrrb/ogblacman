@@ -6,6 +6,10 @@ import { projectImages } from '@/content/site'
 import { calculateGrowthScore, createTargetScore, getGrowthStage } from '@/features/tree-game/gameLogic'
 
 const HOLD_DURATION_MS = 4200
+const emit = defineEmits<{
+  started: []
+  completed: []
+}>()
 
 const progress = ref(0)
 const targetScore = ref(createTargetScore())
@@ -28,6 +32,7 @@ function advance(timestamp: number) {
   }
   lastFrame.value = timestamp
   if (isComplete.value) {
+    emit('completed')
     stopHugging()
     return
   }
@@ -37,6 +42,7 @@ function advance(timestamp: number) {
 function startHugging(event?: PointerEvent) {
   if (isComplete.value || isHugging.value) return
   if (event) (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId)
+  if (!hasStarted.value) emit('started')
   hasStarted.value = true
   isHugging.value = true
   lastFrame.value = null
@@ -136,7 +142,7 @@ onUnmounted(stopHugging)
       </div>
     </div>
 
-    <div class="tree-game__controls">
+    <div class="tree-game__controls" data-buddha-avoid>
       <div class="tree-game__progress-row">
         <span>{{ hasStarted ? `${progressPercent}% grown` : 'Ready to grow' }}</span>
         <span>Stage {{ stage + 1 }} / 5</span>

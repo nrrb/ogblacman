@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BlackBuddha from '@/components/BlackBuddha.vue'
 import OGAmp from '@/components/OGAmp.vue'
 import SiteFooter from '@/components/SiteFooter.vue'
 import SiteHeader from '@/components/SiteHeader.vue'
@@ -11,5 +12,6 @@ import SiteHeader from '@/components/SiteHeader.vue'
     <RouterView />
   </main>
   <SiteFooter />
+  <BlackBuddha />
   <OGAmp />
 </template>

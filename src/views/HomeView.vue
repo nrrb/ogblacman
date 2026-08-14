@@ -7,6 +7,9 @@ import TreeHuggingGame from '@/components/TreeHuggingGame.vue'
 import { releases } from '@/content/releases'
 import { artist, placeholderImages, siteUrl } from '@/content/site'
 import { usePageMeta } from '@/composables/usePageMeta'
+import { useBlackBuddhaStore } from '@/stores/blackBuddha'
+
+const blackBuddha = useBlackBuddhaStore()
 
 usePageMeta({
   title: 'OG Blacman | Independent Chicago Artist',
@@ -49,7 +52,7 @@ useHead({
       <p class="eyebrow eyebrow--light">{{ artist.location }} / {{ artist.descriptor }}</p>
       <h1 id="hero-title">OG<br />Blacman</h1>
       <p class="hero__statement">Music and interactive work on an independent frequency.</p>
-      <div class="hero__actions">
+      <div class="hero__actions" data-buddha-avoid>
         <a class="button button--light" href="#music">
           <Radio :size="18" aria-hidden="true" />
           Hear what's next
@@ -84,7 +87,10 @@ useHead({
 
   <section id="game" class="section section--game">
     <div class="container">
-      <TreeHuggingGame />
+      <TreeHuggingGame
+        @started="blackBuddha.trigger('game-start')"
+        @completed="blackBuddha.trigger('game-complete')"
+      />
     </div>
   </section>
 

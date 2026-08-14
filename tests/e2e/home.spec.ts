@@ -19,6 +19,49 @@ test('home presents the artist and core sections', async ({ page }) => {
   expect(layout.gameSceneRatio).toBeCloseTo(0.8, 1)
 })
 
+test('Black Buddha appears, can be dismissed and reopened without blocking navigation', async ({ page }) => {
+  await page.goto('/')
+
+  const assistant = page.getByLabel('Black Buddha assistant')
+  await expect(assistant.getByRole('status')).toContainText('You found the frequency')
+  await assistant.getByRole('button', { name: 'Dismiss Black Buddha' }).click()
+  await expect(assistant.getByRole('status')).toBeHidden()
+
+  await page.getByRole('button', { name: 'Open Black Buddha' }).click()
+  await expect(assistant.getByRole('status')).toBeVisible()
+  await assistant.getByRole('button', { name: 'Dismiss Black Buddha' }).click()
+
+  const navigationToggle = page.getByRole('button', { name: 'Open navigation' })
+  if (await navigationToggle.isVisible()) await navigationToggle.click()
+  await page.getByRole('link', { name: 'Music', exact: true }).click()
+  await expect(page).toHaveURL(/\/#music$/)
+})
+
+test('Black Buddha reacts to the game and moves away from the hold control', async ({ page }) => {
+  await page.goto('/#game')
+
+  const assistant = page.getByLabel('Black Buddha assistant')
+  const hug = page.getByRole('button', { name: 'HUG', exact: true })
+  await hug.focus()
+  await page.keyboard.down('Space')
+  await expect(assistant.getByRole('status')).toContainText('tree listens to time')
+  await expect(assistant).toHaveClass(/black-buddha--avoid-controls/)
+
+  const overlaps = await page.evaluate(() => {
+    const assistantBox = document.querySelector('.black-buddha')?.getBoundingClientRect()
+    const hugBox = document.querySelector('.tree-game__hug')?.getBoundingClientRect()
+    if (!assistantBox || !hugBox) return true
+    return !(
+      assistantBox.right <= hugBox.left ||
+      assistantBox.left >= hugBox.right ||
+      assistantBox.bottom <= hugBox.top ||
+      assistantBox.top >= hugBox.bottom
+    )
+  })
+  expect(overlaps).toBe(false)
+  await page.keyboard.up('Space')
+})
+
 test('release deep link renders directly with unique metadata', async ({ page }) => {
   await page.goto('/music/next-transmission')
 

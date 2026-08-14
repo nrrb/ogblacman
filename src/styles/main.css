@@ -1157,6 +1157,197 @@ button:disabled {
   color: #263115;
 }
 
+.black-buddha {
+  position: fixed;
+  z-index: 180;
+  right: 12px;
+  bottom: calc(var(--player-height) + env(safe-area-inset-bottom) + 12px);
+  display: flex;
+  max-width: calc(100vw - 24px);
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.black-buddha--avoid-controls {
+  inset: calc(var(--header-height) + 12px) auto auto 12px;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.black-buddha__dialogue,
+.black-buddha__character {
+  pointer-events: auto;
+}
+
+.black-buddha__dialogue {
+  width: min(304px, calc(100vw - 100px));
+  max-height: min(360px, calc(100svh - var(--header-height) - var(--player-height) - 40px));
+  overflow: auto;
+  color: var(--ink);
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 4px;
+  box-shadow: 6px 6px 0 var(--green);
+}
+
+.black-buddha__dialogue header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 9px 8px 12px;
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.black-buddha__dialogue header small,
+.black-buddha__dialogue header strong {
+  display: block;
+}
+
+.black-buddha__dialogue header small {
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.black-buddha__dialogue header strong {
+  margin-top: 3px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.black-buddha__dialogue header button {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--paper);
+  background: transparent;
+  border: 1px solid var(--paper-muted);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.black-buddha__dialogue p {
+  margin: 0;
+  padding: 14px 14px 10px;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.48;
+}
+
+.black-buddha__dialogue > a {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 12px 12px;
+  padding: 9px 10px;
+  color: var(--ink);
+  background: var(--green);
+  border: 2px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 900;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.black-buddha__character {
+  position: relative;
+  display: grid;
+  flex: 0 0 auto;
+  width: 68px;
+  height: 78px;
+  place-items: end center;
+  padding: 0;
+  overflow: visible;
+  color: var(--paper);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  filter: drop-shadow(4px 4px 0 rgb(0 0 0 / 45%));
+}
+
+.black-buddha__pixel {
+  position: relative;
+  display: block;
+  width: 60px;
+  height: 72px;
+  image-rendering: pixelated;
+}
+
+.black-buddha__pixel i {
+  position: absolute;
+  display: block;
+}
+
+.black-buddha__halo {
+  top: 0;
+  left: 10px;
+  width: 40px;
+  height: 12px;
+  border: 4px solid #e4bd39;
+  box-shadow: 3px 3px 0 #755813;
+}
+
+.black-buddha__head {
+  z-index: 2;
+  top: 10px;
+  left: 12px;
+  width: 38px;
+  height: 34px;
+  background: #71452e;
+  border: 4px solid var(--ink);
+  box-shadow: inset 0 8px #141517, inset 0 -7px #251711;
+}
+
+.black-buddha__eyes {
+  z-index: 3;
+  top: 24px;
+  left: 17px;
+  width: 28px;
+  height: 6px;
+  background: linear-gradient(90deg, var(--green) 0 35%, var(--ink) 35% 65%, var(--green) 65%);
+  border: 2px solid var(--ink);
+}
+
+.black-buddha__robe {
+  bottom: 0;
+  left: 5px;
+  width: 50px;
+  height: 34px;
+  background: var(--red);
+  border: 4px solid var(--ink);
+  clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
+  box-shadow: inset 8px 0 #9f2c22, inset -8px 0 #9f2c22;
+}
+
+.black-buddha__badge {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  color: var(--ink);
+  background: var(--green);
+  border: 2px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 950;
+}
+
 .release-page,
 .text-page {
   min-height: 75vh;
@@ -1337,6 +1528,19 @@ button:disabled {
   .ogamp__controls .icon-button {
     width: 40px;
     height: 40px;
+  }
+
+  .black-buddha {
+    right: 16px;
+    bottom: calc(var(--player-height) + 32px);
+  }
+
+  .black-buddha--avoid-controls {
+    inset: calc(var(--header-height) + 20px) auto auto 20px;
+  }
+
+  .black-buddha__dialogue {
+    width: 320px;
   }
 
   .release-page,

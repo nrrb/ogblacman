@@ -4,7 +4,7 @@ Last updated: August 13, 2026
 
 ## Current Checkpoint
 
-**Interactive Checkpoint 2 is complete. OGAmp and the Tree Hugging game are functional and verified.**
+**Interactive Checkpoint 3 is complete. OGAmp, the Tree Hugging game, and the scripted Black Buddha assistant are functional and verified.**
 
 The repository now contains a runnable Vue application and a verified static build. Provisional content is intentionally isolated in typed data modules so client-supplied music, copy, artwork, photography, and links can replace it without changing presentation components.
 
@@ -33,6 +33,12 @@ The repository now contains a runnable Vue application and a verified static bui
 - Added five growth stages, progressive foliage and fruit, a sad-to-happy tree face, a pixel OG avatar, and a portrait completion composition.
 - Added a randomized per-run target from `$1,000` to `$5,000`, monotonic growth-correlated scoring, exact final target landing, and replay/reset.
 - Added pointer capture, keyboard hold support, live status text, and reduced-motion-compatible state transitions.
+- Added a session-only Black Buddha Pinia store with deterministic trigger history, prompt cooldowns, dismissal cooldown, and manual reopen behavior.
+- Added typed provisional Black Buddha dialogue for initial visits, first playback, game start/completion, release routes, the artist story, and inactivity.
+- Added a provisional CSS pixel-art Black Buddha character and responsive dialogue panel with optional internal navigation actions.
+- Added priority-aware prompts so meaningful interaction moments can replace an ambient prompt without allowing repetitive interruptions.
+- Added viewport-aware placement that moves Black Buddha away from visible hero, game, and release controls while always clearing OGAmp.
+- Added unit coverage for prompt selection/session rules and browser coverage for appearance, dismissal, reopening, game reactions, responsive placement, and unobstructed navigation.
 
 ## Verification
 
@@ -40,17 +46,17 @@ The following passed at this checkpoint:
 
 ```text
 npm run typecheck  -> passed
-npm test           -> 3 files, 13 tests passed
+npm test           -> 5 files, 20 tests passed
 npm run build      -> passed; 3 routes statically generated
-npm run test:e2e   -> 10 tests passed across Pixel 7 and desktop Chrome profiles
+npm run test:e2e   -> 14 tests passed across Pixel 7 and desktop Chrome profiles
 npm audit          -> 0 vulnerabilities
 ```
 
-The generated release HTML contains its release-specific title, canonical URL, description, and social image. Browser coverage now verifies real MP3 loading, playback across route navigation, track/seek restoration, game completion scoring, replay, framing, and horizontal overflow.
+The generated release HTML contains its release-specific title, canonical URL, description, and social image. Browser coverage now verifies real MP3 loading, playback across route navigation, track/seek restoration, game completion scoring, replay, framing, horizontal overflow, and Black Buddha's non-blocking session behavior. A final rendered mobile/desktop inspection also completed without page or console errors.
 
 ## Deployment Status
 
-The current checkpoint is deployed at `https://ogblacman.surge.sh`.
+Interactive Checkpoint 2 is deployed at `https://ogblacman.surge.sh`. Interactive Checkpoint 3 is verified locally and has not yet been published.
 
 To publish an updated live preview from an authenticated machine:
 
@@ -69,9 +75,11 @@ Surge overrides `robots.txt` on `*.surge.sh` subdomains with `Disallow: /`. This
 2. Run `npm run dev` and review the foundation locally.
 3. Confirm or collect the client inputs listed in PLAN.md, especially final design references, release data, real audio, artist photography, logo, biography, platform links, and Black Buddha source art.
 4. Replace provisional artist/release content and the sample playlist through `src/content/` as inputs arrive.
-5. Implement the scripted Black Buddha assistant with typed dialogue, triggers, cooldowns, dismissal, and responsive collision handling.
+5. Replace provisional Black Buddha art and authored dialogue through `src/content/blackBuddha.ts` once approved inputs arrive.
 6. Implement the Kit form once its public form endpoint/identifier and approved signup copy are available.
-7. Add analytics, events/merch empty states, and final production SEO content after the relevant configuration and client inputs exist.
+7. Add the typed event/merch empty states and the provider-neutral external-link boundaries described in Phase 7.
+8. Add the analytics abstraction and instrumentation; enable GA4 delivery once the measurement ID is available.
+9. Add final production SEO, privacy, social, and launch content after the relevant client inputs exist.
 
 ## Known Intentional Gaps
 
@@ -79,5 +87,6 @@ Surge overrides `robots.txt` on `*.surge.sh` subdomains with `Disallow: /`. This
 - The one release entry is provisional and is marked `noindex`.
 - OGAmp uses generated sample chiptunes, not OG Blacman music. These tracks are clearly modeled as provisional sample audio.
 - The CSS pixel OG avatar is provisional until approved artist/avatar source art exists.
-- Black Buddha, Kit signup, GA4, live events, live merchandise, and platform/social links are not implemented.
+- Black Buddha's CSS pixel art and dialogue are provisional pending approved source art, lore, lyrics, and voice direction.
+- Kit signup, GA4, live events, live merchandise, and platform/social links are not implemented.
 - Final branding, copy, privacy/contact information, production analytics, and launch metadata remain pending client input.

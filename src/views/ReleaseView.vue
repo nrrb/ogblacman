@@ -70,7 +70,7 @@ function playRelease() {
           <p class="eyebrow">{{ release.featured ? 'Featured release' : 'Release' }}</p>
           <h1>{{ release.title }}</h1>
           <p class="release-page__description">{{ release.description }}</p>
-          <div class="release-page__actions">
+          <div class="release-page__actions" data-buddha-avoid>
             <button class="button button--dark" type="button" :disabled="!release.previewTrackSlug" @click="playRelease">
               <Play :size="18" fill="currentColor" aria-hidden="true" />
               {{ release.previewTrackSlug ? 'Play preview in OGAmp' : 'Audio coming soon' }}

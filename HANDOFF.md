@@ -4,22 +4,15 @@ Last updated: August 13, 2026
 
 ## Current State
 
-Work is paused after completing and deploying two interactive phases:
+Work is paused after completing three interactive phases:
 
 - functional OGAmp sample-audio player
 - functional Tree Hugging game
+- functional scripted Black Buddha assistant
 
-The GitHub `main` branch currently contains these implementation commits:
+Live static preview (through Interactive Checkpoint 2): `https://ogblacman.surge.sh`
 
-```text
-1d8a80a feat: implement tree hugging game
-792bee1 feat: power OGAmp with sample audio
-eee4ef9 feat: establish static artist site foundation
-```
-
-Live static preview: `https://ogblacman.surge.sh`
-
-The live preview was deployed successfully from the current production build. The home page, release deep link, release-specific canonical metadata, sitemap, and MP3 byte-range delivery were verified over HTTPS.
+The live preview was deployed successfully from the prior production build. The new Black Buddha checkpoint is verified locally but has not been published.
 
 ## Completed
 
@@ -59,15 +52,27 @@ The sample chiptunes are not presented as OG Blacman releases. They remain isola
 - accessible progress/status semantics and reduced-motion compatibility
 - no persistence across refresh, as required by PLAN.md
 
+### Black Buddha
+
+- typed provisional dialogue isolated in `src/content/blackBuddha.ts`
+- deterministic triggers for arrival, first playback, game start/completion, release routes, story visibility, and inactivity
+- priority-aware ambient/interaction prompts with per-session trigger history
+- 18-second ambient prompt cooldown and 30-second post-dismissal cooldown
+- close/dismiss and always-available manual reopen behavior
+- provisional CSS pixel-art character pending client source art
+- internal navigation actions that preserve the Vue shell and OGAmp
+- responsive placement that observes marked critical-control groups and moves to the opposite viewport edge
+- no persistence across refresh, as required by PLAN.md
+
 ## Verification
 
 All checks passed immediately before this handoff:
 
 ```text
 npm run typecheck  -> passed
-npm test           -> 3 files, 13 tests passed
+npm test           -> 5 files, 20 tests passed
 npm run build      -> passed; 3 routes statically generated
-npm run test:e2e   -> 10 tests passed across Pixel 7 and desktop Chrome
+npm run test:e2e   -> 14 tests passed across Pixel 7 and desktop Chrome
 npm audit          -> 0 vulnerabilities
 ```
 
@@ -80,6 +85,7 @@ The browser suite covers:
 - queue selection, seeking, and refresh restoration
 - no forced autoplay after refresh
 - Tree Hugging completion, final score bounds, and reset
+- Black Buddha arrival, dismissal, reopening, game reaction, and non-blocking placement
 
 ## Surge Preview Notes
 
@@ -105,10 +111,10 @@ Surge forcibly serves `User-agent: * / Disallow: /` for `*.surge.sh` subdomains 
 1. Pull `main` and run `npm install`.
 2. Run `npm run dev`; use the URL Vite prints because port `5173` may already be occupied.
 3. Run `npm run typecheck`, `npm test`, `npm run build`, and `npm run test:e2e` before extending shared behavior.
-4. Begin the scripted Black Buddha phase: typed dialogue, trigger/cooldown state, dismissal/reopen behavior, and responsive collision handling around OGAmp and the game.
-5. Collect/replace pending client content: real artist photos, logo, approved bio, releases, real music, artwork, platform links, Black Buddha source art/dialogue, Kit endpoint/copy, privacy/contact details, and GA4 ID.
+4. Collect/replace pending client content: real artist photos, logo, approved bio, releases, real music, artwork, platform links, Black Buddha source art/dialogue, Kit endpoint/copy, privacy/contact details, and GA4 ID.
+5. Implement the typed events/merch empty states and provider-neutral external-link boundaries.
 6. Implement Kit only after its public form action/identifier and approved consent wording are available.
-7. Continue with analytics, events/merch empty states, final SEO content, accessibility/performance review, and production launch work.
+7. Continue with the analytics abstraction/instrumentation, final SEO content, accessibility/performance review, and production launch work.
 
 ## Intentional Gaps
 
@@ -116,7 +122,7 @@ Surge forcibly serves `User-agent: * / Disallow: /` for `*.surge.sh` subdomains 
 - The release entry and release content are provisional and remain `noindex`.
 - OGAmp audio is provisional generated sample music, not OG Blacman music.
 - The CSS pixel OG avatar is temporary pending approved source art.
-- Black Buddha is not implemented.
+- Black Buddha's CSS art and dialogue are provisional pending approved client source material and voice direction.
 - Kit, GA4, live social/platform links, live events, and live merchandise are not implemented.
 - Final design references and client assets are still pending.
 
