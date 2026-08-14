@@ -4,7 +4,7 @@ Last updated: August 13, 2026
 
 ## Current Checkpoint
 
-**Implementation Checkpoint 6 is complete. The custom player has been replaced by official Webamp, branded as OGAmp, with its main and playlist windows fixed open in the verified V1 experience.**
+**Implementation Checkpoint 7 is complete. OGAmp is now a custom screenshot-inspired player with a chunky audio-reactive spectrum and collapsible playlist.**
 
 The repository now contains a runnable Vue application and a verified static build. Provisional content is intentionally isolated in typed data modules so client-supplied music, copy, artwork, photography, and links can replace it without changing presentation components.
 
@@ -47,11 +47,12 @@ The repository now contains a runnable Vue application and a verified static bui
 - Added event date/time-zone formatting, status-label helpers, and focused unit/component coverage for empty and populated states.
 - Added Shows and Merch navigation targets while preserving the compact mobile menu and the 720px desktop breakpoint.
 - Prevented generic Black Buddha prompts on intentional section deep links and added sustained-visibility handling for the story trigger.
-- Replaced the custom OGAmp interface and audio engine with dynamically loaded Webamp 2.3.1 while retaining the Pinia release-CTA and route-persistence boundary.
-- Fed Webamp exclusively from `src/content/playlist.json`, including precomputed titles, artist attribution, URLs, and durations.
-- Branded the classic main and playlist title bars as OGAmp and removed the temporary outer player frame while retaining the page shadow.
-- Kept only the main and playlist windows expanded by locking close, minimize/windowshade, equalizer, playlist-toggle, title-bar double-click, context-menu, and external Webamp navigation paths.
-- Added browser coverage for Webamp playback, queue restoration, route continuity, and all locked window/navigation controls.
+- Rebuilt OGAmp as a custom Vue and Pinia player while retaining the release-CTA, route-continuity, and refresh-restoration boundaries.
+- Kept `src/content/playlist.json` as the exclusive source for titles, artist attribution, URLs, durations, and track order.
+- Added a chunky 14-band spectrum driven by real Web Audio frequency data with a reduced-motion fallback.
+- Added a responsive playlist drawer that expands and collapses from the oversized transport controls.
+- Restyled OGAmp around the supplied black, cyan, magenta, acid-green, and bold-type visual reference while retaining its page shadow.
+- Added browser coverage for custom playback, spectrum activity, playlist collapse, queue restoration, and route continuity.
 
 ## Verification
 
@@ -69,7 +70,7 @@ The generated release HTML contains its release-specific title, canonical URL, d
 
 ## Deployment Status
 
-Interactive Checkpoint 2 is deployed at `https://ogblacman.surge.sh`. Checkpoints 3 through 6 are verified locally and have not yet been published.
+Interactive Checkpoint 2 is deployed at `https://ogblacman.surge.sh`. Checkpoints 3 through 7 are verified locally and have not yet been published.
 
 To publish an updated live preview from an authenticated machine:
 

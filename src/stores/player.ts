@@ -1,20 +1,16 @@
 import { computed, ref, shallowRef } from 'vue'
 import { defineStore } from 'pinia'
-import type Webamp from 'webamp'
 
 import { tracks } from '@/content/tracks'
 import { getAdjacentTrackIndex } from '@/features/player/playerLogic'
 
 const STORAGE_KEY = 'ogamp-player'
+const SPECTRUM_BAND_COUNT = 14
+const IDLE_SPECTRUM = [0.26, 0.48, 0.34, 0.66, 0.18, 0.42, 0.29, 0.57, 0.21, 0.39, 0.32, 0.61, 0.24, 0.46]
 
 interface PersistedPlayerState {
   currentTrackSlug: string
   currentTime: number
-}
-
-interface PendingSelection {
-  index: number
-  autoplay: boolean
 }
 
 type PlayerStatus = 'idle' | 'loading' | 'ready' | 'playing' | 'paused' | 'error'
@@ -26,20 +22,19 @@ export const usePlayerStore = defineStore('player', () => {
   const duration = ref(playlist[0]?.durationSeconds ?? 0)
   const status = ref<PlayerStatus>('idle')
   const errorMessage = ref('')
-  const webamp = shallowRef<Webamp | null>(null)
+  const spectrumLevels = ref([...IDLE_SPECTRUM])
+  const audio = shallowRef<HTMLAudioElement | null>(null)
 
-  let unsubscribeState: (() => void) | null = null
-  let unsubscribeTrack: (() => void) | null = null
-  let syncTimer = 0
-  let pendingSelection: PendingSelection | null = null
-  let pendingRestoreTime = 0
-  let isAttaching = false
-  let playbackAllowed = false
+  let audioContext: AudioContext | null = null
+  let analyser: AnalyserNode | null = null
+  let frequencyData: Uint8Array<ArrayBuffer> | null = null
+  let spectrumFrame = 0
+  let lastSpectrumUpdate = 0
 
   const currentTrack = computed(() => playlist[currentIndex.value] ?? null)
   const isPlaying = computed(() => status.value === 'playing')
   const isReady = computed(() => ['ready', 'playing', 'paused'].includes(status.value))
-  const canPlay = computed(() => Boolean(currentTrack.value?.audioUrl && webamp.value))
+  const canPlay = computed(() => Boolean(currentTrack.value?.audioUrl))
 
   function persist() {
     if (typeof window === 'undefined' || !currentTrack.value) return
@@ -59,7 +54,6 @@ export const usePlayerStore = defineStore('player', () => {
         currentIndex.value = storedIndex
         if (typeof stored.currentTime === 'number' && Number.isFinite(stored.currentTime) && stored.currentTime >= 0) {
           currentTime.value = stored.currentTime
-          pendingRestoreTime = stored.currentTime
         }
       }
       duration.value = currentTrack.value?.durationSeconds ?? 0
@@ -68,127 +62,167 @@ export const usePlayerStore = defineStore('player', () => {
     }
   }
 
-  function syncFromWebamp() {
-    if (!webamp.value) return
-    const mediaStatus = webamp.value.getPlayerMediaStatus()
-    if (mediaStatus === 'PLAYING' && !playbackAllowed) {
-      webamp.value.pause()
-    }
-    if (isAttaching || !playbackAllowed) status.value = 'ready'
-    else if (mediaStatus === 'PLAYING') status.value = 'playing'
-    else if (mediaStatus === 'PAUSED') status.value = 'paused'
-    else if (mediaStatus === 'CLOSED') status.value = 'idle'
-    else status.value = 'ready'
-
-    const elapsed = webamp.value.media.timeElapsed()
-    const loadedDuration = webamp.value.media.duration()
-    if (Number.isFinite(elapsed) && elapsed >= 0) currentTime.value = elapsed
-    if (Number.isFinite(loadedDuration) && loadedDuration > 0) duration.value = loadedDuration
-    persist()
+  function describeMediaError() {
+    const code = audio.value?.error?.code
+    if (code === MediaError.MEDIA_ERR_ABORTED) return 'Playback was interrupted.'
+    if (code === MediaError.MEDIA_ERR_NETWORK) return 'The audio file could not be loaded.'
+    if (code === MediaError.MEDIA_ERR_DECODE) return 'This audio file could not be decoded.'
+    if (code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) return 'This audio format is not supported.'
+    return 'Audio is temporarily unavailable.'
   }
 
-  function attach(instance: Webamp) {
-    detach()
-    webamp.value = instance
-    status.value = 'loading'
-    errorMessage.value = ''
-    restore()
-    isAttaching = true
-    playbackAllowed = Boolean(pendingSelection?.autoplay)
+  function resetSpectrum() {
+    spectrumLevels.value = [...IDLE_SPECTRUM]
+  }
 
-    unsubscribeTrack = instance.onTrackDidChange((trackInfo) => {
-      if (!trackInfo || typeof window === 'undefined') return
-      const trackUrl = new URL(trackInfo.url, window.location.href).href
-      const index = playlist.findIndex((track) => new URL(track.audioUrl, window.location.href).href === trackUrl)
-      if (index >= 0) {
-        if (index !== currentIndex.value) currentTime.value = 0
-        currentIndex.value = index
-        duration.value = playlist[index]?.durationSeconds ?? 0
-      }
-      if (pendingRestoreTime > 0) {
-        instance.seekToTime(pendingRestoreTime)
-        currentTime.value = pendingRestoreTime
-        pendingRestoreTime = 0
-      }
-      persist()
-    })
+  function stopSpectrum() {
+    if (typeof window !== 'undefined') window.cancelAnimationFrame(spectrumFrame)
+    spectrumFrame = 0
+    lastSpectrumUpdate = 0
+    resetSpectrum()
+  }
 
-    unsubscribeState = instance.__onStateChange(syncFromWebamp)
-    syncTimer = window.setInterval(syncFromWebamp, 1_000)
-
-    if (pendingSelection) {
-      const selection = pendingSelection
-      pendingSelection = null
-      isAttaching = false
-      selectTrack(selection.index, selection.autoplay)
+  function updateSpectrum(timestamp: number) {
+    if (!analyser || !frequencyData || !isPlaying.value) {
+      stopSpectrum()
       return
     }
 
-    instance.stop()
-    instance.setCurrentTrack(currentIndex.value)
-    instance.pause()
-    isAttaching = false
-    syncFromWebamp()
+    if (timestamp - lastSpectrumUpdate >= 40) {
+      analyser.getByteFrequencyData(frequencyData)
+      const highestBin = Math.max(2, Math.floor(frequencyData.length * 0.46))
+      const rawLevels = Array.from({ length: SPECTRUM_BAND_COUNT }, (_, index) => {
+        const startRatio = index / SPECTRUM_BAND_COUNT
+        const endRatio = (index + 1) / SPECTRUM_BAND_COUNT
+        const start = 1 + Math.floor(Math.pow(startRatio, 1.7) * (highestBin - 1))
+        const end = Math.max(start + 1, 1 + Math.floor(Math.pow(endRatio, 1.7) * (highestBin - 1)))
+        let peak = 0
+        for (let bin = start; bin < end; bin += 1) peak = Math.max(peak, frequencyData?.[bin] ?? 0)
+        return peak
+      })
+      const framePeak = Math.max(1, ...rawLevels)
+      const frameEnergy = Math.min(1, framePeak / 190)
+      spectrumLevels.value = rawLevels.map((value, index) => {
+        const signal = 0.08 + Math.pow(value / framePeak, 0.68) * 0.92
+        const reactiveFloor = (IDLE_SPECTRUM[index] ?? 0.2) * (0.4 + frameEnergy * 0.42)
+        return Math.min(1, Math.max(0.08, signal, reactiveFloor))
+      })
+      lastSpectrumUpdate = timestamp
+    }
+
+    spectrumFrame = window.requestAnimationFrame(updateSpectrum)
   }
 
-  function detach(instance?: Webamp) {
-    if (instance && webamp.value !== instance) return
-    unsubscribeState?.()
-    unsubscribeTrack?.()
-    unsubscribeState = null
-    unsubscribeTrack = null
-    if (typeof window !== 'undefined') window.clearInterval(syncTimer)
-    syncTimer = 0
-    webamp.value = null
-    playbackAllowed = false
-    status.value = 'idle'
+  function startSpectrum() {
+    if (typeof window === 'undefined') return
+    window.cancelAnimationFrame(spectrumFrame)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      spectrumLevels.value = IDLE_SPECTRUM.map((level) => Math.max(0.18, level * 0.72))
+      return
+    }
+    spectrumFrame = window.requestAnimationFrame(updateSpectrum)
   }
 
-  function fail(message: string) {
-    errorMessage.value = message
-    status.value = 'error'
+  function initializeSpectrum() {
+    if (typeof window === 'undefined' || !audio.value || analyser) return
+    try {
+      audioContext = new AudioContext()
+      analyser = audioContext.createAnalyser()
+      analyser.fftSize = 256
+      analyser.smoothingTimeConstant = 0.78
+      frequencyData = new Uint8Array(analyser.frequencyBinCount)
+      const source = audioContext.createMediaElementSource(audio.value)
+      source.connect(analyser)
+      analyser.connect(audioContext.destination)
+    } catch {
+      audioContext = null
+      analyser = null
+      frequencyData = null
+      resetSpectrum()
+    }
   }
 
-  function play() {
-    if (!webamp.value || !canPlay.value) return
-    playbackAllowed = true
-    webamp.value.play()
-    syncFromWebamp()
+  function loadCurrentTrack() {
+    if (!audio.value || !currentTrack.value) return
+    errorMessage.value = ''
+    status.value = 'loading'
+    duration.value = currentTrack.value.durationSeconds
+    audio.value.src = currentTrack.value.audioUrl
+    audio.value.load()
   }
 
-  function allowPlayback() {
-    playbackAllowed = true
+  function initialize() {
+    if (typeof window === 'undefined' || audio.value) return
+    restore()
+    audio.value = new Audio()
+    audio.value.preload = 'metadata'
+    audio.value.addEventListener('loadedmetadata', () => {
+      const loadedDuration = audio.value?.duration
+      if (loadedDuration && Number.isFinite(loadedDuration)) duration.value = loadedDuration
+      if (audio.value) {
+        audio.value.currentTime = currentTime.value < duration.value ? currentTime.value : 0
+        currentTime.value = audio.value.currentTime
+      }
+      status.value = audio.value?.paused === false ? 'playing' : 'ready'
+    })
+    audio.value.addEventListener('timeupdate', () => {
+      currentTime.value = audio.value?.currentTime || 0
+      persist()
+    })
+    audio.value.addEventListener('play', () => {
+      status.value = 'playing'
+      errorMessage.value = ''
+      startSpectrum()
+    })
+    audio.value.addEventListener('pause', () => {
+      if (status.value !== 'loading' && status.value !== 'error') status.value = 'paused'
+      stopSpectrum()
+      persist()
+    })
+    audio.value.addEventListener('error', () => {
+      status.value = 'error'
+      errorMessage.value = describeMediaError()
+      stopSpectrum()
+    })
+    audio.value.addEventListener('ended', () => next(true))
+    loadCurrentTrack()
+  }
+
+  async function play() {
+    initialize()
+    if (!audio.value || !canPlay.value) return
+    try {
+      initializeSpectrum()
+      if (audioContext?.state === 'suspended') await audioContext.resume()
+      await audio.value.play()
+    } catch (error) {
+      status.value = 'error'
+      errorMessage.value = error instanceof Error ? error.message : 'Playback could not start.'
+      stopSpectrum()
+    }
   }
 
   function pause() {
-    webamp.value?.pause()
-    syncFromWebamp()
+    audio.value?.pause()
   }
 
-  function toggle() {
-    if (isPlaying.value) pause()
-    else play()
+  async function toggle() {
+    if (isPlaying.value) {
+      pause()
+      return
+    }
+    await play()
   }
 
   function selectTrack(index: number, autoplay = false) {
     if (index < 0 || index >= playlist.length) return
+    initialize()
+    const wasPlaying = isPlaying.value
     currentIndex.value = index
     currentTime.value = 0
-    duration.value = playlist[index]?.durationSeconds ?? 0
-    if (!webamp.value) {
-      pendingSelection = { index, autoplay }
-      persist()
-      return
-    }
-
-    const wasPlaying = isPlaying.value
-    if (!autoplay && !wasPlaying) webamp.value.pause()
-    webamp.value.setCurrentTrack(index)
-    if (autoplay || wasPlaying) {
-      playbackAllowed = true
-      webamp.value.play()
-    }
+    loadCurrentTrack()
     persist()
+    if (autoplay || wasPlaying) void play()
   }
 
   function previous() {
@@ -202,9 +236,9 @@ export const usePlayerStore = defineStore('player', () => {
   }
 
   function seek(value: number) {
-    if (!webamp.value || !isReady.value || !Number.isFinite(value)) return
+    if (!audio.value || !isReady.value || !Number.isFinite(value)) return
     const nextTime = Math.min(Math.max(value, 0), duration.value)
-    webamp.value.seekToTime(nextTime)
+    audio.value.currentTime = nextTime
     currentTime.value = nextTime
     persist()
   }
@@ -217,13 +251,11 @@ export const usePlayerStore = defineStore('player', () => {
     duration,
     status,
     errorMessage,
+    spectrumLevels,
     isPlaying,
     isReady,
     canPlay,
-    attach,
-    detach,
-    fail,
-    allowPlayback,
+    initialize,
     play,
     pause,
     toggle,

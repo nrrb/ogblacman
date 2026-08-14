@@ -9,7 +9,7 @@
   --blue: #296bd6;
   --line-dark: #343a3e;
   --line-light: #cbc6ba;
-  --player-height: 277px;
+  --player-height: 288px;
   --header-height: 64px;
   --container: 1180px;
   --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -1191,94 +1191,251 @@ button:disabled {
   z-index: 200;
   right: 8px;
   bottom: calc(8px + env(safe-area-inset-bottom));
-  width: 275px;
+  width: min(620px, calc(100vw - 16px));
+  max-height: calc(100svh - var(--header-height) - 16px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  color: #f4f3f1;
+  background: #030405;
+  border: 1px solid #292a31;
   max-width: calc(100vw - 16px);
-  box-shadow: 8px 8px 0 rgb(8 11 13 / 32%);
+  box-shadow: 8px 8px 0 rgb(8 11 13 / 42%);
 }
 
-.ogamp__stage,
-.ogamp__mount {
-  position: relative;
-  width: 275px;
-  max-width: 100%;
-  height: 261px;
+.ogamp__main {
+  padding: 14px;
 }
 
-.ogamp__mount {
-  overflow: visible;
-  background: #050607;
-  isolation: isolate;
-}
-
-.ogamp__mount #webamp {
-  position: absolute !important;
-  inset: 0 auto auto 0 !important;
-}
-
-.ogamp__mount #title-bar::after,
-.ogamp__mount .playlist-top-title::after {
-  position: absolute;
-  z-index: 4;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  color: #d7d7df;
-  background: #29283b;
+.ogamp__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #5ddaf1;
   font-family: var(--font-mono);
-  font-size: 7px;
+  font-size: 9px;
   font-weight: 900;
   line-height: 1;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-.ogamp__mount #title-bar::after {
-  content: "OGAMP";
-  top: 3px;
-  left: 112px;
-  width: 51px;
-  height: 8px;
-}
-
-.ogamp__mount .playlist-top-title {
-  position: relative !important;
-}
-
-.ogamp__mount .playlist-top-title::after {
-  content: "OGAMP PLAYLIST";
-  inset: 5px 9px auto;
-  height: 8px;
-}
-
-.ogamp__mount
-  :is(#close, #minimize, #shade, #option, #about, #equalizer-button, #playlist-button, #playlist-close-button, #playlist-shade-button) {
-  cursor: not-allowed !important;
-}
-
-.ogamp__mount :is(#close, #minimize, #shade, #equalizer-button, #playlist-close-button, #playlist-shade-button) {
-  opacity: 0.42;
-}
-
-.ogamp__notice {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  display: grid;
-  margin: 0;
-  padding: 24px;
-  place-items: center;
-  color: var(--paper-muted);
-  background: #050607;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  line-height: 1.5;
-  text-align: center;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-.ogamp__notice--error {
-  color: #ff8e85;
+.ogamp__heading span:last-child {
+  color: #777984;
+  font-size: 7px;
+}
+
+.ogamp h2 {
+  margin: 12px 0 0;
+  overflow: hidden;
+  color: #f4f3f1;
+  font-size: clamp(30px, 8vw, 44px);
+  line-height: 0.94;
+  letter-spacing: -0.055em;
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.ogamp__spectrum {
+  display: flex;
+  height: 72px;
+  align-items: flex-end;
+  gap: 3px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+.ogamp__spectrum-bar {
+  width: 100%;
+  height: 100%;
+  min-height: 7px;
+  background: #bcff4f;
+  transform-origin: bottom;
+  transition: transform 80ms linear;
+}
+
+.ogamp__spectrum-bar:nth-child(3n + 2) {
+  background: #e53db7;
+}
+
+.ogamp__spectrum-bar:nth-child(3n) {
+  background: #62d8ee;
+}
+
+.ogamp__readout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+  color: #8d8e99;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ogamp__readout .is-error {
+  color: #ff8179;
+}
+
+.ogamp__timeline {
+  display: block;
+  width: 100%;
+  height: 18px;
+  margin: 4px 0 5px;
+  padding: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.ogamp__timeline::-webkit-slider-runnable-track {
+  height: 2px;
+  background: #303139;
+}
+
+.ogamp__timeline::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  margin-top: -6px;
+  appearance: none;
+  background: #f4f3f1;
+  border: 0;
+  border-radius: 0;
+}
+
+.ogamp__timeline::-moz-range-track {
+  height: 2px;
+  background: #303139;
+}
+
+.ogamp__timeline::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: #f4f3f1;
+  border: 0;
+  border-radius: 0;
+}
+
+.ogamp__timeline:disabled {
+  cursor: wait;
+  opacity: 0.45;
+}
+
+.ogamp__controls {
+  display: grid;
+  grid-template-columns: 1.12fr repeat(3, 1fr);
+  border: 1px solid #303139;
+}
+
+.ogamp__control {
+  display: grid;
+  min-width: 0;
+  min-height: 54px;
+  padding: 0;
+  place-items: center;
+  color: #f4f3f1;
+  background: #030405;
+  border: 0;
+  border-left: 1px solid #303139;
+  cursor: pointer;
+}
+
+.ogamp__control:first-child {
+  border-left: 0;
+}
+
+.ogamp__control:hover,
+.ogamp__control:focus-visible {
+  color: #030405;
+  background: #bcff4f;
+}
+
+.ogamp__control--primary,
+.ogamp__control--primary:hover,
+.ogamp__control--primary:focus-visible {
+  color: #030405;
+  background: #f4f3f1;
+}
+
+.ogamp__control:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.ogamp__playlist {
+  max-height: min(230px, 34svh);
+  overflow-y: auto;
+  padding: 10px 14px 14px;
+  border-top: 1px solid #303139;
+}
+
+.ogamp__playlist ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ogamp__playlist li + li {
+  margin-top: 1px;
+}
+
+.ogamp__playlist button {
+  display: grid;
+  grid-template-columns: auto minmax(0, auto) minmax(12px, 1fr) auto;
+  gap: 8px;
+  align-items: baseline;
+  width: 100%;
+  min-height: 31px;
+  padding: 5px 2px;
+  overflow: hidden;
+  color: #a9aab3;
+  background: transparent;
+  border: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  text-align: left;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.ogamp__playlist button:hover,
+.ogamp__playlist button:focus-visible,
+.ogamp__playlist button.is-current {
+  color: #bcff4f;
+}
+
+.ogamp__track-number,
+.ogamp__playlist button > span:last-child {
+  font-variant-numeric: tabular-nums;
+}
+
+.ogamp__playlist-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ogamp__leader {
+  min-width: 12px;
+  border-bottom: 2px dotted currentColor;
+  opacity: 0.5;
+  transform: translateY(-2px);
+}
+
+.ogamp-playlist-enter-active,
+.ogamp-playlist-leave-active {
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.ogamp-playlist-enter-from,
+.ogamp-playlist-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
 }
 
 .black-buddha {
@@ -1471,7 +1628,7 @@ button:disabled {
 
 @media (min-width: 720px) {
   :root {
-    --player-height: 277px;
+    --player-height: 332px;
     --header-height: 72px;
   }
 
@@ -1590,6 +1747,48 @@ button:disabled {
   .ogamp {
     right: 16px;
     bottom: 16px;
+    width: min(720px, calc(100vw - 32px));
+  }
+
+  .ogamp__main {
+    padding: 20px;
+  }
+
+  .ogamp__heading {
+    font-size: 11px;
+  }
+
+  .ogamp__heading span:last-child {
+    font-size: 8px;
+  }
+
+  .ogamp h2 {
+    margin-top: 16px;
+    font-size: 48px;
+  }
+
+  .ogamp__spectrum {
+    height: 94px;
+    gap: 5px;
+    margin-top: 20px;
+  }
+
+  .ogamp__readout {
+    margin-top: 14px;
+    font-size: 12px;
+  }
+
+  .ogamp__control {
+    min-height: 64px;
+  }
+
+  .ogamp__playlist {
+    padding: 12px 20px 18px;
+  }
+
+  .ogamp__playlist button {
+    min-height: 35px;
+    font-size: 13px;
   }
 
   .black-buddha {

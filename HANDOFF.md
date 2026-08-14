@@ -4,14 +4,14 @@ Last updated: August 13, 2026
 
 ## Current State
 
-Work is paused after completing six implementation milestones:
+Work is paused after completing seven implementation milestones:
 
 - functional OGAmp player with the current five-track DnB set
 - functional Tree Hugging game
 - functional scripted Black Buddha assistant using the supplied source figure
 - typed events/merchandise presentation and provider boundaries
 - client asset refresh for Black Buddha and OGAmp
-- official Webamp integration, branded and constrained as OGAmp
+- custom OGAmp redesign with an audio-reactive spectrum and collapsible playlist
 
 Live static preview (through Interactive Checkpoint 2): `https://ogblacman.surge.sh`
 
@@ -31,14 +31,14 @@ The live preview was deployed successfully from the prior production build. The 
 
 ### OGAmp
 
-- official Webamp 2.3.1 main and playlist windows, dynamically loaded and branded as OGAmp
+- custom Vue/Pinia player powered by the browser's native audio and Web Audio APIs
 - five current one-minute DnB tracks from `public/music/`
 - single human-editable playlist manifest at `src/content/playlist.json`
 - `npm run playlist:sync` metadata workflow for replacing the files without editing application code
-- native play/pause, previous, next, seek, shuffle, repeat, and queue selection controls
-- fixed, expanded playlist with all current tracks visible
-- close, minimize/windowshade, equalizer, playlist-toggle, and external Webamp navigation controls locked so only the main and playlist windows remain present
-- title-bar double-click and context-menu escape paths blocked while window dragging remains available
+- play/pause, previous, next, seek, and queue selection controls
+- chunky 14-band spectrum visualization driven by the playing track's real frequency data
+- responsive playlist drawer that opens and collapses from the main transport row
+- screenshot-inspired black, cyan, magenta, and acid-green visual treatment
 - loading and playback error states
 - playback continuity across Vue Router navigation
 - slug-based selected-track and position restoration after refresh
@@ -103,7 +103,7 @@ The browser suite covers:
 - playback across route navigation
 - queue selection and refresh restoration
 - no forced autoplay after refresh
-- locked OGAmp main/playlist close, minimize, equalizer, toggle, and external-navigation paths
+- audio-reactive OGAmp spectrum and playlist expansion/collapse
 - Tree Hugging completion, final score bounds, and reset
 - Black Buddha arrival, dismissal, reopening, game reaction, and non-blocking placement
 - event/merch empty states, anchor navigation, and responsive page overflow
@@ -141,7 +141,7 @@ Surge forcibly serves `User-agent: * / Disallow: /` for `*.surge.sh` subdomains 
 
 - Placecats is used only for the artist-photo placeholder.
 - The release entry and release content are provisional and remain `noindex`.
-- OGAmp uses official Webamp with the current generated DnB set and remains provisional pending final release mapping and approval.
+- OGAmp uses the current generated DnB set and remains provisional pending final release mapping and approval.
 - The CSS pixel OG avatar is temporary pending approved source art.
 - Black Buddha's supplied source art is installed; dialogue remains provisional pending approved lore and voice direction.
 - Event and merchandise collections are intentionally empty until client listings exist; their presentation and provider boundaries are implemented.

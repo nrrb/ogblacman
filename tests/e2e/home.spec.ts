@@ -104,69 +104,54 @@ test('OGAmp loads the current audio and keeps playing across route navigation', 
   await audioResponse
 
   const player = page.getByLabel('OGAmp music player')
-  await expect(player.locator('#main-window')).toBeVisible()
-  await expect(player.locator('#playlist-window')).toBeVisible()
-  await expect(player).toHaveAttribute('data-player-status', 'ready')
-  await player.locator('#play').click()
-  await expect(player).toHaveAttribute('data-player-status', 'playing')
+  await player.getByRole('button', { name: 'Play', exact: true }).click()
+  await expect(player.getByRole('button', { name: 'Pause', exact: true })).toBeVisible()
 
   await page.getByRole('link', { name: 'Details' }).click()
   await expect(page).toHaveURL(/\/music\/next-transmission$/)
-  await expect(player.locator('#main-window')).toBeVisible()
-  await expect(player).toHaveAttribute('data-player-status', 'playing')
+  await expect(player.getByRole('button', { name: 'Pause', exact: true })).toBeVisible()
 })
 
-test('OGAmp selects and restores a track without forced autoplay', async ({ page }) => {
+test('OGAmp selects, seeks, and restores a track without forced autoplay', async ({ page }) => {
   await page.goto('/')
 
   const player = page.getByLabel('OGAmp music player')
-  const playlistRows = player.locator('.playlist-track-titles .track-cell')
-  await expect(playlistRows).toHaveCount(tracks.length)
-  await playlistRows.nth(1).dblclick()
-  await expect(playlistRows.nth(1)).toHaveClass(/current/)
-  await expect(playlistRows.nth(1)).toContainText(secondTrack.title)
-  await expect(player).toHaveAttribute('data-player-status', 'playing')
-  await player.locator('#pause').click()
-  await expect(player).toHaveAttribute('data-player-status', 'paused')
+  await player.getByRole('button', { name: 'Open playlist' }).click()
+  await expect(page.getByRole('region', { name: 'Playlist' })).toBeVisible()
+  await page.locator(`[data-track-slug="${secondTrack.slug}"]`).click()
+  await expect(player.locator('h2')).toHaveText(secondTrack.title)
+  await expect(player.getByRole('button', { name: 'Pause', exact: true })).toBeVisible()
+
+  const timeline = player.getByRole('slider', { name: 'Seek current track' })
+  await timeline.fill('42')
+  await player.getByRole('button', { name: 'Pause', exact: true }).click()
+  await expect(timeline).toHaveValue('42')
 
   await page.reload()
-  await expect(playlistRows.nth(1)).toHaveClass(/current/)
-  await expect(playlistRows.nth(1)).toContainText(secondTrack.title)
-  await expect(player).toHaveAttribute('data-player-status', 'ready')
+  await expect(player.locator('h2')).toHaveText(secondTrack.title)
+  await expect(player.getByRole('button', { name: 'Play', exact: true })).toBeVisible()
+  await expect(timeline).toHaveValue('42')
 })
 
-test('OGAmp windows cannot close, minimize, open the equalizer, or navigate away', async ({ page }) => {
+test('OGAmp animates its spectrum and collapses its playlist', async ({ page }) => {
   await page.goto('/')
 
   const player = page.getByLabel('OGAmp music player')
-  const mainWindow = player.locator('#main-window')
-  const playlistWindow = player.locator('#playlist-window')
-  await expect(mainWindow).toBeVisible()
-  await expect(playlistWindow).toBeVisible()
+  const spectrumBars = player.locator('[data-testid="ogamp-spectrum"] .ogamp__spectrum-bar')
+  await expect(spectrumBars).toHaveCount(14)
+  const idleLevels = await spectrumBars.evaluateAll((bars) => bars.map((bar) => bar.getAttribute('data-level')))
 
-  const originalUrl = page.url()
-  for (const selector of [
-    '#about',
-    '#close',
-    '#minimize',
-    '#shade',
-    '#equalizer-button',
-    '#playlist-button',
-    '#playlist-close-button',
-    '#playlist-shade-button',
-  ]) {
-    await player.locator(selector).click({ force: true })
-  }
-  await player.locator('#title-bar').dblclick({ force: true })
-  await player.locator('.playlist-top').dblclick({ force: true })
+  await player.getByRole('button', { name: 'Play', exact: true }).click()
+  await expect(player.locator('[data-testid="ogamp-spectrum"]')).toHaveClass(/is-playing/)
+  await expect.poll(() => spectrumBars.evaluateAll((bars) => bars.map((bar) => bar.getAttribute('data-level')))).not.toEqual(
+    idleLevels,
+  )
 
-  await expect(page).toHaveURL(originalUrl)
-  await expect(mainWindow).toBeVisible()
-  await expect(playlistWindow).toBeVisible()
-  await expect(mainWindow).toHaveCSS('height', '116px')
-  await expect(playlistWindow).toHaveCSS('height', '145px')
-  await expect(player.locator('#equalizer-window')).toBeHidden()
-  expect(await player.locator('#about').getAttribute('href')).toBeNull()
+  await player.getByRole('button', { name: 'Open playlist' }).click()
+  await expect(page.getByRole('region', { name: 'Playlist' })).toBeVisible()
+  await expect(page.locator('[data-track-slug]')).toHaveCount(tracks.length)
+  await player.getByRole('button', { name: 'Hide playlist' }).click()
+  await expect(page.getByRole('region', { name: 'Playlist' })).toHaveCount(0)
 })
 
 test('Tree Hugging completes, awards the target score, and resets', async ({ page }) => {

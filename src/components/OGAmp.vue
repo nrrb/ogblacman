@@ -1,151 +1,134 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
-import type Webamp from 'webamp'
+import { computed, onMounted, ref } from 'vue'
+import { FastForward, ListMusic, Pause, Play, Rewind } from '@lucide/vue'
 
-import { tracks } from '@/content/tracks'
+import { formatPlaybackTime } from '@/features/player/playerLogic'
 import { usePlayerStore } from '@/stores/player'
 
 const player = usePlayerStore()
-const mount = ref<HTMLElement | null>(null)
-const isLoading = ref(true)
-const loadError = ref('')
+const playlistOpen = ref(false)
 
-let webamp: Webamp | null = null
-let unsubscribeClose: (() => void) | null = null
-let unsubscribeWillClose: (() => void) | null = null
-let unsubscribeStartupPlayback: (() => void) | null = null
-
-const lockedControlSelector =
-  '#close, #minimize, #shade, #option, #about, #equalizer-button, #playlist-button, #playlist-close-button, #playlist-shade-button'
-const playbackControlSelector =
-  '#play, #previous, #next, .playlist-play-button, .playlist-previous-button, .playlist-next-button'
-
-function preventLockedControl(event: Event) {
-  const target = event.target instanceof Element ? event.target.closest(lockedControlSelector) : null
-  if (!target || !mount.value?.contains(target)) return
-  event.preventDefault()
-  event.stopImmediatePropagation()
-}
-
-function preventWebampContextMenu(event: Event) {
-  if (!mount.value?.contains(event.target as Node)) return
-  event.preventDefault()
-  event.stopImmediatePropagation()
-}
-
-function preventWindowShade(event: Event) {
-  const target = event.target instanceof Element ? event.target.closest('#title-bar, .playlist-top') : null
-  if (!target || !mount.value?.contains(target)) return
-  event.preventDefault()
-  event.stopImmediatePropagation()
-}
-
-function allowWebampPlayback(event: Event) {
-  const target = event.target instanceof Element ? event.target.closest(playbackControlSelector) : null
-  if (!target || !mount.value?.contains(target)) return
-  player.allowPlayback()
-}
-
-function allowPlaylistPlayback(event: Event) {
-  const target = event.target instanceof Element ? event.target.closest('.track-cell') : null
-  if (!target || !mount.value?.contains(target)) return
-  player.allowPlayback()
-}
-
-onMounted(async () => {
-  if (!mount.value) return
-  mount.value.addEventListener('click', preventLockedControl, true)
-  mount.value.addEventListener('auxclick', preventLockedControl, true)
-  mount.value.addEventListener('contextmenu', preventWebampContextMenu, true)
-  mount.value.addEventListener('dblclick', preventWindowShade, true)
-  mount.value.addEventListener('click', allowWebampPlayback, true)
-  mount.value.addEventListener('dblclick', allowPlaylistPlayback, true)
-
-  try {
-    const { default: WebampPlayer } = await import('webamp')
-    if (!WebampPlayer.browserIsSupported()) {
-      throw new Error('This browser does not support the Web Audio features OGAmp needs.')
-    }
-
-    webamp = new WebampPlayer({
-      initialTracks: tracks.map((track) => ({
-        url: track.audioUrl,
-        defaultName: `${track.artist} - ${track.title}`,
-        metaData: {
-          artist: track.artist,
-          title: track.title,
-        },
-        duration: track.durationSeconds,
-      })),
-      windowLayout: {
-        main: { position: { top: 0, left: 0 } },
-        playlist: {
-          position: { top: 116, left: 0 },
-          size: { extraHeight: 1, extraWidth: 0 },
-        },
-      },
-      enableMediaSession: true,
-      zIndex: 205,
-    })
-
-    unsubscribeWillClose = webamp.onWillClose((cancel) => cancel())
-    unsubscribeClose = webamp.onClose(() => {
-      webamp?.reopen()
-    })
-    unsubscribeStartupPlayback = webamp.__onStateChange(() => {
-      if (webamp?.getPlayerMediaStatus() === 'PLAYING') webamp.pause()
-    })
-    webamp.stop()
-    await webamp.renderInto(mount.value)
-    webamp.stop()
-    player.attach(webamp)
-    unsubscribeStartupPlayback()
-    unsubscribeStartupPlayback = null
-
-    const renderedPlayer = mount.value.querySelector('#webamp')
-    renderedPlayer?.setAttribute('role', 'application')
-    renderedPlayer?.setAttribute('aria-label', 'OGAmp Webamp interface')
-    for (const selector of lockedControlSelector.split(', ')) {
-      const control = mount.value.querySelector(selector)
-      control?.setAttribute('aria-disabled', 'true')
-      const title =
-        selector === '#about' ? 'OGAmp' : selector === '#equalizer-button' ? 'Equalizer disabled' : 'OGAmp stays open'
-      control?.setAttribute('title', title)
-      if (control instanceof HTMLAnchorElement) control.removeAttribute('href')
-    }
-  } catch (error) {
-    unsubscribeStartupPlayback?.()
-    unsubscribeStartupPlayback = null
-    loadError.value = error instanceof Error ? error.message : 'OGAmp could not be loaded.'
-    player.fail(loadError.value)
-  } finally {
-    isLoading.value = false
-  }
+const elapsed = computed(() => formatPlaybackTime(player.currentTime))
+const total = computed(() => formatPlaybackTime(player.duration))
+const statusLabel = computed(() => {
+  if (player.status === 'error') return 'SIGNAL LOST'
+  if (player.status === 'loading') return 'TUNING IN'
+  if (player.isPlaying) return 'NOW PLAYING'
+  return 'READY'
 })
 
-onBeforeUnmount(() => {
-  mount.value?.removeEventListener('click', preventLockedControl, true)
-  mount.value?.removeEventListener('auxclick', preventLockedControl, true)
-  mount.value?.removeEventListener('contextmenu', preventWebampContextMenu, true)
-  mount.value?.removeEventListener('dblclick', preventWindowShade, true)
-  mount.value?.removeEventListener('click', allowWebampPlayback, true)
-  mount.value?.removeEventListener('dblclick', allowPlaylistPlayback, true)
-  unsubscribeWillClose?.()
-  unsubscribeClose?.()
-  unsubscribeStartupPlayback?.()
-  if (webamp) {
-    player.detach(webamp)
-    webamp.dispose()
-  }
-})
+function selectTrack(index: number) {
+  player.selectTrack(index, true)
+}
+
+function seek(event: Event) {
+  player.seek(Number((event.target as HTMLInputElement).value))
+}
+
+onMounted(player.initialize)
 </script>
 
 <template>
-  <aside class="ogamp" aria-label="OGAmp music player" :data-player-status="player.status">
-    <div class="ogamp__stage">
-      <div ref="mount" class="ogamp__mount" :aria-busy="isLoading"></div>
-      <p v-if="isLoading" class="ogamp__notice">Loading OGAmp...</p>
-      <p v-else-if="loadError" class="ogamp__notice ogamp__notice--error" role="alert">{{ loadError }}</p>
+  <aside
+    class="ogamp"
+    :class="{ 'ogamp--playlist-open': playlistOpen }"
+    aria-label="OGAmp music player"
+    :data-player-status="player.status"
+  >
+    <div class="ogamp__main">
+      <header class="ogamp__heading">
+        <span>OGAMP&nbsp; // &nbsp;{{ statusLabel }}</span>
+        <span aria-hidden="true">CHICAGO TRANSMISSION</span>
+      </header>
+
+      <h2>{{ player.currentTrack?.title || 'No signal' }}</h2>
+
+      <div
+        class="ogamp__spectrum"
+        :class="{ 'is-playing': player.isPlaying }"
+        data-testid="ogamp-spectrum"
+        role="img"
+        :aria-label="player.isPlaying ? 'Animated audio spectrum' : 'Audio spectrum waiting for playback'"
+      >
+        <span
+          v-for="(level, index) in player.spectrumLevels"
+          :key="index"
+          class="ogamp__spectrum-bar"
+          :data-level="level.toFixed(3)"
+          :style="{ transform: `scaleY(${level})` }"
+        ></span>
+      </div>
+
+      <div class="ogamp__readout" aria-live="polite">
+        <span :class="{ 'is-error': player.status === 'error' }">
+          {{ player.errorMessage || `${elapsed} / ${total}` }}
+        </span>
+        <span>{{ player.playlist.length }} TRACKS QUEUED</span>
+      </div>
+
+      <input
+        class="ogamp__timeline"
+        type="range"
+        min="0"
+        :max="player.duration || 0"
+        step="0.1"
+        :value="player.currentTime"
+        :disabled="!player.isReady"
+        aria-label="Seek current track"
+        @input="seek"
+      />
+
+      <div class="ogamp__controls">
+        <button
+          class="ogamp__control ogamp__control--primary"
+          type="button"
+          :disabled="!player.canPlay"
+          :aria-label="player.isPlaying ? 'Pause' : 'Play'"
+          :title="player.isPlaying ? 'Pause' : 'Play'"
+          @click="player.toggle"
+        >
+          <Pause v-if="player.isPlaying" :size="28" fill="currentColor" aria-hidden="true" />
+          <Play v-else :size="28" fill="currentColor" aria-hidden="true" />
+        </button>
+        <button class="ogamp__control" type="button" aria-label="Previous track" title="Previous track" @click="player.previous">
+          <Rewind :size="28" fill="currentColor" aria-hidden="true" />
+        </button>
+        <button class="ogamp__control" type="button" aria-label="Next track" title="Next track" @click="player.next()">
+          <FastForward :size="28" fill="currentColor" aria-hidden="true" />
+        </button>
+        <button
+          class="ogamp__control"
+          type="button"
+          :aria-expanded="playlistOpen"
+          aria-controls="ogamp-playlist"
+          :aria-label="playlistOpen ? 'Hide playlist' : 'Open playlist'"
+          :title="playlistOpen ? 'Hide playlist' : 'Open playlist'"
+          @click="playlistOpen = !playlistOpen"
+        >
+          <ListMusic :size="26" aria-hidden="true" />
+        </button>
+      </div>
     </div>
+
+    <Transition name="ogamp-playlist">
+      <section v-if="playlistOpen" id="ogamp-playlist" class="ogamp__playlist" aria-label="Playlist">
+        <ol>
+          <li v-for="(track, index) in player.playlist" :key="track.slug">
+            <button
+              type="button"
+              :class="{ 'is-current': index === player.currentIndex }"
+              :data-track-slug="track.slug"
+              :aria-current="index === player.currentIndex ? 'true' : undefined"
+              @click="selectTrack(index)"
+            >
+              <span class="ogamp__track-number">{{ String(index + 1).padStart(2, '0') }}</span>
+              <span class="ogamp__playlist-title">{{ track.title }}</span>
+              <span class="ogamp__leader" aria-hidden="true"></span>
+              <span>{{ formatPlaybackTime(track.durationSeconds) }}</span>
+            </button>
+          </li>
+        </ol>
+      </section>
+    </Transition>
   </aside>
 </template>
