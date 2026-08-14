@@ -38,8 +38,8 @@ const sampleItem: MerchandiseItem = {
 describe('EventsSection', () => {
   it('renders a useful empty state when there are no dates', () => {
     render(EventsSection, { props: { events: [] } })
-    expect(screen.getByRole('heading', { name: 'No dates announced yet.' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Get show updates' }).getAttribute('href')).toBe('#join')
+    expect(screen.getByRole('heading', { name: 'The play pen is empty' })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Tell Me First' }).getAttribute('href')).toBe('#join')
   })
 
   it('renders provider-neutral ticket data for populated events', () => {
@@ -54,8 +54,8 @@ describe('EventsSection', () => {
 describe('MerchSection', () => {
   it('renders a useful empty state when there are no products', () => {
     render(MerchSection, { props: { merchandise: [] } })
-    expect(screen.getByRole('heading', { name: 'The first drop is under wraps.' })).toBeTruthy()
-    expect(screen.getByRole('link', { name: 'Hear about the drop' }).getAttribute('href')).toBe('#join')
+    expect(screen.getByRole('heading', { name: "Store's not open" })).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Put Me On The List' }).getAttribute('href')).toBe('#join')
   })
 
   it('renders provider-neutral checkout data for populated merchandise', () => {

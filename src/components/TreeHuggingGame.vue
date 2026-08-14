@@ -82,7 +82,7 @@ onUnmounted(stopHugging)
     <header class="tree-game__heading">
       <div>
         <p class="eyebrow eyebrow--light">Tree Hugging</p>
-        <h2>{{ isComplete ? 'Deep roots. Big energy.' : 'Put down roots.' }}</h2>
+        <h2>{{ isComplete ? 'Look what you did' : 'Go hug that tree' }}</h2>
       </div>
       <button class="icon-button tree-game__reset" type="button" aria-label="Reset game" title="Reset game" @click="resetGame">
         <RotateCcw :size="20" aria-hidden="true" />
@@ -144,7 +144,7 @@ onUnmounted(stopHugging)
 
     <div class="tree-game__controls" data-buddha-avoid>
       <div class="tree-game__progress-row">
-        <span>{{ hasStarted ? `${progressPercent}% grown` : 'Ready to grow' }}</span>
+        <span>{{ hasStarted ? `${progressPercent}% grown` : 'Hold it down' }}</span>
         <span>Stage {{ stage + 1 }} / 5</span>
       </div>
       <div

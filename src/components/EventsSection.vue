@@ -15,7 +15,7 @@ defineProps<{
     <div class="container">
       <div class="section-heading section-heading--light">
         <div>
-          <p class="eyebrow eyebrow--light">On the ground</p>
+          <p class="eyebrow eyebrow--light">Catch me outside</p>
           <h2 id="shows-title">Upcoming shows</h2>
         </div>
         <span class="section-index">02</span>
@@ -66,11 +66,11 @@ defineProps<{
           <span>00</span>
         </div>
         <div class="listing-empty__copy">
-          <p class="eyebrow eyebrow--light">The board is clear</p>
-          <h3>No dates announced yet.</h3>
-          <p>When OG Blacman steps out, the details will land here first.</p>
+          <p class="eyebrow eyebrow--light">Nothing booked</p>
+          <h3>The play pen is empty</h3>
+          <p>Ain't nothing on the calendar yet but when I step out you'll know before the group chat</p>
         </div>
-        <a class="button button--light" href="#join">Get show updates</a>
+        <a class="button button--light" href="#join">Tell Me First</a>
       </div>
     </div>
   </section>

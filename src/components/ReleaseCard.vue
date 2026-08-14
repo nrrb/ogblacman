@@ -43,7 +43,7 @@ function playRelease() {
           @click="playRelease"
         >
           <Play :size="17" fill="currentColor" aria-hidden="true" />
-          {{ release.previewTrackSlug ? 'Play preview' : 'Coming soon' }}
+          {{ release.previewTrackSlug ? 'Play It' : 'Not Yet' }}
         </button>
         <RouterLink class="button button--quiet" :to="`/music/${release.slug}`">
           Details

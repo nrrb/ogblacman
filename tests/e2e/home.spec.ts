@@ -30,10 +30,10 @@ test('home presents the artist and core sections', async ({ page }) => {
 test('events and merch provide launch-ready empty states', async ({ page }) => {
   await page.goto('/#shows')
 
-  await expect(page.getByRole('heading', { name: 'No dates announced yet.' })).toBeVisible()
-  await expect(page.getByRole('link', { name: 'Get show updates' })).toHaveAttribute('href', '#join')
-  await expect(page.getByRole('heading', { name: 'The first drop is under wraps.' })).toBeVisible()
-  await expect(page.getByRole('link', { name: 'Hear about the drop' })).toHaveAttribute('href', '#join')
+  await expect(page.getByRole('heading', { name: 'The play pen is empty' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Tell Me First' })).toHaveAttribute('href', '#join')
+  await expect(page.getByRole('heading', { name: "Store's not open" })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Put Me On The List' })).toHaveAttribute('href', '#join')
   await page.waitForTimeout(1500)
   await expect(page.getByLabel('Black Buddha assistant').getByRole('status')).toHaveCount(0)
 })
@@ -45,7 +45,7 @@ test('Black Buddha appears, can be dismissed and reopened without blocking navig
   const artwork = assistant.locator('img.black-buddha__art')
   await expect(artwork).toBeVisible()
   await expect(artwork).toHaveAttribute('src', '/images/black-buddha-love.png')
-  await expect(assistant.getByRole('status')).toContainText('You found the frequency')
+  await expect(assistant.getByRole('status')).toContainText('Press play before you start scrolling')
   await assistant.getByRole('button', { name: 'Dismiss Black Buddha' }).click()
   await expect(assistant.getByRole('status')).toBeHidden()
 
@@ -66,7 +66,7 @@ test('Black Buddha reacts to the game and moves away from the hold control', asy
   const hug = page.getByRole('button', { name: 'HUG', exact: true })
   await hug.focus()
   await page.keyboard.down('Space')
-  await expect(assistant.getByRole('status')).toContainText('tree listens to time')
+  await expect(assistant.getByRole('status')).toContainText("don't be tapping it like an elevator")
   await expect(assistant).toHaveClass(/black-buddha--avoid-controls/)
 
   const overlaps = await page.evaluate(() => {

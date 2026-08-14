@@ -13,10 +13,10 @@ export const projectImages = {
 
 export const artist: ArtistProfile = {
   name: 'OG Blacman',
-  location: 'Chicago, Illinois',
-  descriptor: 'Independent artist',
+  location: 'Chicago',
+  descriptor: 'The Original',
   biography:
-    'OG Blacman is an independent Chicago artist building music, visuals, and interactive experiences on his own frequency.',
+    "I'm from Chicago and I been doing this since before anybody was watching so don't ask me who put me on \u{1F934}\u{1F3FF}",
   socialLinks: [],
 }
 

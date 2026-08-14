@@ -15,11 +15,11 @@ usePageMeta({
   <section class="text-page">
     <div class="container text-page__inner">
       <p class="eyebrow">404</p>
-      <h1>Signal lost.</h1>
-      <p>That page is not on this frequency.</p>
+      <h1>This ain't it</h1>
+      <p>whatever you looking for it's not here</p>
       <RouterLink class="button button--dark" to="/">
         <ArrowLeft :size="18" aria-hidden="true" />
-        Return home
+        Take Me Back
       </RouterLink>
     </div>
   </section>

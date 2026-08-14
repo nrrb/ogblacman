@@ -73,7 +73,7 @@ function playRelease() {
           <div class="release-page__actions" data-buddha-avoid>
             <button class="button button--dark" type="button" :disabled="!release.previewTrackSlug" @click="playRelease">
               <Play :size="18" fill="currentColor" aria-hidden="true" />
-              {{ release.previewTrackSlug ? 'Play preview in OGAmp' : 'Audio coming soon' }}
+              {{ release.previewTrackSlug ? 'Play It In OGAmp' : 'Audio Not Up Yet' }}
             </button>
             <a
               v-for="platform in release.platformLinks"

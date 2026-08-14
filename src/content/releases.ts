@@ -13,11 +13,11 @@ export const releases: Release[] = [
     artworkAlt: 'Pixel-art Chicago skyline at night with a giant tree beside an elevated train',
     previewTrackSlug: tracks[0]?.slug ?? null,
     description:
-      'New OG Blacman music is on the way. Final release details, cover art, audio, and platform links will replace this preview entry.',
+      'New music on the way. Cover art, audio and every platform link land right here the second it drops.',
     platformLinks: [],
     seo: {
       title: 'Next Transmission | OG Blacman',
-      description: 'New music from independent Chicago artist OG Blacman is on the way.',
+      description: 'New music from OG Blacman out of Chicago. Coming soon.',
       image: projectImages.tree,
     },
     provisional: true,

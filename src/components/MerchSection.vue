@@ -15,7 +15,7 @@ defineProps<{
     <div class="container">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">Objects from the frequency</p>
+          <p class="eyebrow">Wearable evidence</p>
           <h2 id="merch-title">Merch</h2>
         </div>
         <span class="section-index section-index--dark">03</span>
@@ -60,11 +60,11 @@ defineProps<{
           <span>DROP</span>
         </div>
         <div class="listing-empty__copy">
-          <p class="eyebrow">First edition pending</p>
-          <h3>The first drop is under wraps.</h3>
-          <p>No filler products. The store opens when the right pieces are ready.</p>
+          <p class="eyebrow">Nothing yet</p>
+          <h3>Store's not open</h3>
+          <p>I'm not putting my name on no cheap shirt so you gonna have to wait on me</p>
         </div>
-        <a class="button button--dark" href="#join">Hear about the drop</a>
+        <a class="button button--dark" href="#join">Put Me On The List</a>
       </div>
     </div>
   </section>
