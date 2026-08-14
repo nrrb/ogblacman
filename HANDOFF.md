@@ -37,7 +37,7 @@ The live preview was deployed successfully from the prior production build. The 
 - `npm run playlist:sync` metadata workflow for replacing the files without editing application code
 - native play/pause, previous, next, seek, shuffle, repeat, and queue selection controls
 - fixed, expanded playlist with all current tracks visible
-- close, minimize/windowshade, playlist-toggle, and external Webamp navigation controls locked so both windows remain present
+- close, minimize/windowshade, equalizer, playlist-toggle, and external Webamp navigation controls locked so only the main and playlist windows remain present
 - title-bar double-click and context-menu escape paths blocked while window dragging remains available
 - loading and playback error states
 - playback continuity across Vue Router navigation
@@ -103,7 +103,7 @@ The browser suite covers:
 - playback across route navigation
 - queue selection and refresh restoration
 - no forced autoplay after refresh
-- locked OGAmp main/playlist close, minimize, toggle, and external-navigation paths
+- locked OGAmp main/playlist close, minimize, equalizer, toggle, and external-navigation paths
 - Tree Hugging completion, final score bounds, and reset
 - Black Buddha arrival, dismissal, reopening, game reaction, and non-blocking placement
 - event/merch empty states, anchor navigation, and responsive page overflow

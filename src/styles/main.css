@@ -1252,11 +1252,11 @@ button:disabled {
 }
 
 .ogamp__mount
-  :is(#close, #minimize, #shade, #option, #about, #playlist-button, #playlist-close-button, #playlist-shade-button) {
+  :is(#close, #minimize, #shade, #option, #about, #equalizer-button, #playlist-button, #playlist-close-button, #playlist-shade-button) {
   cursor: not-allowed !important;
 }
 
-.ogamp__mount :is(#close, #minimize, #shade, #playlist-close-button, #playlist-shade-button) {
+.ogamp__mount :is(#close, #minimize, #shade, #equalizer-button, #playlist-close-button, #playlist-shade-button) {
   opacity: 0.42;
 }
 

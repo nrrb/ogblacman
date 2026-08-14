@@ -135,7 +135,7 @@ test('OGAmp selects and restores a track without forced autoplay', async ({ page
   await expect(player).toHaveAttribute('data-player-status', 'ready')
 })
 
-test('OGAmp main and playlist windows cannot close, minimize, or navigate away', async ({ page }) => {
+test('OGAmp windows cannot close, minimize, open the equalizer, or navigate away', async ({ page }) => {
   await page.goto('/')
 
   const player = page.getByLabel('OGAmp music player')
@@ -150,6 +150,7 @@ test('OGAmp main and playlist windows cannot close, minimize, or navigate away',
     '#close',
     '#minimize',
     '#shade',
+    '#equalizer-button',
     '#playlist-button',
     '#playlist-close-button',
     '#playlist-shade-button',
@@ -164,6 +165,7 @@ test('OGAmp main and playlist windows cannot close, minimize, or navigate away',
   await expect(playlistWindow).toBeVisible()
   await expect(mainWindow).toHaveCSS('height', '116px')
   await expect(playlistWindow).toHaveCSS('height', '145px')
+  await expect(player.locator('#equalizer-window')).toBeHidden()
   expect(await player.locator('#about').getAttribute('href')).toBeNull()
 })
 

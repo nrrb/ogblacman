@@ -274,6 +274,7 @@ No shuffle or repeat controls are required for V1.
 - usable on small mobile screens without covering critical interaction areas
 - desktop version may expand or reposition while preserving the fixed/persistent concept
 - keep the main and playlist windows visible; visitors cannot close, minimize/windowshade, or toggle them away
+- keep optional Webamp windows such as the equalizer closed
 - Webamp-branded controls must not navigate visitors away from the site
 
 ### Playback state

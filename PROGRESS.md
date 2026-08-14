@@ -50,7 +50,7 @@ The repository now contains a runnable Vue application and a verified static bui
 - Replaced the custom OGAmp interface and audio engine with dynamically loaded Webamp 2.3.1 while retaining the Pinia release-CTA and route-persistence boundary.
 - Fed Webamp exclusively from `src/content/playlist.json`, including precomputed titles, artist attribution, URLs, and durations.
 - Branded the classic main and playlist title bars as OGAmp and removed the temporary outer player frame while retaining the page shadow.
-- Kept both classic windows expanded by locking close, minimize/windowshade, playlist-toggle, title-bar double-click, context-menu, and external Webamp navigation paths.
+- Kept only the main and playlist windows expanded by locking close, minimize/windowshade, equalizer, playlist-toggle, title-bar double-click, context-menu, and external Webamp navigation paths.
 - Added browser coverage for Webamp playback, queue restoration, route continuity, and all locked window/navigation controls.
 
 ## Verification

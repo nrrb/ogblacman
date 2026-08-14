@@ -16,7 +16,7 @@ let unsubscribeWillClose: (() => void) | null = null
 let unsubscribeStartupPlayback: (() => void) | null = null
 
 const lockedControlSelector =
-  '#close, #minimize, #shade, #option, #about, #playlist-button, #playlist-close-button, #playlist-shade-button'
+  '#close, #minimize, #shade, #option, #about, #equalizer-button, #playlist-button, #playlist-close-button, #playlist-shade-button'
 const playbackControlSelector =
   '#play, #previous, #next, .playlist-play-button, .playlist-previous-button, .playlist-next-button'
 
@@ -108,7 +108,9 @@ onMounted(async () => {
     for (const selector of lockedControlSelector.split(', ')) {
       const control = mount.value.querySelector(selector)
       control?.setAttribute('aria-disabled', 'true')
-      control?.setAttribute('title', selector === '#about' ? 'OGAmp' : 'OGAmp stays open')
+      const title =
+        selector === '#about' ? 'OGAmp' : selector === '#equalizer-button' ? 'Equalizer disabled' : 'OGAmp stays open'
+      control?.setAttribute('title', title)
       if (control instanceof HTMLAnchorElement) control.removeAttribute('href')
     }
   } catch (error) {
