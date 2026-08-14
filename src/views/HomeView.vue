@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ArrowDown, ArrowUpRight, Radio } from '@lucide/vue'
+import { ArrowDown, Radio } from '@lucide/vue'
 import { useHead } from '@unhead/vue'
 
 import EventsSection from '@/components/EventsSection.vue'
 import MerchSection from '@/components/MerchSection.vue'
 import ReleaseCard from '@/components/ReleaseCard.vue'
+import SignupForm from '@/components/SignupForm.vue'
 import TreeHuggingGame from '@/components/TreeHuggingGame.vue'
 import { events, merchandise } from '@/content/marketplace'
 import { releases } from '@/content/releases'
@@ -122,10 +123,7 @@ useHead({
       </div>
       <div class="join-action">
         <p>New music videos shows drops all of it &amp; I promise I'm not in your inbox every day</p>
-        <button class="button button--dark" type="button" disabled>
-          List Opens Soon
-          <ArrowUpRight :size="18" aria-hidden="true" />
-        </button>
+        <SignupForm source="homepage" />
       </div>
     </div>
   </section>

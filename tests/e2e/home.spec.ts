@@ -27,6 +27,17 @@ test('home presents the artist and core sections', async ({ page }) => {
   expect(layout.gameSceneRatio).toBeCloseTo(0.8, 1)
 })
 
+test('mailing-list form exposes labelled fields and its unconfigured state', async ({ page }) => {
+  await page.goto('/#join')
+
+  // Builds without VITE_KIT_FORM_ACTION render the form inert rather than
+  // failing on submit. Validation and success/error handling are covered in
+  // src/components/SignupForm.test.ts, which can configure the endpoint.
+  await expect(page.getByLabel('Email')).toBeDisabled()
+  await expect(page.getByLabel(/first name/i)).toBeDisabled()
+  await expect(page.getByRole('button', { name: 'List Opens Soon' })).toBeDisabled()
+})
+
 test('events and merch provide launch-ready empty states', async ({ page }) => {
   await page.goto('/#shows')
 
