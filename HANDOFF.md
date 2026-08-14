@@ -1,151 +1,215 @@
-# OG Blacman Implementation Handoff
+# OG Blacman — Claude Code + Claude Design Handoff
 
-Last updated: August 13, 2026
+Last updated: August 14, 2026
 
-## Current State
+## Start Here
 
-Work is paused after completing seven implementation milestones:
+This repository contains the current implementation of the OG Blacman artist site. The working application is a mobile-first Vue static site with a persistent custom music player, an interactive Tree Hugging game, and the scripted Black Buddha assistant.
 
-- functional OGAmp player with the current five-track DnB set
-- functional Tree Hugging game
-- functional scripted Black Buddha assistant using the supplied source figure
-- typed events/merchandise presentation and provider boundaries
-- client asset refresh for Black Buddha and OGAmp
-- custom OGAmp redesign with an audio-reactive spectrum and collapsible playlist
+At the start of this handoff:
 
-Live static preview (through Interactive Checkpoint 2): `https://ogblacman.surge.sh`
+- branch: `main`
+- current implementation commit: `7fa7c79` (`perf: render OGAmp spectrum on canvas`)
+- `HEAD` and `origin/main` both pointed to `7fa7c79`
+- the worktree was clean before this handoff document was replaced
+- repository: `git@github.com:nrrb/ogblacman.git`
 
-The live preview was deployed successfully from the prior production build. The Black Buddha and marketplace checkpoints are verified locally but have not been published.
+The recorded Surge preview is `https://ogblacman.surge.sh`, but do not assume it matches the current repository. The last documented manual deployment predates the latest custom OGAmp and canvas-spectrum work.
 
-## Completed
+Read [PLAN.md](./PLAN.md) for the full product specification. [PROGRESS.md](./PROGRESS.md) is the longer implementation history, but this file is the current operational source for resuming work.
 
-### Foundation
+## Current Product State
 
-- Vue 3, Vite, TypeScript, Vue Router, Pinia, Vite SSG, Vitest, and Playwright setup
-- mobile-first responsive shell, navigation, footer, and fixed player accommodation
-- typed artist, release, and track data boundaries
-- statically generated `/`, `/privacy`, and `/music/next-transmission` pages
-- route-specific canonical, description, Open Graph, Twitter, and structured metadata
-- generated sitemap and static-host fallback files
-- local `npm run dev` workflow and Surge deployment workflow
+The application currently includes:
 
-### OGAmp
+- responsive hero, music, game, story, shows, merchandise, signup, and footer sections
+- prerendered `/`, `/privacy`, and `/music/next-transmission` routes
+- route-specific canonical, Open Graph, Twitter, and structured metadata
+- persistent custom OGAmp playback across Vue Router navigation
+- five provisional one-minute DnB files under `public/music/`
+- a collapsible OGAmp playlist sourced from one editable JSON manifest
+- a performant audio-reactive canvas spectrum
+- the complete press-and-hold Tree Hugging game loop
+- the supplied Black Buddha pixel-art figure and deterministic assistant behavior
+- future-ready event and merchandise presentation boundaries
+- Vitest and Playwright coverage for the critical flows
+- static-host output and a manual Surge deployment command
 
-- custom Vue/Pinia player powered by the browser's native audio and Web Audio APIs
-- five current one-minute DnB tracks from `public/music/`
-- single human-editable playlist manifest at `src/content/playlist.json`
-- `npm run playlist:sync` metadata workflow for replacing the files without editing application code
-- play/pause, previous, next, seek, and queue selection controls
-- chunky 14-band spectrum visualization driven by the playing track's real frequency data
-- responsive playlist drawer that opens and collapses from the main transport row
-- screenshot-inspired black, cyan, magenta, and acid-green visual treatment
-- loading and playback error states
-- playback continuity across Vue Router navigation
-- slug-based selected-track and position restoration after refresh
-- browser autoplay restrictions respected: state restores without forced playback
-- provisional release CTA connected to the deterministic first playlist track
+There is no Webamp dependency or runtime code in the current application. Webamp appeared temporarily in commit history and was deliberately removed. Keep OGAmp custom unless the product direction explicitly changes again.
 
-The current MP3s retain their embedded `Procedural DnB Generator` attribution. They remain isolated in `src/content/tracks.ts` and marked provisional until final release mapping and approval are supplied.
+## Latest OGAmp Architecture
 
-### Tree Hugging
+The current player is split intentionally:
 
-- pointer and keyboard press-and-hold interaction
-- explicit pointer capture so the fixed player cannot interrupt a hold
-- five tree growth stages with increasing trunk, foliage, fruit, and expression changes
-- temporary CSS pixel OG avatar
-- randomized per-run target score from `$1,000` to `$5,000`
-- monotonic, progress-correlated score that lands exactly on the target
-- portrait-oriented branded Chicago completion composition
-- reset/replay with a new per-run target
-- accessible progress/status semantics and reduced-motion compatibility
-- no persistence across refresh, as required by PLAN.md
+- `src/stores/player.ts` owns the `HTMLAudioElement`, Web Audio graph, track state, persistence, seeking, and frequency-data access.
+- `src/components/OGAmp.vue` owns the visible transport and collapsible playlist.
+- `src/components/OGSpectrum.vue` owns canvas rendering and all per-frame visualization data.
 
-### Black Buddha
+Important performance decision: spectrum frames must not be stored in Pinia or Vue reactive state. `OGSpectrum.vue` uses reusable typed arrays, precomputed frequency-band ranges, one 280×94 canvas, and direct `requestAnimationFrame` drawing. This avoids virtual-DOM updates and per-bar style recalculation.
 
-- typed provisional dialogue isolated in `src/content/blackBuddha.ts`
-- deterministic triggers for arrival, first playback, game start/completion, release routes, story visibility, and inactivity
-- priority-aware ambient/interaction prompts with per-session trigger history
-- 18-second ambient prompt cooldown and 30-second post-dismissal cooldown
-- close/dismiss and always-available manual reopen behavior
-- supplied `BLACKBUDDHA-LOVE.PNG` pixel-art figure installed as a local site asset
-- internal navigation actions that preserve the Vue shell and OGAmp
-- responsive placement that observes marked critical-control groups and moves to the opposite viewport edge
-- no persistence across refresh, as required by PLAN.md
+The current analyzer:
 
-### Events and merchandise
+- draws 14 chunky cyan, magenta, and acid-green bands
+- uses a 256-point Web Audio FFT
+- updates at display refresh rate, approximately 50–60 distinct frames per second in Chromium testing
+- stops rendering when the document is hidden
+- becomes static when `prefers-reduced-motion: reduce` is active
+- measured about 80 ms of main-thread task time over five seconds in local headless Chromium, approximately 1.6% of one CPU core, with zero style recalculation during the measurement
 
-- typed event, merchandise, content-image, status, and provider-link models
-- centralized empty launch collections in `src/content/marketplace.ts`
-- populated Upcoming Shows cards with venue-local time formatting, artwork fallback, location, status, and external ticket actions
-- populated Merch cards with product imagery fallback, display price, status, and external checkout actions
-- branded, accessible empty states that point visitors toward the future mailing-list form
-- provider-neutral outbound links carrying stable provider IDs and future analytics event names
-- POSH, Fourthwall, venue, promoter, and alternate-provider URLs can be added through content without component changes
-- responsive section layouts and six-item primary navigation verified from mobile through desktop
+That benchmark is a regression indicator, not a guarantee for every browser or machine. If the spectrum is changed, profile actual playback and preserve the direct-canvas boundary.
 
-## Verification
+## Music Source of Truth
 
-All checks passed immediately before this handoff:
+`src/content/playlist.json` is the only human-editable source of truth for:
+
+- track order
+- display title
+- artist attribution
+- public audio URL
+- measured duration
+- provisional status
+
+`src/content/tracks.ts` consumes that manifest; do not duplicate track metadata elsewhere.
+
+To replace the playlist from the files currently in `public/music/`:
+
+1. Install FFmpeg so `ffprobe` is available.
+2. Replace the files in `public/music/`.
+3. Run `npm run playlist:sync`.
+4. Review `src/content/playlist.json` and manually correct display metadata if needed.
+
+The sync script reads embedded title/artist metadata and duration, derives URL-safe slugs, and falls back to filename-derived titles plus `OG Blacman`. The current files are provisional and retain the embedded artist value `Procedural DnB Generator`.
+
+## Architecture and Editing Map
+
+| Area | Primary files | Notes |
+| --- | --- | --- |
+| App shell | `src/App.vue`, `src/components/SiteHeader.vue`, `src/components/SiteFooter.vue` | OGAmp and Black Buddha live outside route views so they survive navigation. |
+| Homepage composition | `src/views/HomeView.vue` | Main section ordering and homepage metadata. |
+| Global design | `src/styles/main.css` | Single large stylesheet; mobile-first with the main desktop breakpoint at 720px. |
+| Artist/site content | `src/content/site.ts` | Biography, location, navigation, social links, and current Placecats hero placeholder. |
+| Releases | `src/content/releases.ts`, `src/views/ReleaseView.vue`, `src/components/ReleaseCard.vue` | Current release is provisional and therefore `noindex`. |
+| Music metadata | `src/content/playlist.json`, `src/content/tracks.ts` | JSON manifest is authoritative. |
+| Music metadata tool | `scripts/sync-playlist.mjs` | Requires `ffprobe`. |
+| OGAmp | `src/components/OGAmp.vue`, `src/components/OGSpectrum.vue`, `src/stores/player.ts` | Custom player; preserve canvas spectrum performance. |
+| Tree Hugging | `src/components/TreeHuggingGame.vue`, `src/features/tree-game/gameLogic.ts` | Session-only state; no refresh persistence by design. |
+| Black Buddha | `src/components/BlackBuddha.vue`, `src/stores/blackBuddha.ts`, `src/content/blackBuddha.ts` | Dialogue is provisional and deterministic; no AI/backend. |
+| Events and merch | `src/content/marketplace.ts`, `src/components/EventsSection.vue`, `src/components/MerchSection.vue` | Collections are intentionally empty; provider URLs remain content data. |
+| Types | `src/types/content.ts` | Extend these boundaries before adding ad hoc component data. |
+| Routing | `src/router/index.ts` | Release routes are generated from release content. |
+| Metadata | `src/composables/usePageMeta.ts`, release/home views | `VITE_SITE_URL` controls canonical origin. |
+| Static build | `vite.config.ts`, `scripts/finalize-build.mjs` | Generates prerendered routes plus static-host support files. |
+| Browser tests | `tests/e2e/home.spec.ts`, `playwright.config.ts` | Pixel 7 and desktop Chrome projects. |
+
+## Development and Verification
+
+Install and run locally:
+
+```bash
+npm install
+npm run dev
+```
+
+Use this verification order, sequentially:
+
+```bash
+npm run typecheck
+npm test
+npm run build
+npm run test:e2e
+```
+
+Do not run `npm run build` and `npm run test:e2e` concurrently. Playwright previews `dist/` at port 4173, so replacing the production build while the browser suite is running can make early workers load stale output. Also note that `reuseExistingServer` is enabled outside CI; stop any stale process on port 4173 if browser results contradict the source.
+
+Most recent verified result:
 
 ```text
 npm run typecheck  -> passed
 npm test           -> 7 files, 28 tests passed
-npm run build      -> passed; 3 routes statically generated
+npm run build      -> passed; 3 routes prerendered
 npm run test:e2e   -> 18 tests passed across Pixel 7 and desktop Chrome
-npm audit          -> 0 vulnerabilities
 ```
 
-The browser suite covers:
+The spectrum browser test verifies that the renderer is a canvas, that idle and successive playback frames differ, and that switching to reduced-motion freezes the visualization. Manual automation also verified that hiding the document stops canvas changes and returning to it resumes animation.
 
-- responsive home layout and horizontal overflow
-- direct release deep links and canonical metadata
-- real MP3 response/loading
-- playback across route navigation
-- queue selection and refresh restoration
-- no forced autoplay after refresh
-- audio-reactive OGAmp spectrum and playlist expansion/collapse
-- Tree Hugging completion, final score bounds, and reset
-- Black Buddha arrival, dismissal, reopening, game reaction, and non-blocking placement
-- event/merch empty states, anchor navigation, and responsive page overflow
+## Design Guardrails for Claude Design
 
-## Surge Preview Notes
+The current look is intentionally bold, editorial, and screenshot-friendly rather than a literal desktop/Winamp simulation. Preserve these established traits while refining the next phase:
 
-Deployment command:
+- black, off-white, bright blue, red, acid green, cyan, and magenta palette
+- heavy condensed typography and small monospace/technical labels
+- hard borders, offset shadows, strong color blocking, and restrained pixel-art motifs
+- portrait-first layouts with recognizable branding in cropped screenshots and screen recordings
+- OGAmp as a fixed floating object with a strong page shadow
+- Black Buddha placed away from controls marked with `data-buddha-avoid`
+- visible keyboard focus, meaningful labels, and touch-friendly controls
+- no horizontal overflow at mobile widths
+- reduced-motion behavior as a first-class design state
+- fixed-player safe-area and bottom-spacing accommodation
+
+The current design was influenced by the client-provided Claude artifact:
+
+`https://claude.ai/code/artifact/628261ff-17c7-440b-a46e-d2ace26b9e61`
+
+The OGAmp spectrum was also shaped by a supplied screenshot showing a black player, chunky multicolor bands, bold current-track typography, oversized controls, and a collapsible queue.
+
+When changing OGAmp layout, retain the native canvas dimensions or re-profile it after changing resolution. Do not reintroduce one reactive DOM element per spectrum band.
+
+## Known Intentional Gaps
+
+- The hero still uses a Placecats image and placeholder alt text.
+- Final logo files, artist photography, biography, and approved brand copy are missing.
+- The only release entry is provisional, points to placeholder artwork, and is marked `noindex`.
+- Current music and its release mapping are provisional.
+- Spotify, Apple Music, YouTube, social, and video URLs are not populated.
+- Black Buddha uses the supplied figure, but its lore and dialogue remain provisional.
+- The Tree Hugging game's CSS pixel OG avatar is temporary.
+- Events and merchandise collections are empty until real listings exist.
+- The mailing-list button is disabled; Kit is not integrated.
+- GA4 and the analytics event abstraction are not implemented.
+- Privacy/contact wording and final production metadata are incomplete.
+- Production hosting, domain/DNS validation, and final launch QA remain outstanding.
+
+## Recommended Next Phase
+
+The next phase should focus on replacing provisional presentation and completing launch integrations rather than expanding the application architecture.
+
+1. Use Claude Design to establish the final art direction for hero, artist story, release system, and section transitions using approved assets.
+2. Replace the Placecats hero, temporary avatar, provisional release art, biography, and placeholder copy.
+3. Populate final releases and platform/video links through the typed content files.
+4. Review and approve Black Buddha voice/lore, then replace only `src/content/blackBuddha.ts` dialogue unless behavior also needs revision.
+5. Add a small analytics abstraction and instrument playback, release CTAs, game start/completion, Black Buddha interactions, signup, event clicks, and merch clicks.
+6. Integrate Kit only after receiving its public form action/identifier and approved consent/success/error wording.
+7. Populate events and merchandise when client-approved listings and provider URLs exist.
+8. Perform the final WCAG, mobile Safari/Chrome, performance, metadata, and social-preview pass.
+9. Deploy to UAT, obtain content/design approval, then complete production domain and analytics validation.
+
+Keep the application static-first. Do not add a CMS, backend, user accounts, persistent game state, or AI chat for V1.
+
+## Deployment
+
+Manual Surge preview deployment:
 
 ```bash
 npm run deploy:surge
 ```
 
-This builds with `VITE_SITE_URL=https://ogblacman.surge.sh`, then publishes `dist/`.
+This builds with `VITE_SITE_URL=https://ogblacman.surge.sh` and publishes `dist/`. Surge authentication is required.
 
-Verified live responses from the deployed Checkpoint 2 build:
+Surge overrides `robots.txt` for `*.surge.sh` subdomains with `Disallow: /`; that is acceptable for preview. Production hosting must serve the generated crawl and sitemap files from `scripts/finalize-build.mjs`.
 
-- `/` -> `200 text/html`
-- `/music/next-transmission` -> `200 text/html`
-- `/music/01-dungeon-crawl.mp3` -> `206 Partial Content`, `audio/mpeg`, byte ranges accepted
-- release canonical -> `https://ogblacman.surge.sh/music/next-transmission`
+The planned production architecture remains portable static hosting. Environment variables must contain public environment configuration only; no private secrets can be protected in the frontend bundle.
 
-Surge forcibly serves `User-agent: * / Disallow: /` for `*.surge.sh` subdomains even though the generated local `robots.txt` allows crawling. This is acceptable for a client preview and prevents accidental indexing. The production custom domain/static host must serve the generated allow/sitemap rules instead.
+## Definition of a Safe Continuation
 
-## Resume Steps
+Before handing a future phase back:
 
-1. Pull `main` and run `npm install`.
-2. Run `npm run dev`; use the URL Vite prints because port `5173` may already be occupied.
-3. Run `npm run typecheck`, `npm test`, `npm run build`, and `npm run test:e2e` before extending shared behavior.
-4. Collect/replace pending client content: real artist photos, logo, approved bio, releases, final music/release mapping, cover art, platform links, Black Buddha dialogue, Kit endpoint/copy, privacy/contact details, and GA4 ID.
-5. Implement the analytics abstraction and instrument the required V1 interactions; enable GA4 delivery when its measurement ID arrives.
-6. Implement Kit only after its public form action/identifier and approved consent wording are available.
-7. Continue with final SEO content, accessibility/performance review, and production launch work.
-
-## Intentional Gaps
-
-- Placecats is used only for the artist-photo placeholder.
-- The release entry and release content are provisional and remain `noindex`.
-- OGAmp uses the current generated DnB set and remains provisional pending final release mapping and approval.
-- The CSS pixel OG avatar is temporary pending approved source art.
-- Black Buddha's supplied source art is installed; dialogue remains provisional pending approved lore and voice direction.
-- Event and merchandise collections are intentionally empty until client listings exist; their presentation and provider boundaries are implemented.
-- Kit, GA4 delivery, and live social/platform links are not implemented.
-- Final design references and client assets are still pending.
-
-See [PLAN.md](./PLAN.md) for the complete product specification and [PROGRESS.md](./PROGRESS.md) for the longer implementation log.
+- preserve typed, centralized content boundaries
+- keep OGAmp and Black Buddha outside route views
+- keep OGAmp spectrum data outside Vue reactivity
+- keep game and assistant state session-only
+- keep direct release routes prerenderable
+- run the full verification sequence in order
+- visually inspect mobile and desktop output
+- record deployment status separately from repository status
+- use atomic commits and clearly identify anything not pushed or deployed
