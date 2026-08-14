@@ -35,12 +35,12 @@ function drawSpectrum() {
 
   const width = canvas.value.width
   const height = canvas.value.height
-  const gap = 4
+  const gap = 2
   const barWidth = (width - gap * (BAND_COUNT - 1)) / BAND_COUNT
 
   drawingContext.clearRect(0, 0, width, height)
   for (let index = 0; index < BAND_COUNT; index += 1) {
-    const barHeight = Math.max(7, Math.round((levels[index] ?? 0.1) * height))
+    const barHeight = Math.max(3, Math.round((levels[index] ?? 0.1) * height))
     drawingContext.fillStyle = BAR_COLORS[index % BAR_COLORS.length] ?? '#bcff4f'
     drawingContext.fillRect(Math.round(index * (barWidth + gap)), height - barHeight, Math.ceil(barWidth), barHeight)
   }
@@ -148,8 +148,8 @@ onBeforeUnmount(() => {
     ref="canvas"
     class="ogamp__spectrum"
     :class="{ 'is-playing': player.isPlaying }"
-    width="280"
-    height="94"
+    width="132"
+    height="40"
     data-testid="ogamp-spectrum"
     role="img"
     :aria-label="player.isPlaying ? 'Animated audio spectrum' : 'Audio spectrum waiting for playback'"

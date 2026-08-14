@@ -54,7 +54,7 @@ The current player is split intentionally:
 - `src/components/OGAmp.vue` owns the visible transport and collapsible playlist.
 - `src/components/OGSpectrum.vue` owns canvas rendering and all per-frame visualization data.
 
-Important performance decision: spectrum frames must not be stored in Pinia or Vue reactive state. `OGSpectrum.vue` uses reusable typed arrays, precomputed frequency-band ranges, one 280×94 canvas, and direct `requestAnimationFrame` drawing. This avoids virtual-DOM updates and per-bar style recalculation.
+Important performance decision: spectrum frames must not be stored in Pinia or Vue reactive state. `OGSpectrum.vue` uses reusable typed arrays, precomputed frequency-band ranges, one 132×40 canvas, and direct `requestAnimationFrame` drawing. This avoids virtual-DOM updates and per-bar style recalculation.
 
 The current analyzer:
 
@@ -63,7 +63,9 @@ The current analyzer:
 - updates at display refresh rate, approximately 50–60 distinct frames per second in Chromium testing
 - stops rendering when the document is hidden
 - becomes static when `prefers-reduced-motion: reduce` is active
-- measured about 80 ms of main-thread task time over five seconds in local headless Chromium, approximately 1.6% of one CPU core, with zero style recalculation during the measurement
+- measured about 147 ms of main-thread task time over five seconds in local headless Chromium, approximately 2.9% of one CPU core
+
+That figure replaces an earlier 280×94 measurement of roughly 80 ms. The canvas is now smaller, so the increase is not drawing cost; it is measurement conditions plus roughly 24 ms of style recalculation from the per-`timeupdate` readout and seek-value bindings in the transport bar. An idle five-second sample on the same page measures 2.7 ms, which confirms the marquee tickers and the levitating figure animate on the compositor and cost effectively nothing.
 
 That benchmark is a regression indicator, not a guarantee for every browser or machine. If the spectrum is changed, profile actual playback and preserve the direct-canvas boundary.
 
@@ -100,7 +102,7 @@ The sync script reads embedded title/artist metadata and duration, derives URL-s
 | Releases | `src/content/releases.ts`, `src/views/ReleaseView.vue`, `src/components/ReleaseCard.vue` | Current release is provisional and therefore `noindex`. |
 | Music metadata | `src/content/playlist.json`, `src/content/tracks.ts` | JSON manifest is authoritative. |
 | Music metadata tool | `scripts/sync-playlist.mjs` | Requires `ffprobe`. |
-| OGAmp | `src/components/OGAmp.vue`, `src/components/OGSpectrum.vue`, `src/stores/player.ts` | Custom player; preserve canvas spectrum performance. |
+| OGAmp | `src/components/OGAmp.vue`, `src/components/OGSpectrum.vue`, `src/stores/player.ts` | Fixed transport bar, `--player-height` tall. Preserve canvas spectrum performance. |
 | Tree Hugging | `src/components/TreeHuggingGame.vue`, `src/features/tree-game/gameLogic.ts` | Session-only state; no refresh persistence by design. |
 | Black Buddha | `src/components/BlackBuddha.vue`, `src/stores/blackBuddha.ts`, `src/content/blackBuddha.ts` | Dialogue is provisional and deterministic; no AI/backend. |
 | Events and merch | `src/content/marketplace.ts`, `src/components/EventsSection.vue`, `src/components/MerchSection.vue` | Collections are intentionally empty; provider URLs remain content data. |
@@ -138,7 +140,7 @@ Most recent verified result:
 npm run typecheck  -> passed
 npm test           -> 10 files, 49 tests passed
 npm run build      -> passed; 3 routes prerendered
-npm run test:e2e   -> 20 tests passed across Pixel 7 and desktop Chrome
+npm run test:e2e   -> 22 tests passed across Pixel 7 and desktop Chrome
 ```
 
 The spectrum browser test verifies that the renderer is a canvas, that idle and successive playback frames differ, and that switching to reduced-motion freezes the visualization. Manual automation also verified that hiding the document stops canvas changes and returning to it resumes animation.
@@ -165,6 +167,8 @@ The current design was influenced by the client-provided Claude artifact:
 The OGAmp spectrum was also shaped by a supplied screenshot showing a black player, chunky multicolor bands, bold current-track typography, oversized controls, and a collapsible queue.
 
 When changing OGAmp layout, retain the native canvas dimensions or re-profile it after changing resolution. Do not reintroduce one reactive DOM element per spectrum band.
+
+OGAmp is a fixed bar: small spectrum left, track readout centre, four controls right, and a queue drawer that opens above the bar. The drawer dismisses on outside pointerdown, window scroll, Escape, and track selection. Keep the drawer absolutely positioned so opening it never displaces the transport.
 
 ## Known Intentional Gaps
 

@@ -130,7 +130,7 @@ test('OGAmp selects, seeks, and restores a track without forced autoplay', async
   await player.getByRole('button', { name: 'Open playlist' }).click()
   await expect(page.getByRole('region', { name: 'Playlist' })).toBeVisible()
   await page.locator(`[data-track-slug="${secondTrack.slug}"]`).click()
-  await expect(player.locator('h2')).toHaveText(secondTrack.title)
+  await expect(player.locator('.ogamp__title')).toHaveText(secondTrack.title)
   await expect(player.getByRole('button', { name: 'Pause', exact: true })).toBeVisible()
 
   const timeline = player.getByRole('slider', { name: 'Seek current track' })
@@ -139,7 +139,7 @@ test('OGAmp selects, seeks, and restores a track without forced autoplay', async
   await expect(timeline).toHaveValue('42')
 
   await page.reload()
-  await expect(player.locator('h2')).toHaveText(secondTrack.title)
+  await expect(player.locator('.ogamp__title')).toHaveText(secondTrack.title)
   await expect(player.getByRole('button', { name: 'Play', exact: true })).toBeVisible()
   await expect(timeline).toHaveValue('42')
 })
@@ -172,6 +172,44 @@ test('OGAmp animates its spectrum and collapses its playlist', async ({ page }) 
   await expect(page.locator('[data-track-slug]')).toHaveCount(tracks.length)
   await player.getByRole('button', { name: 'Hide playlist' }).click()
   await expect(page.getByRole('region', { name: 'Playlist' })).toHaveCount(0)
+})
+
+test('OGAmp stays a compact bar and its playlist dismisses on outside input', async ({ page }) => {
+  await page.goto('/')
+
+  const player = page.getByLabel('OGAmp music player')
+  const drawer = page.getByRole('region', { name: 'Playlist' })
+  const open = player.getByRole('button', { name: 'Open playlist' })
+
+  // The transport is a bar, not a panel: it must not eat the viewport.
+  const bar = await player.boundingBox()
+  expect(bar!.height).toBeLessThan(110)
+  const viewport = page.viewportSize()!
+  expect(bar!.height).toBeLessThan(viewport.height * 0.2)
+
+  // The drawer opens above the bar without displacing the transport, so the
+  // controls never move out from under the user's finger.
+  await open.click()
+  await expect(drawer).toBeVisible()
+  const drawerBox = await drawer.boundingBox()
+  expect(drawerBox!.y).toBeLessThan(bar!.y)
+  expect((await player.boundingBox())!.y).toBeCloseTo(bar!.y, 0)
+
+  // Pressing anywhere outside the player dismisses it.
+  await page.locator('#story').click({ position: { x: 10, y: 10 } })
+  await expect(drawer).toHaveCount(0)
+
+  // Scrolling the page dismisses it.
+  await open.click()
+  await expect(drawer).toBeVisible()
+  await page.mouse.wheel(0, 400)
+  await expect(drawer).toHaveCount(0)
+
+  // Escape dismisses it.
+  await open.click()
+  await expect(drawer).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(drawer).toHaveCount(0)
 })
 
 test('Tree Hugging completes, awards the target score, and resets', async ({ page }) => {
