@@ -6,6 +6,7 @@ import { getAdjacentTrackIndex } from '@/features/player/playerLogic'
 
 const STORAGE_KEY = 'ogamp-player'
 const SPECTRUM_BAND_COUNT = 14
+const SPECTRUM_UPDATE_INTERVAL_MS = 125
 const IDLE_SPECTRUM = [0.26, 0.48, 0.34, 0.66, 0.18, 0.42, 0.29, 0.57, 0.21, 0.39, 0.32, 0.61, 0.24, 0.46]
 
 interface PersistedPlayerState {
@@ -29,7 +30,7 @@ export const usePlayerStore = defineStore('player', () => {
   let analyser: AnalyserNode | null = null
   let frequencyData: Uint8Array<ArrayBuffer> | null = null
   let spectrumFrame = 0
-  let lastSpectrumUpdate = 0
+  let spectrumTimer = 0
 
   const currentTrack = computed(() => playlist[currentIndex.value] ?? null)
   const isPlaying = computed(() => status.value === 'playing')
@@ -75,11 +76,24 @@ export const usePlayerStore = defineStore('player', () => {
     spectrumLevels.value = [...IDLE_SPECTRUM]
   }
 
-  function stopSpectrum() {
-    if (typeof window !== 'undefined') window.cancelAnimationFrame(spectrumFrame)
+  function cancelSpectrumUpdates() {
+    if (typeof window === 'undefined') return
+    window.cancelAnimationFrame(spectrumFrame)
+    window.clearTimeout(spectrumTimer)
     spectrumFrame = 0
-    lastSpectrumUpdate = 0
+    spectrumTimer = 0
+  }
+
+  function stopSpectrum() {
+    cancelSpectrumUpdates()
     resetSpectrum()
+  }
+
+  function scheduleSpectrumUpdate() {
+    spectrumTimer = window.setTimeout(() => {
+      spectrumTimer = 0
+      spectrumFrame = window.requestAnimationFrame(updateSpectrum)
+    }, SPECTRUM_UPDATE_INTERVAL_MS)
   }
 
   function updateSpectrum(timestamp: number) {
@@ -88,35 +102,32 @@ export const usePlayerStore = defineStore('player', () => {
       return
     }
 
-    if (timestamp - lastSpectrumUpdate >= 16) {
-      analyser.getByteFrequencyData(frequencyData)
-      const highestBin = Math.max(2, Math.floor(frequencyData.length * 0.46))
-      const rawLevels = Array.from({ length: SPECTRUM_BAND_COUNT }, (_, index) => {
-        const startRatio = index / SPECTRUM_BAND_COUNT
-        const endRatio = (index + 1) / SPECTRUM_BAND_COUNT
-        const start = 1 + Math.floor(Math.pow(startRatio, 1.7) * (highestBin - 1))
-        const end = Math.max(start + 1, 1 + Math.floor(Math.pow(endRatio, 1.7) * (highestBin - 1)))
-        let peak = 0
-        for (let bin = start; bin < end; bin += 1) peak = Math.max(peak, frequencyData?.[bin] ?? 0)
-        return peak
-      })
-      const framePeak = Math.max(1, ...rawLevels)
-      const frameEnergy = Math.min(1, framePeak / 180)
-      spectrumLevels.value = rawLevels.map((value, index) => {
-        const signal = 0.08 + Math.pow(Math.min(1, value / 185), 0.72) * 0.92
-        const pulse = 0.84 + Math.sin(timestamp * 0.026 + index * 1.7) * 0.16
-        const reactiveFloor = (IDLE_SPECTRUM[index] ?? 0.2) * (0.28 + frameEnergy * 0.44) * pulse
-        return Math.min(1, Math.max(0.08, signal, reactiveFloor))
-      })
-      lastSpectrumUpdate = timestamp
-    }
-
-    spectrumFrame = window.requestAnimationFrame(updateSpectrum)
+    analyser.getByteFrequencyData(frequencyData)
+    const highestBin = Math.max(2, Math.floor(frequencyData.length * 0.46))
+    const rawLevels = Array.from({ length: SPECTRUM_BAND_COUNT }, (_, index) => {
+      const startRatio = index / SPECTRUM_BAND_COUNT
+      const endRatio = (index + 1) / SPECTRUM_BAND_COUNT
+      const start = 1 + Math.floor(Math.pow(startRatio, 1.7) * (highestBin - 1))
+      const end = Math.max(start + 1, 1 + Math.floor(Math.pow(endRatio, 1.7) * (highestBin - 1)))
+      let peak = 0
+      for (let bin = start; bin < end; bin += 1) peak = Math.max(peak, frequencyData?.[bin] ?? 0)
+      return peak
+    })
+    const framePeak = Math.max(1, ...rawLevels)
+    const frameEnergy = Math.min(1, framePeak / 180)
+    spectrumLevels.value = rawLevels.map((value, index) => {
+      const signal = 0.08 + Math.pow(Math.min(1, value / 185), 0.72) * 0.92
+      const pulse = 0.84 + Math.sin(timestamp * 0.026 + index * 1.7) * 0.16
+      const reactiveFloor = (IDLE_SPECTRUM[index] ?? 0.2) * (0.28 + frameEnergy * 0.44) * pulse
+      return Math.min(1, Math.max(0.08, signal, reactiveFloor))
+    })
+    spectrumFrame = 0
+    scheduleSpectrumUpdate()
   }
 
   function startSpectrum() {
     if (typeof window === 'undefined') return
-    window.cancelAnimationFrame(spectrumFrame)
+    cancelSpectrumUpdates()
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       spectrumLevels.value = IDLE_SPECTRUM.map((level) => Math.max(0.18, level * 0.72))
       return
@@ -124,13 +135,21 @@ export const usePlayerStore = defineStore('player', () => {
     spectrumFrame = window.requestAnimationFrame(updateSpectrum)
   }
 
+  function handleVisibilityChange() {
+    if (document.hidden) {
+      cancelSpectrumUpdates()
+    } else if (isPlaying.value) {
+      startSpectrum()
+    }
+  }
+
   function initializeSpectrum() {
     if (typeof window === 'undefined' || !audio.value || analyser) return
     try {
       audioContext = new AudioContext()
       analyser = audioContext.createAnalyser()
-      analyser.fftSize = 256
-      analyser.smoothingTimeConstant = 0.22
+      analyser.fftSize = 64
+      analyser.smoothingTimeConstant = 0.55
       frequencyData = new Uint8Array(analyser.frequencyBinCount)
       const source = audioContext.createMediaElementSource(audio.value)
       source.connect(analyser)
@@ -186,6 +205,7 @@ export const usePlayerStore = defineStore('player', () => {
       stopSpectrum()
     })
     audio.value.addEventListener('ended', () => next(true))
+    document.addEventListener('visibilitychange', handleVisibilityChange)
     loadCurrentTrack()
   }
 
