@@ -4,12 +4,13 @@ Last updated: August 13, 2026
 
 ## Current State
 
-Work is paused after completing four implementation milestones:
+Work is paused after completing five implementation milestones:
 
-- functional OGAmp sample-audio player
+- functional OGAmp player with the current five-track DnB set
 - functional Tree Hugging game
-- functional scripted Black Buddha assistant
+- functional scripted Black Buddha assistant using the supplied source figure
 - typed events/merchandise presentation and provider boundaries
+- client asset refresh for Black Buddha and OGAmp
 
 Live static preview (through Interactive Checkpoint 2): `https://ogblacman.surge.sh`
 
@@ -29,16 +30,18 @@ The live preview was deployed successfully from the prior production build. The 
 
 ### OGAmp
 
-- five provisional MP3 sample tracks from `public/music/`
+- five current one-minute DnB tracks from `public/music/`
+- single human-editable playlist manifest at `src/content/playlist.json`
+- `npm run playlist:sync` metadata workflow for replacing the files without editing application code
 - play/pause, previous, next, seek, and queue selection
 - compact responsive playlist drawer
 - loading and playback error states
 - playback continuity across Vue Router navigation
 - slug-based selected-track and position restoration after refresh
 - browser autoplay restrictions respected: state restores without forced playback
-- provisional release CTA connected to a deterministic sample preview track
+- provisional release CTA connected to the deterministic first playlist track
 
-The sample chiptunes are not presented as OG Blacman releases. They remain isolated in `src/content/tracks.ts` and are marked as provisional sample audio.
+The current MP3s retain their embedded `Procedural DnB Generator` attribution. They remain isolated in `src/content/tracks.ts` and marked provisional until final release mapping and approval are supplied.
 
 ### Tree Hugging
 
@@ -60,7 +63,7 @@ The sample chiptunes are not presented as OG Blacman releases. They remain isola
 - priority-aware ambient/interaction prompts with per-session trigger history
 - 18-second ambient prompt cooldown and 30-second post-dismissal cooldown
 - close/dismiss and always-available manual reopen behavior
-- provisional CSS pixel-art character pending client source art
+- supplied `BLACKBUDDHA-LOVE.PNG` pixel-art figure installed as a local site asset
 - internal navigation actions that preserve the Vue shell and OGAmp
 - responsive placement that observes marked critical-control groups and moves to the opposite viewport edge
 - no persistence across refresh, as required by PLAN.md
@@ -82,7 +85,7 @@ All checks passed immediately before this handoff:
 
 ```text
 npm run typecheck  -> passed
-npm test           -> 7 files, 27 tests passed
+npm test           -> 7 files, 28 tests passed
 npm run build      -> passed; 3 routes statically generated
 npm run test:e2e   -> 16 tests passed across Pixel 7 and desktop Chrome
 npm audit          -> 0 vulnerabilities
@@ -110,7 +113,7 @@ npm run deploy:surge
 
 This builds with `VITE_SITE_URL=https://ogblacman.surge.sh`, then publishes `dist/`.
 
-Verified live responses:
+Verified live responses from the deployed Checkpoint 2 build:
 
 - `/` -> `200 text/html`
 - `/music/next-transmission` -> `200 text/html`
@@ -124,7 +127,7 @@ Surge forcibly serves `User-agent: * / Disallow: /` for `*.surge.sh` subdomains 
 1. Pull `main` and run `npm install`.
 2. Run `npm run dev`; use the URL Vite prints because port `5173` may already be occupied.
 3. Run `npm run typecheck`, `npm test`, `npm run build`, and `npm run test:e2e` before extending shared behavior.
-4. Collect/replace pending client content: real artist photos, logo, approved bio, releases, real music, artwork, platform links, Black Buddha source art/dialogue, Kit endpoint/copy, privacy/contact details, and GA4 ID.
+4. Collect/replace pending client content: real artist photos, logo, approved bio, releases, final music/release mapping, cover art, platform links, Black Buddha dialogue, Kit endpoint/copy, privacy/contact details, and GA4 ID.
 5. Implement the analytics abstraction and instrument the required V1 interactions; enable GA4 delivery when its measurement ID arrives.
 6. Implement Kit only after its public form action/identifier and approved consent wording are available.
 7. Continue with final SEO content, accessibility/performance review, and production launch work.
@@ -133,9 +136,9 @@ Surge forcibly serves `User-agent: * / Disallow: /` for `*.surge.sh` subdomains 
 
 - Placecats is used only for the artist-photo placeholder.
 - The release entry and release content are provisional and remain `noindex`.
-- OGAmp audio is provisional generated sample music, not OG Blacman music.
+- OGAmp uses the current generated DnB set and remains provisional pending final release mapping and approval.
 - The CSS pixel OG avatar is temporary pending approved source art.
-- Black Buddha's CSS art and dialogue are provisional pending approved client source material and voice direction.
+- Black Buddha's supplied source art is installed; dialogue remains provisional pending approved lore and voice direction.
 - Event and merchandise collections are intentionally empty until client listings exist; their presentation and provider boundaries are implemented.
 - Kit, GA4 delivery, and live social/platform links are not implemented.
 - Final design references and client assets are still pending.

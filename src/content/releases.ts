@@ -1,4 +1,5 @@
 import { projectImages } from '@/content/site'
+import { tracks } from '@/content/tracks'
 import type { Release } from '@/types/content'
 
 export const releases: Release[] = [
@@ -10,7 +11,7 @@ export const releases: Release[] = [
     artwork: projectImages.tree,
     artworkOptimized: projectImages.treeOptimized,
     artworkAlt: 'Pixel-art Chicago skyline at night with a giant tree beside an elevated train',
-    previewTrackSlug: 'dungeon-crawl',
+    previewTrackSlug: tracks[0]?.slug ?? null,
     description:
       'New OG Blacman music is on the way. Final release details, cover art, audio, and platform links will replace this preview entry.',
     platformLinks: [],

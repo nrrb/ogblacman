@@ -1,5 +1,11 @@
 import { expect, test } from '@playwright/test'
 
+import tracks from '../../src/content/playlist.json' with { type: 'json' }
+
+const [firstTrack, secondTrack] = tracks
+
+if (!firstTrack || !secondTrack) throw new Error('The OGAmp browser checks require at least two playlist tracks.')
+
 test('home presents the artist and core sections', async ({ page }) => {
   await page.goto('/')
 
@@ -36,6 +42,9 @@ test('Black Buddha appears, can be dismissed and reopened without blocking navig
   await page.goto('/')
 
   const assistant = page.getByLabel('Black Buddha assistant')
+  const artwork = assistant.locator('img.black-buddha__art')
+  await expect(artwork).toBeVisible()
+  await expect(artwork).toHaveAttribute('src', '/images/black-buddha-love.png')
   await expect(assistant.getByRole('status')).toContainText('You found the frequency')
   await assistant.getByRole('button', { name: 'Dismiss Black Buddha' }).click()
   await expect(assistant.getByRole('status')).toBeHidden()
@@ -86,9 +95,9 @@ test('release deep link renders directly with unique metadata', async ({ page })
   )
 })
 
-test('OGAmp loads sample audio and keeps playing across route navigation', async ({ page }) => {
+test('OGAmp loads the current audio and keeps playing across route navigation', async ({ page }) => {
   const audioResponse = page.waitForResponse(
-    (response) => response.url().endsWith('/music/01-dungeon-crawl.mp3') && response.status() < 400,
+    (response) => response.url().endsWith(firstTrack.audioUrl) && response.status() < 400,
   )
 
   await page.goto('/')
@@ -109,8 +118,8 @@ test('OGAmp selects, seeks, and restores a track without forced autoplay', async
   const player = page.getByLabel('OGAmp music player')
   await player.getByRole('button', { name: 'Open playlist' }).click()
   await expect(page.getByRole('region', { name: 'Playlist' })).toBeVisible()
-  await page.getByRole('button', { name: /02 Overworld Rush/ }).click()
-  await expect(player.getByText('Overworld Rush', { exact: true })).toBeVisible()
+  await page.locator(`[data-track-slug="${secondTrack.slug}"]`).click()
+  await expect(player.getByText(secondTrack.title, { exact: true })).toBeVisible()
   await expect(player.getByRole('button', { name: 'Pause', exact: true })).toBeVisible()
 
   const timeline = player.getByRole('slider', { name: 'Seek current track' })
@@ -119,7 +128,7 @@ test('OGAmp selects, seeks, and restores a track without forced autoplay', async
   await expect(timeline).toHaveValue('42')
 
   await page.reload()
-  await expect(player.getByText('Overworld Rush', { exact: true })).toBeVisible()
+  await expect(player.getByText(secondTrack.title, { exact: true })).toBeVisible()
   await expect(player.getByRole('button', { name: 'Play', exact: true })).toBeVisible()
   await expect(timeline).toHaveValue('42')
 })

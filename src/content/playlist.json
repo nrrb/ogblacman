@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "liquid-pressure",
+    "title": "Liquid Pressure",
+    "artist": "Procedural DnB Generator",
+    "audioUrl": "/music/01_liquid_pressure.mp3",
+    "durationSeconds": 60.029,
+    "provisional": true
+  },
+  {
+    "slug": "jungle-subway",
+    "title": "Jungle Subway",
+    "artist": "Procedural DnB Generator",
+    "audioUrl": "/music/02_jungle_subway.mp3",
+    "durationSeconds": 60.029,
+    "provisional": true
+  },
+  {
+    "slug": "neuro-voltage",
+    "title": "Neuro Voltage",
+    "artist": "Procedural DnB Generator",
+    "audioUrl": "/music/03_neuro_voltage.mp3",
+    "durationSeconds": 60.029,
+    "provisional": true
+  },
+  {
+    "slug": "deep-current",
+    "title": "Deep Current",
+    "artist": "Procedural DnB Generator",
+    "audioUrl": "/music/04_deep_current.mp3",
+    "durationSeconds": 60.029,
+    "provisional": true
+  },
+  {
+    "slug": "dancefloor-mass",
+    "title": "Dancefloor Mass",
+    "artist": "Procedural DnB Generator",
+    "audioUrl": "/music/05_dancefloor_mass.mp3",
+    "durationSeconds": 60.029,
+    "provisional": true
+  }
+]

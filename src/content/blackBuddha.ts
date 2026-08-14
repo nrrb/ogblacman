@@ -1,7 +1,7 @@
 import type { BlackBuddhaDialogue } from '@/features/black-buddha/assistantLogic'
 
 // Provisional voice and presentation copy. Replace here when approved Black Buddha
-// lore, lyrics, and source artwork arrive; trigger behavior lives elsewhere.
+// lore and lyrics arrive; artwork and trigger behavior live elsewhere.
 export const blackBuddhaDialogues: readonly BlackBuddhaDialogue[] = [
   {
     id: 'manual-welcome',

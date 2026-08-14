@@ -41,9 +41,11 @@ export const usePlayerStore = defineStore('player', () => {
     try {
       const stored = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '') as Partial<PersistedPlayerState>
       const storedIndex = playlist.findIndex((track) => track.slug === stored.currentTrackSlug)
-      if (storedIndex >= 0) currentIndex.value = storedIndex
-      if (typeof stored.currentTime === 'number' && Number.isFinite(stored.currentTime) && stored.currentTime >= 0) {
-        currentTime.value = stored.currentTime
+      if (storedIndex >= 0) {
+        currentIndex.value = storedIndex
+        if (typeof stored.currentTime === 'number' && Number.isFinite(stored.currentTime) && stored.currentTime >= 0) {
+          currentTime.value = stored.currentTime
+        }
       }
       duration.value = currentTrack.value?.durationSeconds ?? 0
     } catch {

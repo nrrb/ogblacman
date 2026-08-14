@@ -25,7 +25,7 @@ describe('release content', () => {
   })
 })
 
-describe('sample track content', () => {
+describe('track content', () => {
   it('has unique slugs and audio paths', () => {
     expect(new Set(tracks.map((track) => track.slug)).size).toBe(tracks.length)
     expect(new Set(tracks.map((track) => track.audioUrl)).size).toBe(tracks.length)
@@ -35,6 +35,14 @@ describe('sample track content', () => {
     for (const track of tracks) {
       expect(track.audioUrl).toMatch(/^\/music\/.+\.mp3$/)
       expect(track.durationSeconds).toBeGreaterThan(0)
+    }
+  })
+
+  it('provides editable display metadata for every track', () => {
+    for (const track of tracks) {
+      expect(track.title.trim()).toBeTruthy()
+      expect(track.artist.trim()).toBeTruthy()
+      expect(track.slug).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
     }
   })
 })

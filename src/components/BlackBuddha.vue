@@ -167,13 +167,14 @@ onBeforeUnmount(() => {
       :title="assistant.isOpen ? 'Black Buddha' : 'Open Black Buddha'"
       @click="assistant.isOpen ? assistant.dismiss() : assistant.open()"
     >
-      <span class="black-buddha__pixel" aria-hidden="true">
-        <i class="black-buddha__halo"></i>
-        <i class="black-buddha__head"></i>
-        <i class="black-buddha__eyes"></i>
-        <i class="black-buddha__robe"></i>
-      </span>
-      <span class="black-buddha__badge" aria-hidden="true">BB</span>
+      <img
+        class="black-buddha__art"
+        src="/images/black-buddha-love.png"
+        alt=""
+        width="1254"
+        height="1254"
+        aria-hidden="true"
+      />
     </button>
   </aside>
 </template>

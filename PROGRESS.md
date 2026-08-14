@@ -4,7 +4,7 @@ Last updated: August 13, 2026
 
 ## Current Checkpoint
 
-**Implementation Checkpoint 4 is complete. The V1 events and merchandise presentation boundaries now join OGAmp, Tree Hugging, and Black Buddha as functional, verified site features.**
+**Implementation Checkpoint 5 is complete. The supplied Black Buddha figure and current five-track DnB set now replace their prior temporary assets across the functional, verified V1 experience.**
 
 The repository now contains a runnable Vue application and a verified static build. Provisional content is intentionally isolated in typed data modules so client-supplied music, copy, artwork, photography, and links can replace it without changing presentation components.
 
@@ -25,17 +25,18 @@ The repository now contains a runnable Vue application and a verified static bui
 - Added focused tests for release content and player helpers.
 - Added Playwright smoke tests for home, direct release deep links, generated metadata, horizontal overflow, game-image framing, and persistent player visibility at mobile and desktop viewports.
 - Updated the README with local development, static build, and Surge deployment commands.
-- Added five provisional sample MP3s as a typed OGAmp playlist, separate from real OG Blacman release content.
+- Replaced the prior sample MP3s with the five current one-minute DnB tracks, using their embedded titles, artist attribution, and measured duration.
+- Added `src/content/playlist.json` as the single source of truth and `npm run playlist:sync` to regenerate it from the MP3 filenames, tags, and durations.
 - Completed OGAmp play/pause, previous/next, queue selection, seeking, loading/error feedback, and route-persistent playback.
 - Added slug-based track and playback-position restoration without forcing autoplay after refresh.
-- Connected the provisional release CTA to a deterministic sample preview track.
+- Connected the provisional release CTA to the deterministic first current playlist track.
 - Replaced the Tree Hugging placeholder with a complete press-and-hold game.
 - Added five growth stages, progressive foliage and fruit, a sad-to-happy tree face, a pixel OG avatar, and a portrait completion composition.
 - Added a randomized per-run target from `$1,000` to `$5,000`, monotonic growth-correlated scoring, exact final target landing, and replay/reset.
 - Added pointer capture, keyboard hold support, live status text, and reduced-motion-compatible state transitions.
 - Added a session-only Black Buddha Pinia store with deterministic trigger history, prompt cooldowns, dismissal cooldown, and manual reopen behavior.
 - Added typed provisional Black Buddha dialogue for initial visits, first playback, game start/completion, release routes, the artist story, and inactivity.
-- Added a provisional CSS pixel-art Black Buddha character and responsive dialogue panel with optional internal navigation actions.
+- Replaced the provisional CSS character with the supplied `BLACKBUDDHA-LOVE.PNG` figure while retaining the responsive dialogue panel and internal navigation actions.
 - Added priority-aware prompts so meaningful interaction moments can replace an ambient prompt without allowing repetitive interruptions.
 - Added viewport-aware placement that moves Black Buddha away from visible hero, game, and release controls while always clearing OGAmp.
 - Added unit coverage for prompt selection/session rules and browser coverage for appearance, dismissal, reopening, game reactions, responsive placement, and unobstructed navigation.
@@ -53,7 +54,7 @@ The following passed at this checkpoint:
 
 ```text
 npm run typecheck  -> passed
-npm test           -> 7 files, 27 tests passed
+npm test           -> 7 files, 28 tests passed
 npm run build      -> passed; 3 routes statically generated
 npm run test:e2e   -> 16 tests passed across Pixel 7 and desktop Chrome profiles
 npm audit          -> 0 vulnerabilities
@@ -80,9 +81,9 @@ Surge overrides `robots.txt` on `*.surge.sh` subdomains with `Disallow: /`. This
 
 1. Pull `main` and run `npm install`.
 2. Run `npm run dev` and review the foundation locally.
-3. Confirm or collect the client inputs listed in PLAN.md, especially final design references, release data, real audio, artist photography, logo, biography, platform links, and Black Buddha source art.
-4. Replace provisional artist/release content and the sample playlist through `src/content/` as inputs arrive.
-5. Replace provisional Black Buddha art and authored dialogue through `src/content/blackBuddha.ts` once approved inputs arrive.
+3. Confirm or collect the client inputs listed in PLAN.md, especially final design references, release data, final audio mapping, artist photography, logo, biography, and platform links.
+4. Replace provisional artist/release content and map the current playlist to approved releases through `src/content/` as inputs arrive.
+5. Replace provisional Black Buddha dialogue through `src/content/blackBuddha.ts` once approved lore and voice direction arrive.
 6. Add the analytics abstraction and instrumentation; enable GA4 delivery once the measurement ID is available.
 7. Implement the Kit form once its public form endpoint/identifier and approved signup copy are available.
 8. Add final production SEO, privacy, social, and launch content after the relevant client inputs exist.
@@ -91,9 +92,9 @@ Surge overrides `robots.txt` on `*.surge.sh` subdomains with `Disallow: /`. This
 
 - Artist photography uses Placecats placeholders.
 - The one release entry is provisional and is marked `noindex`.
-- OGAmp uses generated sample chiptunes, not OG Blacman music. These tracks are clearly modeled as provisional sample audio.
+- OGAmp uses the current generated DnB set with its embedded attribution; release mapping and final approval remain pending.
 - The CSS pixel OG avatar is provisional until approved artist/avatar source art exists.
-- Black Buddha's CSS pixel art and dialogue are provisional pending approved source art, lore, lyrics, and voice direction.
+- Black Buddha's supplied source art is installed; dialogue remains provisional pending approved lore, lyrics, and voice direction.
 - Event and merchandise collections are intentionally empty until real listings exist; both presentation layers and external-provider boundaries are implemented.
 - Kit signup, GA4 delivery, and platform/social links are not implemented.
 - Final branding, copy, privacy/contact information, production analytics, and launch metadata remain pending client input.

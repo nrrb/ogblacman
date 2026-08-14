@@ -357,7 +357,7 @@ V1 Black Buddha is a **scripted Clippy-style assistant**, not an AI chatbot.
 
 ### Character concept
 
-- pixel-art interpretation based on client-provided Black Buddha source image
+- client-provided Black Buddha pixel artwork
 - appears throughout the site
 - actively initiates interactions based on site activity
 - behaves more like a personality-rich assistant/guide than a generic help widget
@@ -1016,7 +1016,6 @@ Implementation can begin before every design decision is resolved, but the follo
 - Spotify/Apple Music/YouTube/other platform URLs
 - song-specific video URLs
 - optional lyrics/lyric excerpts for release content and Black Buddha dialogue
-- Black Buddha source artwork
 - approved Black Buddha lore/dialogue direction
 - final mailing-list signup wording
 - privacy/contact information

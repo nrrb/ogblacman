@@ -34,7 +34,7 @@ onMounted(player.initialize)
       <header>
         <div>
           <span>OGAmp queue</span>
-          <small>{{ player.playlist.length }} sample tracks</small>
+          <small>{{ player.playlist.length }} tracks</small>
         </div>
         <button class="icon-button" type="button" aria-label="Close playlist" title="Close playlist" @click="playlistOpen = false">
           <X :size="18" aria-hidden="true" />
@@ -45,6 +45,7 @@ onMounted(player.initialize)
           <button
             type="button"
             :class="{ 'is-current': index === player.currentIndex }"
+            :data-track-slug="track.slug"
             :aria-current="index === player.currentIndex ? 'true' : undefined"
             @click="selectTrack(index)"
           >

@@ -8,7 +8,7 @@ Start with [HANDOFF.md](./HANDOFF.md) to resume implementation. The longer imple
 
 ## Project Status
 
-Implementation is in progress. The current build includes a responsive application shell, typed provisional content, static release routes, metadata, a functional persistent OGAmp sample playlist, the complete Tree Hugging game loop, automated tests, and a Surge preview workflow.
+Implementation is in progress. The current build includes a responsive application shell, typed provisional content, static release routes, metadata, a functional persistent OGAmp DnB playlist, the complete Tree Hugging game loop, the client-supplied Black Buddha figure, automated tests, and a Surge preview workflow.
 
 ## Local Development
 
@@ -26,6 +26,16 @@ npm run build
 npm run preview
 ```
 
+### Replacing OGAmp music
+
+`src/content/playlist.json` is the single human-editable source of truth for track names, ordering, attribution, durations, and public audio URLs. To rebuild it from the MP3s currently in `public/music/`, install FFmpeg so `ffprobe` is available, replace the files, and run:
+
+```bash
+npm run playlist:sync
+```
+
+The sync command reads embedded title/artist tags and measured durations, derives URL-safe slugs, and uses filename-based titles plus `OG Blacman` as fallbacks. Review or edit the generated JSON before committing if the display metadata needs an override.
+
 ## Live Preview
 
 Publish the current static build to `https://ogblacman.surge.sh`:
@@ -42,7 +52,7 @@ The command builds with the Surge preview URL as the canonical site URL, generat
 - Feature the latest release and provide statically generated, deep-linkable release pages.
 - Provide **OGAmp**, a persistent Winamp-inspired audio player that survives route navigation.
 - Embed the touch-first **Tree Hugging** game with a branded, shareable completion state.
-- Add **Black Buddha**, a scripted pixel-art assistant with contextual site interactions.
+- Provide **Black Buddha**, a scripted pixel-art assistant with contextual site interactions.
 - Capture mailing-list signups through Kit.
 - Provide future-ready presentation layers for Fourthwall merchandise and POSH events.
 - Ship accessible, responsive, performant pages with GA4 analytics and release-specific SEO metadata.
@@ -78,7 +88,7 @@ The interface will be designed for portrait mobile use first, with pixel-art mot
 
 ## Required Client Inputs
 
-Implementation depends on final design references, logo and artist imagery, biography, launch releases, audio and cover art, platform and video URLs, Black Buddha artwork and dialogue direction, signup wording, privacy/contact information, and launch timing.
+Implementation depends on final design references, logo and artist imagery, biography, launch releases, final audio and cover art, platform and video URLs, approved Black Buddha dialogue direction, signup wording, privacy/contact information, and launch timing.
 
 ## Documentation
 
