@@ -9,3 +9,6 @@ test-results/
 .DS_Store
 *.local
 *.log
+
+# Instagram caption export used as a copy reference, not part of the build
+instagram/
