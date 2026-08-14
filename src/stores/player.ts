@@ -88,7 +88,7 @@ export const usePlayerStore = defineStore('player', () => {
       return
     }
 
-    if (timestamp - lastSpectrumUpdate >= 40) {
+    if (timestamp - lastSpectrumUpdate >= 16) {
       analyser.getByteFrequencyData(frequencyData)
       const highestBin = Math.max(2, Math.floor(frequencyData.length * 0.46))
       const rawLevels = Array.from({ length: SPECTRUM_BAND_COUNT }, (_, index) => {
@@ -101,10 +101,11 @@ export const usePlayerStore = defineStore('player', () => {
         return peak
       })
       const framePeak = Math.max(1, ...rawLevels)
-      const frameEnergy = Math.min(1, framePeak / 190)
+      const frameEnergy = Math.min(1, framePeak / 180)
       spectrumLevels.value = rawLevels.map((value, index) => {
-        const signal = 0.08 + Math.pow(value / framePeak, 0.68) * 0.92
-        const reactiveFloor = (IDLE_SPECTRUM[index] ?? 0.2) * (0.4 + frameEnergy * 0.42)
+        const signal = 0.08 + Math.pow(Math.min(1, value / 185), 0.72) * 0.92
+        const pulse = 0.84 + Math.sin(timestamp * 0.026 + index * 1.7) * 0.16
+        const reactiveFloor = (IDLE_SPECTRUM[index] ?? 0.2) * (0.28 + frameEnergy * 0.44) * pulse
         return Math.min(1, Math.max(0.08, signal, reactiveFloor))
       })
       lastSpectrumUpdate = timestamp
@@ -129,7 +130,7 @@ export const usePlayerStore = defineStore('player', () => {
       audioContext = new AudioContext()
       analyser = audioContext.createAnalyser()
       analyser.fftSize = 256
-      analyser.smoothingTimeConstant = 0.78
+      analyser.smoothingTimeConstant = 0.22
       frequencyData = new Uint8Array(analyser.frequencyBinCount)
       const source = audioContext.createMediaElementSource(audio.value)
       source.connect(analyser)

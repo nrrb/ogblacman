@@ -1252,7 +1252,7 @@ button:disabled {
   min-height: 7px;
   background: #bcff4f;
   transform-origin: bottom;
-  transition: transform 80ms linear;
+  transition: transform 24ms linear;
 }
 
 .ogamp__spectrum-bar:nth-child(3n + 2) {

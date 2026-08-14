@@ -143,9 +143,12 @@ test('OGAmp animates its spectrum and collapses its playlist', async ({ page }) 
 
   await player.getByRole('button', { name: 'Play', exact: true }).click()
   await expect(player.locator('[data-testid="ogamp-spectrum"]')).toHaveClass(/is-playing/)
-  await expect.poll(() => spectrumBars.evaluateAll((bars) => bars.map((bar) => bar.getAttribute('data-level')))).not.toEqual(
-    idleLevels,
-  )
+  await page.waitForTimeout(120)
+  const firstActiveLevels = await spectrumBars.evaluateAll((bars) => bars.map((bar) => bar.getAttribute('data-level')))
+  expect(firstActiveLevels).not.toEqual(idleLevels)
+  await page.waitForTimeout(80)
+  const secondActiveLevels = await spectrumBars.evaluateAll((bars) => bars.map((bar) => bar.getAttribute('data-level')))
+  expect(secondActiveLevels).not.toEqual(firstActiveLevels)
 
   await player.getByRole('button', { name: 'Open playlist' }).click()
   await expect(page.getByRole('region', { name: 'Playlist' })).toBeVisible()
