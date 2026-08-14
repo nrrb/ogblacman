@@ -2,6 +2,7 @@
 import { computed, onUnmounted, ref } from 'vue'
 import { HandHeart, RotateCcw } from '@lucide/vue'
 
+import { trackEvent } from '@/analytics'
 import { projectImages } from '@/content/site'
 import { calculateGrowthScore, createTargetScore, getGrowthStage } from '@/features/tree-game/gameLogic'
 
@@ -32,6 +33,7 @@ function advance(timestamp: number) {
   }
   lastFrame.value = timestamp
   if (isComplete.value) {
+    trackEvent('game_completed', { final_score: score.value })
     emit('completed')
     stopHugging()
     return
@@ -42,7 +44,10 @@ function advance(timestamp: number) {
 function startHugging(event?: PointerEvent) {
   if (isComplete.value || isHugging.value) return
   if (event) (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId)
-  if (!hasStarted.value) emit('started')
+  if (!hasStarted.value) {
+    trackEvent('game_started', { target_score: targetScore.value })
+    emit('started')
+  }
   hasStarted.value = true
   isHugging.value = true
   lastFrame.value = null

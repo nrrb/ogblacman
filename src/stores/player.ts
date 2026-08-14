@@ -1,6 +1,7 @@
 import { computed, ref, shallowRef } from 'vue'
 import { defineStore } from 'pinia'
 
+import { trackEvent } from '@/analytics'
 import { tracks } from '@/content/tracks'
 import { getAdjacentTrackIndex } from '@/features/player/playerLogic'
 
@@ -26,6 +27,9 @@ export const usePlayerStore = defineStore('player', () => {
 
   let audioContext: AudioContext | null = null
   let analyser: AnalyserNode | null = null
+  // Slug of the track most recently reported to analytics, so resuming after a
+  // pause does not count as another play.
+  let reportedTrackSlug: string | null = null
 
   const currentTrack = computed(() => playlist[currentIndex.value] ?? null)
   const isPlaying = computed(() => status.value === 'playing')
@@ -119,6 +123,11 @@ export const usePlayerStore = defineStore('player', () => {
     audio.value.addEventListener('play', () => {
       status.value = 'playing'
       errorMessage.value = ''
+      const track = currentTrack.value
+      if (track && track.slug !== reportedTrackSlug) {
+        reportedTrackSlug = track.slug
+        trackEvent('song_played', { track_slug: track.slug, track_title: track.title })
+      }
     })
     audio.value.addEventListener('pause', () => {
       if (status.value !== 'loading' && status.value !== 'error') status.value = 'paused'

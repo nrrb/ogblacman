@@ -46,6 +46,7 @@ defineProps<{
               class="button button--dark"
               :link="item.checkoutLink"
               analytics-event="merch_click"
+              :item-slug="item.slug"
             />
             <span v-else class="listing-status listing-status--dark">
               {{ getMerchandiseStatusLabel(item.status) }}

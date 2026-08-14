@@ -1,6 +1,7 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 
+import { trackEvent } from '@/analytics'
 import { blackBuddhaDialogues } from '@/content/blackBuddha'
 import {
   DISMISSAL_COOLDOWN_MS,
@@ -37,12 +38,17 @@ export const useBlackBuddhaStore = defineStore('black-buddha', () => {
     currentDialogueId.value = dialogue.id
     lastPromptAt.value = now
     isOpen.value = true
+    trackEvent('buddha_engaged', { dialogue_id: dialogue.id, trigger: triggerName })
     return true
   }
 
   function open(now = Date.now()) {
     if (currentDialogue.value) {
       isOpen.value = true
+      trackEvent('buddha_engaged', {
+        dialogue_id: currentDialogue.value.id,
+        trigger: 'manual-open',
+      })
       return
     }
     trigger('manual-open', now)

@@ -2,6 +2,7 @@
 import { ArrowLeft, ArrowUpRight, Play } from '@lucide/vue'
 import { useHead } from '@unhead/vue'
 
+import { trackEvent } from '@/analytics'
 import { getRelease } from '@/content/releases'
 import { artist, siteUrl } from '@/content/site'
 import { usePageMeta } from '@/composables/usePageMeta'
@@ -17,6 +18,7 @@ const player = usePlayerStore()
 if (!release) throw new Error(`Unknown release: ${props.releaseSlug}`)
 
 const previewTrackSlug = release.previewTrackSlug
+const releaseSlug = release.slug
 
 usePageMeta({
   title: release.seo.title,
@@ -45,9 +47,20 @@ useHead({
   ],
 })
 
+trackEvent('release_view', { release_slug: release.slug, release_title: release.title })
+
 function playRelease() {
   const index = player.playlist.findIndex((item) => item.slug === previewTrackSlug)
   if (index >= 0) player.selectTrack(index, true)
+}
+
+// Video destinations report separately from audio streaming platforms.
+const VIDEO_PLATFORMS = ['youtube', 'vevo', 'vimeo']
+
+function trackPlatformClick(label: string) {
+  const isVideo = VIDEO_PLATFORMS.some((platform) => label.toLowerCase().includes(platform))
+  const params = { platform: label, release_slug: releaseSlug }
+  trackEvent(isVideo ? 'video_click' : 'streaming_click', params)
 }
 </script>
 
@@ -82,6 +95,7 @@ function playRelease() {
               :href="platform.url"
               target="_blank"
               rel="noopener noreferrer"
+              @click="trackPlatformClick(platform.label)"
             >
               {{ platform.label }}
               <ArrowUpRight :size="18" aria-hidden="true" />

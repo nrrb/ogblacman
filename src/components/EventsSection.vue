@@ -54,6 +54,7 @@ defineProps<{
               class="button button--light"
               :link="event.ticketLink"
               analytics-event="ticket_click"
+              :item-slug="event.slug"
             />
             <span v-else class="listing-status">{{ getEventStatusLabel(event.status) }}</span>
           </div>
