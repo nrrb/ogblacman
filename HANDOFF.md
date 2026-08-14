@@ -1,6 +1,6 @@
 # OG Blacman — Claude Code + Claude Design Handoff
 
-Last updated: August 14, 2026
+Last updated: August 14, 2026 (revised after the copy, analytics, and Kit phase)
 
 ## Start Here
 
@@ -8,11 +8,20 @@ This repository contains the current implementation of the OG Blacman artist sit
 
 At the start of this handoff:
 
-- branch: `main`
-- current implementation commit: `7fa7c79` (`perf: render OGAmp spectrum on canvas`)
-- `HEAD` and `origin/main` both pointed to `7fa7c79`
-- the worktree was clean before this handoff document was replaced
+- branch: `feat/og-voice-copy`, branched from `main` at `a63996e` and not yet merged or pushed
+- current implementation commit: `19a6c58` (`feat: add Kit mailing-list signup with inline validation and states`)
+- `origin/main` still points to `a63996e`; the copy, analytics, and Kit work exists only locally
+- `instagram/` is an untracked caption export used to derive site copy
 - repository: `git@github.com:nrrb/ogblacman.git`
+
+### Required environment variables
+
+Both features are built and inert until these are configured for the deploy environment:
+
+| Variable | Effect when unset | Effect when set |
+| --- | --- | --- |
+| `VITE_GA_MEASUREMENT_ID` | No GA script loads; all tracking calls no-op | GA4 loads and receives the tracked event set |
+| `VITE_KIT_FORM_ACTION` | Signup form renders disabled | Signup form submits to Kit |
 
 The recorded Surge preview is `https://ogblacman.surge.sh`, but do not assume it matches the current repository. The last documented manual deployment predates the latest custom OGAmp and canvas-spectrum work.
 
@@ -95,6 +104,8 @@ The sync script reads embedded title/artist metadata and duration, derives URL-s
 | Tree Hugging | `src/components/TreeHuggingGame.vue`, `src/features/tree-game/gameLogic.ts` | Session-only state; no refresh persistence by design. |
 | Black Buddha | `src/components/BlackBuddha.vue`, `src/stores/blackBuddha.ts`, `src/content/blackBuddha.ts` | Dialogue is provisional and deterministic; no AI/backend. |
 | Events and merch | `src/content/marketplace.ts`, `src/components/EventsSection.vue`, `src/components/MerchSection.vue` | Collections are intentionally empty; provider URLs remain content data. |
+| Analytics | `src/analytics/events.ts`, `src/analytics/index.ts` | Typed event contract plus the GA4 boundary. Never call gtag from components. |
+| Mailing list | `src/features/mailing-list/kitLogic.ts`, `src/components/SignupForm.vue` | Kit endpoint comes from `VITE_KIT_FORM_ACTION`; inert without it. |
 | Types | `src/types/content.ts` | Extend these boundaries before adding ad hoc component data. |
 | Routing | `src/router/index.ts` | Release routes are generated from release content. |
 | Metadata | `src/composables/usePageMeta.ts`, release/home views | `VITE_SITE_URL` controls canonical origin. |
@@ -125,9 +136,9 @@ Most recent verified result:
 
 ```text
 npm run typecheck  -> passed
-npm test           -> 7 files, 28 tests passed
+npm test           -> 10 files, 49 tests passed
 npm run build      -> passed; 3 routes prerendered
-npm run test:e2e   -> 18 tests passed across Pixel 7 and desktop Chrome
+npm run test:e2e   -> 20 tests passed across Pixel 7 and desktop Chrome
 ```
 
 The spectrum browser test verifies that the renderer is a canvas, that idle and successive playback frames differ, and that switching to reduced-motion freezes the visualization. Manual automation also verified that hiding the document stops canvas changes and returning to it resumes animation.
@@ -157,6 +168,7 @@ When changing OGAmp layout, retain the native canvas dimensions or re-profile it
 
 ## Known Intentional Gaps
 
+- All site copy is derived from the artist's Instagram captions and is written in first person, so it needs his approval before launch.
 - The hero still uses a Placecats image and placeholder alt text.
 - Final logo files, artist photography, biography, and approved brand copy are missing.
 - The only release entry is provisional, points to placeholder artwork, and is marked `noindex`.
@@ -165,9 +177,10 @@ When changing OGAmp layout, retain the native canvas dimensions or re-profile it
 - Black Buddha uses the supplied figure, but its lore and dialogue remain provisional.
 - The Tree Hugging game's CSS pixel OG avatar is temporary.
 - Events and merchandise collections are empty until real listings exist.
-- The mailing-list button is disabled; Kit is not integrated.
-- GA4 and the analytics event abstraction are not implemented.
-- Privacy/contact wording and final production metadata are incomplete.
+- Kit signup is built but inert until `VITE_KIT_FORM_ACTION` is set; consent wording is unapproved.
+- GA4 is built but sends nothing until `VITE_GA_MEASUREMENT_ID` is set.
+- `social_click` and `signup_success` exist in the analytics contract, but no social links are populated yet.
+- Contact wording and final production metadata are incomplete.
 - Production hosting, domain/DNS validation, and final launch QA remain outstanding.
 
 ## Recommended Next Phase
@@ -178,8 +191,8 @@ The next phase should focus on replacing provisional presentation and completing
 2. Replace the Placecats hero, temporary avatar, provisional release art, biography, and placeholder copy.
 3. Populate final releases and platform/video links through the typed content files.
 4. Review and approve Black Buddha voice/lore, then replace only `src/content/blackBuddha.ts` dialogue unless behavior also needs revision.
-5. Add a small analytics abstraction and instrument playback, release CTAs, game start/completion, Black Buddha interactions, signup, event clicks, and merch clicks.
-6. Integrate Kit only after receiving its public form action/identifier and approved consent/success/error wording.
+5. ~~Add a small analytics abstraction and instrument key interactions.~~ Done; set `VITE_GA_MEASUREMENT_ID` to activate.
+6. ~~Integrate Kit.~~ Done; set `VITE_KIT_FORM_ACTION` to activate, and approve the consent/success/error wording.
 7. Populate events and merchandise when client-approved listings and provider URLs exist.
 8. Perform the final WCAG, mobile Safari/Chrome, performance, metadata, and social-preview pass.
 9. Deploy to UAT, obtain content/design approval, then complete production domain and analytics validation.
