@@ -5,6 +5,8 @@ test('home presents the artist and core sections', async ({ page }) => {
 
   await expect(page.getByRole('heading', { level: 1, name: 'OG Blacman' })).toBeVisible()
   await expect(page.getByRole('heading', { level: 2, name: 'Music' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2, name: 'Upcoming shows' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2, name: 'Merch' })).toBeVisible()
   await expect(page.getByLabel('OGAmp music player')).toBeVisible()
 
   const layout = await page.evaluate(() => {
@@ -17,6 +19,17 @@ test('home presents the artist and core sections', async ({ page }) => {
 
   expect(layout.hasHorizontalOverflow).toBe(false)
   expect(layout.gameSceneRatio).toBeCloseTo(0.8, 1)
+})
+
+test('events and merch provide launch-ready empty states', async ({ page }) => {
+  await page.goto('/#shows')
+
+  await expect(page.getByRole('heading', { name: 'No dates announced yet.' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Get show updates' })).toHaveAttribute('href', '#join')
+  await expect(page.getByRole('heading', { name: 'The first drop is under wraps.' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Hear about the drop' })).toHaveAttribute('href', '#join')
+  await page.waitForTimeout(1500)
+  await expect(page.getByLabel('Black Buddha assistant').getByRole('status')).toHaveCount(0)
 })
 
 test('Black Buddha appears, can be dismissed and reopened without blocking navigation', async ({ page }) => {

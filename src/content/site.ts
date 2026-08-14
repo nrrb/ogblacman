@@ -24,5 +24,7 @@ export const primaryNavigation = [
   { label: 'Music', href: '/#music' },
   { label: 'Tree Hugging', href: '/#game' },
   { label: 'Story', href: '/#story' },
+  { label: 'Shows', href: '/#shows' },
+  { label: 'Merch', href: '/#merch' },
   { label: 'Join', href: '/#join' },
 ] as const

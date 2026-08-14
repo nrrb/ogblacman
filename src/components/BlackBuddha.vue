@@ -8,6 +8,7 @@ import { usePlayerStore } from '@/stores/player'
 
 const INITIAL_PROMPT_DELAY_MS = 1_400
 const INACTIVITY_DELAY_MS = 45_000
+const SECTION_TRIGGER_DWELL_MS = 800
 
 const route = useRoute()
 const assistant = useBlackBuddhaStore()
@@ -18,7 +19,10 @@ const visibleAvoidTargets = new Set<Element>()
 
 let initialTimer = 0
 let inactivityTimer = 0
+let storyTimer = 0
 let sectionObserver: IntersectionObserver | null = null
+let isStoryVisible = false
+let hasUserIntent = false
 
 const placementClass = computed(() => ({
   'black-buddha--avoid-controls': shouldAvoidBottomControls.value,
@@ -32,8 +36,14 @@ function scheduleInactivityPrompt() {
   }, INACTIVITY_DELAY_MS)
 }
 
+function registerUserIntent() {
+  hasUserIntent = true
+  scheduleInactivityPrompt()
+}
+
 function handleRoute() {
   if (!hasMounted.value) return
+  if (route.hash) window.clearTimeout(initialTimer)
   if (String(route.name ?? '').startsWith('release-')) {
     window.clearTimeout(initialTimer)
     assistant.trigger('release-open')
@@ -45,6 +55,8 @@ function handleRoute() {
 async function observePageTargets() {
   await nextTick()
   sectionObserver?.disconnect()
+  window.clearTimeout(storyTimer)
+  isStoryVisible = false
   visibleAvoidTargets.clear()
   shouldAvoidBottomControls.value = false
   for (const target of document.querySelectorAll('#story, [data-buddha-avoid]')) {
@@ -69,14 +81,24 @@ onMounted(() => {
   hasMounted.value = true
   handleRoute()
 
-  if (!String(route.name ?? '').startsWith('release-')) {
+  if (!String(route.name ?? '').startsWith('release-') && !route.hash) {
     initialTimer = window.setTimeout(() => assistant.trigger('initial-visit'), INITIAL_PROMPT_DELAY_MS)
   }
 
   sectionObserver = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
-        if (entry.target.id === 'story' && entry.isIntersecting) assistant.trigger('story-section')
+        if (entry.target.id === 'story') {
+          isStoryVisible = entry.isIntersecting
+          window.clearTimeout(storyTimer)
+          if (entry.isIntersecting) {
+            storyTimer = window.setTimeout(() => {
+              if (isStoryVisible && (route.hash === '#story' || hasUserIntent)) {
+                assistant.trigger('story-section')
+              }
+            }, SECTION_TRIGGER_DWELL_MS)
+          }
+        }
         if (entry.target.hasAttribute('data-buddha-avoid')) {
           if (entry.isIntersecting) visibleAvoidTargets.add(entry.target)
           else visibleAvoidTargets.delete(entry.target)
@@ -88,19 +110,22 @@ onMounted(() => {
   )
 
   void observePageTargets()
-  for (const eventName of ['pointerdown', 'keydown', 'scroll'] as const) {
-    window.addEventListener(eventName, scheduleInactivityPrompt, { passive: true })
+  for (const eventName of ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const) {
+    window.addEventListener(eventName, registerUserIntent, { passive: true })
   }
+  window.addEventListener('scroll', scheduleInactivityPrompt, { passive: true })
   scheduleInactivityPrompt()
 })
 
 onBeforeUnmount(() => {
   window.clearTimeout(initialTimer)
   window.clearTimeout(inactivityTimer)
+  window.clearTimeout(storyTimer)
   sectionObserver?.disconnect()
-  for (const eventName of ['pointerdown', 'keydown', 'scroll'] as const) {
-    window.removeEventListener(eventName, scheduleInactivityPrompt)
+  for (const eventName of ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const) {
+    window.removeEventListener(eventName, registerUserIntent)
   }
+  window.removeEventListener('scroll', scheduleInactivityPrompt)
 })
 </script>
 

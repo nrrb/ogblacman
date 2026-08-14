@@ -4,15 +4,16 @@ Last updated: August 13, 2026
 
 ## Current State
 
-Work is paused after completing three interactive phases:
+Work is paused after completing four implementation milestones:
 
 - functional OGAmp sample-audio player
 - functional Tree Hugging game
 - functional scripted Black Buddha assistant
+- typed events/merchandise presentation and provider boundaries
 
 Live static preview (through Interactive Checkpoint 2): `https://ogblacman.surge.sh`
 
-The live preview was deployed successfully from the prior production build. The new Black Buddha checkpoint is verified locally but has not been published.
+The live preview was deployed successfully from the prior production build. The Black Buddha and marketplace checkpoints are verified locally but have not been published.
 
 ## Completed
 
@@ -64,15 +65,26 @@ The sample chiptunes are not presented as OG Blacman releases. They remain isola
 - responsive placement that observes marked critical-control groups and moves to the opposite viewport edge
 - no persistence across refresh, as required by PLAN.md
 
+### Events and merchandise
+
+- typed event, merchandise, content-image, status, and provider-link models
+- centralized empty launch collections in `src/content/marketplace.ts`
+- populated Upcoming Shows cards with venue-local time formatting, artwork fallback, location, status, and external ticket actions
+- populated Merch cards with product imagery fallback, display price, status, and external checkout actions
+- branded, accessible empty states that point visitors toward the future mailing-list form
+- provider-neutral outbound links carrying stable provider IDs and future analytics event names
+- POSH, Fourthwall, venue, promoter, and alternate-provider URLs can be added through content without component changes
+- responsive section layouts and six-item primary navigation verified from mobile through desktop
+
 ## Verification
 
 All checks passed immediately before this handoff:
 
 ```text
 npm run typecheck  -> passed
-npm test           -> 5 files, 20 tests passed
+npm test           -> 7 files, 27 tests passed
 npm run build      -> passed; 3 routes statically generated
-npm run test:e2e   -> 14 tests passed across Pixel 7 and desktop Chrome
+npm run test:e2e   -> 16 tests passed across Pixel 7 and desktop Chrome
 npm audit          -> 0 vulnerabilities
 ```
 
@@ -86,6 +98,7 @@ The browser suite covers:
 - no forced autoplay after refresh
 - Tree Hugging completion, final score bounds, and reset
 - Black Buddha arrival, dismissal, reopening, game reaction, and non-blocking placement
+- event/merch empty states, anchor navigation, and responsive page overflow
 
 ## Surge Preview Notes
 
@@ -112,9 +125,9 @@ Surge forcibly serves `User-agent: * / Disallow: /` for `*.surge.sh` subdomains 
 2. Run `npm run dev`; use the URL Vite prints because port `5173` may already be occupied.
 3. Run `npm run typecheck`, `npm test`, `npm run build`, and `npm run test:e2e` before extending shared behavior.
 4. Collect/replace pending client content: real artist photos, logo, approved bio, releases, real music, artwork, platform links, Black Buddha source art/dialogue, Kit endpoint/copy, privacy/contact details, and GA4 ID.
-5. Implement the typed events/merch empty states and provider-neutral external-link boundaries.
+5. Implement the analytics abstraction and instrument the required V1 interactions; enable GA4 delivery when its measurement ID arrives.
 6. Implement Kit only after its public form action/identifier and approved consent wording are available.
-7. Continue with the analytics abstraction/instrumentation, final SEO content, accessibility/performance review, and production launch work.
+7. Continue with final SEO content, accessibility/performance review, and production launch work.
 
 ## Intentional Gaps
 
@@ -123,7 +136,8 @@ Surge forcibly serves `User-agent: * / Disallow: /` for `*.surge.sh` subdomains 
 - OGAmp audio is provisional generated sample music, not OG Blacman music.
 - The CSS pixel OG avatar is temporary pending approved source art.
 - Black Buddha's CSS art and dialogue are provisional pending approved client source material and voice direction.
-- Kit, GA4, live social/platform links, live events, and live merchandise are not implemented.
+- Event and merchandise collections are intentionally empty until client listings exist; their presentation and provider boundaries are implemented.
+- Kit, GA4 delivery, and live social/platform links are not implemented.
 - Final design references and client assets are still pending.
 
 See [PLAN.md](./PLAN.md) for the complete product specification and [PROGRESS.md](./PROGRESS.md) for the longer implementation log.

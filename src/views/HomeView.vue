@@ -2,8 +2,11 @@
 import { ArrowDown, ArrowUpRight, Radio } from '@lucide/vue'
 import { useHead } from '@unhead/vue'
 
+import EventsSection from '@/components/EventsSection.vue'
+import MerchSection from '@/components/MerchSection.vue'
 import ReleaseCard from '@/components/ReleaseCard.vue'
 import TreeHuggingGame from '@/components/TreeHuggingGame.vue'
+import { events, merchandise } from '@/content/marketplace'
 import { releases } from '@/content/releases'
 import { artist, placeholderImages, siteUrl } from '@/content/site'
 import { usePageMeta } from '@/composables/usePageMeta'
@@ -106,6 +109,10 @@ useHead({
       </div>
     </div>
   </section>
+
+  <EventsSection :events="events" />
+
+  <MerchSection :merchandise="merchandise" />
 
   <section id="join" class="section section--join">
     <div class="container join-layout">
