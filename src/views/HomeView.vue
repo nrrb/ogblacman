@@ -53,9 +53,26 @@ useHead({
     />
     <div class="hero__shade" aria-hidden="true"></div>
     <div class="container hero__content">
-      <p class="eyebrow eyebrow--light">{{ artist.location }} / {{ artist.descriptor }}</p>
-      <h1 id="hero-title">OG<br />Blacman</h1>
+      <p class="eyebrow eyebrow--chip">{{ artist.location }} // {{ artist.descriptor }}</p>
+      <h1 id="hero-title">
+        <span class="hero__name-og">OG</span><br />
+        <span class="hero__name-blac">Blac</span><span class="hero__name-man">man</span>
+      </h1>
       <p class="hero__statement">Turn it up before you start scrolling</p>
+      <dl class="hero__stats">
+        <div class="hero__stat">
+          <dt>Height</dt>
+          <dd>6&prime;2&Prime;</dd>
+        </div>
+        <div class="hero__stat">
+          <dt>Volume</dt>
+          <dd>Max</dd>
+        </div>
+        <div class="hero__stat">
+          <dt>Cake</dt>
+          <dd>#1</dd>
+        </div>
+      </dl>
       <div class="hero__actions" data-buddha-avoid>
         <a class="button button--light" href="#music">
           <Radio :size="18" aria-hidden="true" />
@@ -70,8 +87,18 @@ useHead({
     <div class="hero__stamp" aria-hidden="true">OG / CHI / 001</div>
   </section>
 
-  <div class="signal-strip" aria-hidden="true">
-    <span>OG BLACMAN</span><span>CHICAGO</span><span>TIME IS EXPENSIVE</span><span>OG BLACMAN</span>
+  <!-- Each track holds the run twice so the -50% loop is seamless. -->
+  <div class="ticker ticker--magenta" aria-hidden="true">
+    <div class="ticker__track">
+      <span>▓ BEST CAKE IN THE WORLD ▓ MEGAPHONE ON ▓ TIME IS EXPENSIVE ▓ CHICAGO IL ▓</span>
+      <span>▓ BEST CAKE IN THE WORLD ▓ MEGAPHONE ON ▓ TIME IS EXPENSIVE ▓ CHICAGO IL ▓</span>
+    </div>
+  </div>
+  <div class="ticker ticker--cyan" aria-hidden="true">
+    <div class="ticker__track">
+      <span>★ OG BLACMAN ★ SIX FOOT TWO ★ POSITIVITY AT FULL VOLUME ★ DREADS PAST THE SHOULDERS ★</span>
+      <span>★ OG BLACMAN ★ SIX FOOT TWO ★ POSITIVITY AT FULL VOLUME ★ DREADS PAST THE SHOULDERS ★</span>
+    </div>
   </div>
 
   <section id="music" class="section section--paper">
@@ -106,6 +133,7 @@ useHead({
       </div>
       <div class="story-copy">
         <p>{{ artist.biography }}</p>
+        <p>I been doing this since before anybody was watching so don't ask me who put me on</p>
         <p>Time is expensive so I spend mine making the stuff I wanted to hear</p>
       </div>
     </div>

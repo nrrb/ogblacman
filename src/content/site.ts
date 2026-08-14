@@ -16,7 +16,7 @@ export const artist: ArtistProfile = {
   location: 'Chicago',
   descriptor: 'The Original',
   biography:
-    "I'm from Chicago and I been doing this since before anybody was watching so don't ask me who put me on \u{1F934}\u{1F3FF}",
+    "Six foot two with the dreads past my shoulders and a megaphone in my hand. Music, positivity and the best cake in the world, sold loud on Chicago sidewalks \u{1F934}\u{1F3FF}",
   socialLinks: [],
 }
 
