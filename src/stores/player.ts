@@ -5,9 +5,8 @@ import { tracks } from '@/content/tracks'
 import { getAdjacentTrackIndex } from '@/features/player/playerLogic'
 
 const STORAGE_KEY = 'ogamp-player'
-const SPECTRUM_BAND_COUNT = 14
-const SPECTRUM_UPDATE_INTERVAL_MS = 125
-const IDLE_SPECTRUM = [0.26, 0.48, 0.34, 0.66, 0.18, 0.42, 0.29, 0.57, 0.21, 0.39, 0.32, 0.61, 0.24, 0.46]
+const SPECTRUM_FFT_SIZE = 256
+const SPECTRUM_BIN_COUNT = SPECTRUM_FFT_SIZE / 2
 
 interface PersistedPlayerState {
   currentTrackSlug: string
@@ -23,14 +22,10 @@ export const usePlayerStore = defineStore('player', () => {
   const duration = ref(playlist[0]?.durationSeconds ?? 0)
   const status = ref<PlayerStatus>('idle')
   const errorMessage = ref('')
-  const spectrumLevels = ref([...IDLE_SPECTRUM])
   const audio = shallowRef<HTMLAudioElement | null>(null)
 
   let audioContext: AudioContext | null = null
   let analyser: AnalyserNode | null = null
-  let frequencyData: Uint8Array<ArrayBuffer> | null = null
-  let spectrumFrame = 0
-  let spectrumTimer = 0
 
   const currentTrack = computed(() => playlist[currentIndex.value] ?? null)
   const isPlaying = computed(() => status.value === 'playing')
@@ -72,75 +67,10 @@ export const usePlayerStore = defineStore('player', () => {
     return 'Audio is temporarily unavailable.'
   }
 
-  function resetSpectrum() {
-    spectrumLevels.value = [...IDLE_SPECTRUM]
-  }
-
-  function cancelSpectrumUpdates() {
-    if (typeof window === 'undefined') return
-    window.cancelAnimationFrame(spectrumFrame)
-    window.clearTimeout(spectrumTimer)
-    spectrumFrame = 0
-    spectrumTimer = 0
-  }
-
-  function stopSpectrum() {
-    cancelSpectrumUpdates()
-    resetSpectrum()
-  }
-
-  function scheduleSpectrumUpdate() {
-    spectrumTimer = window.setTimeout(() => {
-      spectrumTimer = 0
-      spectrumFrame = window.requestAnimationFrame(updateSpectrum)
-    }, SPECTRUM_UPDATE_INTERVAL_MS)
-  }
-
-  function updateSpectrum(timestamp: number) {
-    if (!analyser || !frequencyData || !isPlaying.value) {
-      stopSpectrum()
-      return
-    }
-
-    analyser.getByteFrequencyData(frequencyData)
-    const highestBin = Math.max(2, Math.floor(frequencyData.length * 0.46))
-    const rawLevels = Array.from({ length: SPECTRUM_BAND_COUNT }, (_, index) => {
-      const startRatio = index / SPECTRUM_BAND_COUNT
-      const endRatio = (index + 1) / SPECTRUM_BAND_COUNT
-      const start = 1 + Math.floor(Math.pow(startRatio, 1.7) * (highestBin - 1))
-      const end = Math.max(start + 1, 1 + Math.floor(Math.pow(endRatio, 1.7) * (highestBin - 1)))
-      let peak = 0
-      for (let bin = start; bin < end; bin += 1) peak = Math.max(peak, frequencyData?.[bin] ?? 0)
-      return peak
-    })
-    const framePeak = Math.max(1, ...rawLevels)
-    const frameEnergy = Math.min(1, framePeak / 180)
-    spectrumLevels.value = rawLevels.map((value, index) => {
-      const signal = 0.08 + Math.pow(Math.min(1, value / 185), 0.72) * 0.92
-      const pulse = 0.84 + Math.sin(timestamp * 0.026 + index * 1.7) * 0.16
-      const reactiveFloor = (IDLE_SPECTRUM[index] ?? 0.2) * (0.28 + frameEnergy * 0.44) * pulse
-      return Math.min(1, Math.max(0.08, signal, reactiveFloor))
-    })
-    spectrumFrame = 0
-    scheduleSpectrumUpdate()
-  }
-
-  function startSpectrum() {
-    if (typeof window === 'undefined') return
-    cancelSpectrumUpdates()
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      spectrumLevels.value = IDLE_SPECTRUM.map((level) => Math.max(0.18, level * 0.72))
-      return
-    }
-    spectrumFrame = window.requestAnimationFrame(updateSpectrum)
-  }
-
-  function handleVisibilityChange() {
-    if (document.hidden) {
-      cancelSpectrumUpdates()
-    } else if (isPlaying.value) {
-      startSpectrum()
-    }
+  function readSpectrum(target: Uint8Array<ArrayBuffer>) {
+    if (!analyser || !isPlaying.value) return false
+    analyser.getByteFrequencyData(target)
+    return true
   }
 
   function initializeSpectrum() {
@@ -148,17 +78,14 @@ export const usePlayerStore = defineStore('player', () => {
     try {
       audioContext = new AudioContext()
       analyser = audioContext.createAnalyser()
-      analyser.fftSize = 64
+      analyser.fftSize = SPECTRUM_FFT_SIZE
       analyser.smoothingTimeConstant = 0.55
-      frequencyData = new Uint8Array(analyser.frequencyBinCount)
       const source = audioContext.createMediaElementSource(audio.value)
       source.connect(analyser)
       analyser.connect(audioContext.destination)
     } catch {
       audioContext = null
       analyser = null
-      frequencyData = null
-      resetSpectrum()
     }
   }
 
@@ -192,20 +119,16 @@ export const usePlayerStore = defineStore('player', () => {
     audio.value.addEventListener('play', () => {
       status.value = 'playing'
       errorMessage.value = ''
-      startSpectrum()
     })
     audio.value.addEventListener('pause', () => {
       if (status.value !== 'loading' && status.value !== 'error') status.value = 'paused'
-      stopSpectrum()
       persist()
     })
     audio.value.addEventListener('error', () => {
       status.value = 'error'
       errorMessage.value = describeMediaError()
-      stopSpectrum()
     })
     audio.value.addEventListener('ended', () => next(true))
-    document.addEventListener('visibilitychange', handleVisibilityChange)
     loadCurrentTrack()
   }
 
@@ -219,7 +142,6 @@ export const usePlayerStore = defineStore('player', () => {
     } catch (error) {
       status.value = 'error'
       errorMessage.value = error instanceof Error ? error.message : 'Playback could not start.'
-      stopSpectrum()
     }
   }
 
@@ -272,7 +194,7 @@ export const usePlayerStore = defineStore('player', () => {
     duration,
     status,
     errorMessage,
-    spectrumLevels,
+    spectrumBinCount: SPECTRUM_BIN_COUNT,
     isPlaying,
     isReady,
     canPlay,
@@ -284,5 +206,6 @@ export const usePlayerStore = defineStore('player', () => {
     previous,
     next,
     seek,
+    readSpectrum,
   }
 })

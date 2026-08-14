@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { FastForward, ListMusic, Pause, Play, Rewind } from '@lucide/vue'
 
 import { formatPlaybackTime } from '@/features/player/playerLogic'
+import OGSpectrum from '@/components/OGSpectrum.vue'
 import { usePlayerStore } from '@/stores/player'
 
 const player = usePlayerStore()
@@ -43,21 +44,7 @@ onMounted(player.initialize)
 
       <h2>{{ player.currentTrack?.title || 'No signal' }}</h2>
 
-      <div
-        class="ogamp__spectrum"
-        :class="{ 'is-playing': player.isPlaying }"
-        data-testid="ogamp-spectrum"
-        role="img"
-        :aria-label="player.isPlaying ? 'Animated audio spectrum' : 'Audio spectrum waiting for playback'"
-      >
-        <span
-          v-for="(level, index) in player.spectrumLevels"
-          :key="index"
-          class="ogamp__spectrum-bar"
-          :data-level="level.toFixed(3)"
-          :style="{ transform: `scaleY(${level})` }"
-        ></span>
-      </div>
+      <OGSpectrum />
 
       <div class="ogamp__readout" aria-live="polite">
         <span :class="{ 'is-error': player.status === 'error' }">
