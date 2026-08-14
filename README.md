@@ -8,7 +8,7 @@ Start with [HANDOFF.md](./HANDOFF.md) to resume implementation. The longer imple
 
 ## Project Status
 
-Implementation is in progress. The current build includes a responsive application shell, typed provisional content, static release routes, metadata, a functional persistent OGAmp DnB playlist, the complete Tree Hugging game loop, the client-supplied Black Buddha figure, automated tests, and a Surge preview workflow.
+Implementation is in progress. The current build includes a responsive application shell, typed provisional content, static release routes, metadata, a persistent Webamp-powered OGAmp DnB playlist, the complete Tree Hugging game loop, the client-supplied Black Buddha figure, automated tests, and a Surge preview workflow.
 
 ## Local Development
 
@@ -50,7 +50,7 @@ The command builds with the Surge preview URL as the canonical site URL, generat
 
 - Present OG Blacman's identity, biography, photography, music, videos, and platform links.
 - Feature the latest release and provide statically generated, deep-linkable release pages.
-- Provide **OGAmp**, a persistent Winamp-inspired audio player that survives route navigation.
+- Provide **OGAmp**, a persistent Webamp-powered audio player that survives route navigation.
 - Embed the touch-first **Tree Hugging** game with a branded, shareable completion state.
 - Provide **Black Buddha**, a scripted pixel-art assistant with contextual site interactions.
 - Capture mailing-list signups through Kit.
@@ -64,6 +64,7 @@ Commerce, ticketing, user accounts, AI chat, a CMS, and persistent game or assis
 - Vue 3, Vite, and TypeScript
 - Vue Router for navigation and release routes
 - Pinia for shared interactive state
+- Webamp 2.3 for the classic OGAmp player interface
 - Custom CSS and Vue components
 - Build-time prerendering for known release routes and social metadata
 - Static output portable across hosting providers, with Vercel as the initial host

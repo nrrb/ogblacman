@@ -254,7 +254,7 @@ No built-in share API is required in V1.
 
 ## 9. OGAmp Persistent Music Player
 
-Create a custom Winamp-inspired player with an OG Blacman-specific identity. **OGAmp** is the current working name and may change during design.
+Use the official Webamp implementation of the classic Winamp interface with an OG Blacman-specific identity. The player is titled **OGAmp**.
 
 ### Required controls
 
@@ -273,6 +273,8 @@ No shuffle or repeat controls are required for V1.
 - clearly identifies OG Blacman and/or uses the OG logo/name
 - usable on small mobile screens without covering critical interaction areas
 - desktop version may expand or reposition while preserving the fixed/persistent concept
+- keep the main and playlist windows visible; visitors cannot close, minimize/windowshade, or toggle them away
+- Webamp-branded controls must not navigate visitors away from the site
 
 ### Playback state
 
@@ -842,7 +844,8 @@ Each phase should be implemented through small, atomic commits. Codex should exp
 
 ### Phase 3: OGAmp
 
-- player UI
+- Webamp integration and OGAmp branding
+- locked-open main and playlist windows
 - play/pause
 - previous/next
 - persistent route-level state

@@ -4,7 +4,7 @@ Last updated: August 13, 2026
 
 ## Current Checkpoint
 
-**Implementation Checkpoint 5 is complete. The supplied Black Buddha figure and current five-track DnB set now replace their prior temporary assets across the functional, verified V1 experience.**
+**Implementation Checkpoint 6 is complete. The custom player has been replaced by official Webamp, branded as OGAmp, with its main and playlist windows fixed open in the verified V1 experience.**
 
 The repository now contains a runnable Vue application and a verified static build. Provisional content is intentionally isolated in typed data modules so client-supplied music, copy, artwork, photography, and links can replace it without changing presentation components.
 
@@ -47,6 +47,11 @@ The repository now contains a runnable Vue application and a verified static bui
 - Added event date/time-zone formatting, status-label helpers, and focused unit/component coverage for empty and populated states.
 - Added Shows and Merch navigation targets while preserving the compact mobile menu and the 720px desktop breakpoint.
 - Prevented generic Black Buddha prompts on intentional section deep links and added sustained-visibility handling for the story trigger.
+- Replaced the custom OGAmp interface and audio engine with dynamically loaded Webamp 2.3.1 while retaining the Pinia release-CTA and route-persistence boundary.
+- Fed Webamp exclusively from `src/content/playlist.json`, including precomputed titles, artist attribution, URLs, and durations.
+- Branded the classic main and playlist title bars as OGAmp and removed the temporary outer player frame while retaining the page shadow.
+- Kept both classic windows expanded by locking close, minimize/windowshade, playlist-toggle, title-bar double-click, context-menu, and external Webamp navigation paths.
+- Added browser coverage for Webamp playback, queue restoration, route continuity, and all locked window/navigation controls.
 
 ## Verification
 
@@ -56,7 +61,7 @@ The following passed at this checkpoint:
 npm run typecheck  -> passed
 npm test           -> 7 files, 28 tests passed
 npm run build      -> passed; 3 routes statically generated
-npm run test:e2e   -> 16 tests passed across Pixel 7 and desktop Chrome profiles
+npm run test:e2e   -> 18 tests passed across Pixel 7 and desktop Chrome profiles
 npm audit          -> 0 vulnerabilities
 ```
 
@@ -64,7 +69,7 @@ The generated release HTML contains its release-specific title, canonical URL, d
 
 ## Deployment Status
 
-Interactive Checkpoint 2 is deployed at `https://ogblacman.surge.sh`. Checkpoints 3 and 4 are verified locally and have not yet been published.
+Interactive Checkpoint 2 is deployed at `https://ogblacman.surge.sh`. Checkpoints 3 through 6 are verified locally and have not yet been published.
 
 To publish an updated live preview from an authenticated machine:
 

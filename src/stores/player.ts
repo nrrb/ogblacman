@@ -1,5 +1,6 @@
 import { computed, ref, shallowRef } from 'vue'
 import { defineStore } from 'pinia'
+import type Webamp from 'webamp'
 
 import { tracks } from '@/content/tracks'
 import { getAdjacentTrackIndex } from '@/features/player/playerLogic'
@@ -11,6 +12,11 @@ interface PersistedPlayerState {
   currentTime: number
 }
 
+interface PendingSelection {
+  index: number
+  autoplay: boolean
+}
+
 type PlayerStatus = 'idle' | 'loading' | 'ready' | 'playing' | 'paused' | 'error'
 
 export const usePlayerStore = defineStore('player', () => {
@@ -20,12 +26,20 @@ export const usePlayerStore = defineStore('player', () => {
   const duration = ref(playlist[0]?.durationSeconds ?? 0)
   const status = ref<PlayerStatus>('idle')
   const errorMessage = ref('')
-  const audio = shallowRef<HTMLAudioElement | null>(null)
+  const webamp = shallowRef<Webamp | null>(null)
+
+  let unsubscribeState: (() => void) | null = null
+  let unsubscribeTrack: (() => void) | null = null
+  let syncTimer = 0
+  let pendingSelection: PendingSelection | null = null
+  let pendingRestoreTime = 0
+  let isAttaching = false
+  let playbackAllowed = false
 
   const currentTrack = computed(() => playlist[currentIndex.value] ?? null)
   const isPlaying = computed(() => status.value === 'playing')
   const isReady = computed(() => ['ready', 'playing', 'paused'].includes(status.value))
-  const canPlay = computed(() => Boolean(currentTrack.value?.audioUrl))
+  const canPlay = computed(() => Boolean(currentTrack.value?.audioUrl && webamp.value))
 
   function persist() {
     if (typeof window === 'undefined' || !currentTrack.value) return
@@ -45,6 +59,7 @@ export const usePlayerStore = defineStore('player', () => {
         currentIndex.value = storedIndex
         if (typeof stored.currentTime === 'number' && Number.isFinite(stored.currentTime) && stored.currentTime >= 0) {
           currentTime.value = stored.currentTime
+          pendingRestoreTime = stored.currentTime
         }
       }
       duration.value = currentTrack.value?.durationSeconds ?? 0
@@ -53,90 +68,127 @@ export const usePlayerStore = defineStore('player', () => {
     }
   }
 
-  function describeMediaError() {
-    const code = audio.value?.error?.code
-    if (code === MediaError.MEDIA_ERR_ABORTED) return 'Playback was interrupted.'
-    if (code === MediaError.MEDIA_ERR_NETWORK) return 'The audio file could not be loaded.'
-    if (code === MediaError.MEDIA_ERR_DECODE) return 'This audio file could not be decoded.'
-    if (code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) return 'This audio format is not supported.'
-    return 'Audio is temporarily unavailable.'
-  }
-
-  function loadCurrentTrack() {
-    if (!audio.value || !currentTrack.value) return
-    errorMessage.value = ''
-    status.value = 'loading'
-    duration.value = currentTrack.value.durationSeconds
-    audio.value.src = currentTrack.value.audioUrl
-    audio.value.load()
-  }
-
-  function initialize() {
-    if (typeof window === 'undefined' || audio.value) return
-    restore()
-    audio.value = new Audio()
-    audio.value.preload = 'metadata'
-    audio.value.addEventListener('loadedmetadata', () => {
-      const loadedDuration = audio.value?.duration
-      if (loadedDuration && Number.isFinite(loadedDuration)) duration.value = loadedDuration
-      if (audio.value) {
-        audio.value.currentTime = currentTime.value < duration.value ? currentTime.value : 0
-        currentTime.value = audio.value.currentTime
-      }
-      status.value = audio.value?.paused === false ? 'playing' : 'ready'
-    })
-    audio.value.addEventListener('timeupdate', () => {
-      currentTime.value = audio.value?.currentTime || 0
-      persist()
-    })
-    audio.value.addEventListener('play', () => {
-      status.value = 'playing'
-      errorMessage.value = ''
-    })
-    audio.value.addEventListener('pause', () => {
-      if (status.value !== 'loading' && status.value !== 'error') status.value = 'paused'
-      persist()
-    })
-    audio.value.addEventListener('error', () => {
-      status.value = 'error'
-      errorMessage.value = describeMediaError()
-    })
-    audio.value.addEventListener('ended', () => next(true))
-    loadCurrentTrack()
-  }
-
-  async function play() {
-    initialize()
-    if (!audio.value || !canPlay.value) return
-    try {
-      await audio.value.play()
-    } catch (error) {
-      status.value = 'error'
-      errorMessage.value = error instanceof Error ? error.message : 'Playback could not start.'
+  function syncFromWebamp() {
+    if (!webamp.value) return
+    const mediaStatus = webamp.value.getPlayerMediaStatus()
+    if (mediaStatus === 'PLAYING' && !playbackAllowed) {
+      webamp.value.pause()
     }
+    if (isAttaching || !playbackAllowed) status.value = 'ready'
+    else if (mediaStatus === 'PLAYING') status.value = 'playing'
+    else if (mediaStatus === 'PAUSED') status.value = 'paused'
+    else if (mediaStatus === 'CLOSED') status.value = 'idle'
+    else status.value = 'ready'
+
+    const elapsed = webamp.value.media.timeElapsed()
+    const loadedDuration = webamp.value.media.duration()
+    if (Number.isFinite(elapsed) && elapsed >= 0) currentTime.value = elapsed
+    if (Number.isFinite(loadedDuration) && loadedDuration > 0) duration.value = loadedDuration
+    persist()
+  }
+
+  function attach(instance: Webamp) {
+    detach()
+    webamp.value = instance
+    status.value = 'loading'
+    errorMessage.value = ''
+    restore()
+    isAttaching = true
+    playbackAllowed = Boolean(pendingSelection?.autoplay)
+
+    unsubscribeTrack = instance.onTrackDidChange((trackInfo) => {
+      if (!trackInfo || typeof window === 'undefined') return
+      const trackUrl = new URL(trackInfo.url, window.location.href).href
+      const index = playlist.findIndex((track) => new URL(track.audioUrl, window.location.href).href === trackUrl)
+      if (index >= 0) {
+        if (index !== currentIndex.value) currentTime.value = 0
+        currentIndex.value = index
+        duration.value = playlist[index]?.durationSeconds ?? 0
+      }
+      if (pendingRestoreTime > 0) {
+        instance.seekToTime(pendingRestoreTime)
+        currentTime.value = pendingRestoreTime
+        pendingRestoreTime = 0
+      }
+      persist()
+    })
+
+    unsubscribeState = instance.__onStateChange(syncFromWebamp)
+    syncTimer = window.setInterval(syncFromWebamp, 1_000)
+
+    if (pendingSelection) {
+      const selection = pendingSelection
+      pendingSelection = null
+      isAttaching = false
+      selectTrack(selection.index, selection.autoplay)
+      return
+    }
+
+    instance.stop()
+    instance.setCurrentTrack(currentIndex.value)
+    instance.pause()
+    isAttaching = false
+    syncFromWebamp()
+  }
+
+  function detach(instance?: Webamp) {
+    if (instance && webamp.value !== instance) return
+    unsubscribeState?.()
+    unsubscribeTrack?.()
+    unsubscribeState = null
+    unsubscribeTrack = null
+    if (typeof window !== 'undefined') window.clearInterval(syncTimer)
+    syncTimer = 0
+    webamp.value = null
+    playbackAllowed = false
+    status.value = 'idle'
+  }
+
+  function fail(message: string) {
+    errorMessage.value = message
+    status.value = 'error'
+  }
+
+  function play() {
+    if (!webamp.value || !canPlay.value) return
+    playbackAllowed = true
+    webamp.value.play()
+    syncFromWebamp()
+  }
+
+  function allowPlayback() {
+    playbackAllowed = true
   }
 
   function pause() {
-    audio.value?.pause()
+    webamp.value?.pause()
+    syncFromWebamp()
   }
 
-  async function toggle() {
-    if (isPlaying.value) {
-      pause()
-      return
-    }
-    await play()
+  function toggle() {
+    if (isPlaying.value) pause()
+    else play()
   }
 
   function selectTrack(index: number, autoplay = false) {
     if (index < 0 || index >= playlist.length) return
-    initialize()
-    const wasPlaying = isPlaying.value
     currentIndex.value = index
     currentTime.value = 0
-    loadCurrentTrack()
+    duration.value = playlist[index]?.durationSeconds ?? 0
+    if (!webamp.value) {
+      pendingSelection = { index, autoplay }
+      persist()
+      return
+    }
+
+    const wasPlaying = isPlaying.value
+    if (!autoplay && !wasPlaying) webamp.value.pause()
+    webamp.value.setCurrentTrack(index)
+    if (autoplay || wasPlaying) {
+      playbackAllowed = true
+      webamp.value.play()
+    }
     persist()
-    if (autoplay || wasPlaying) void play()
   }
 
   function previous() {
@@ -150,9 +202,9 @@ export const usePlayerStore = defineStore('player', () => {
   }
 
   function seek(value: number) {
-    if (!audio.value || !isReady.value || !Number.isFinite(value)) return
+    if (!webamp.value || !isReady.value || !Number.isFinite(value)) return
     const nextTime = Math.min(Math.max(value, 0), duration.value)
-    audio.value.currentTime = nextTime
+    webamp.value.seekToTime(nextTime)
     currentTime.value = nextTime
     persist()
   }
@@ -168,7 +220,10 @@ export const usePlayerStore = defineStore('player', () => {
     isPlaying,
     isReady,
     canPlay,
-    initialize,
+    attach,
+    detach,
+    fail,
+    allowPlayback,
     play,
     pause,
     toggle,
