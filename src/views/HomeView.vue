@@ -101,14 +101,14 @@ useHead({
     </div>
   </div>
 
-  <section id="music" class="section section--paper">
+  <section id="music" class="section section--music">
     <div class="container">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Press play</p>
           <h2>Music</h2>
         </div>
-        <span class="section-index">01</span>
+        <span class="section-index section-index--dark">01</span>
       </div>
       <div class="release-grid">
         <ReleaseCard v-for="release in releases" :key="release.slug" :release="release" />

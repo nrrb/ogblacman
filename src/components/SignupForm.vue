@@ -57,7 +57,8 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="signup">
+  <!-- Marked so Black Buddha repositions instead of covering the form. -->
+  <div class="signup" data-buddha-avoid>
     <p v-if="isSubscribed" class="signup__success" role="status">
       <Check :size="20" aria-hidden="true" />
       {{ SIGNUP_MESSAGES.success }}

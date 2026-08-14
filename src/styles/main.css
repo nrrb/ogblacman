@@ -198,7 +198,7 @@ button:disabled {
   color: inherit;
   background: transparent;
   border: 1px solid currentColor;
-  border-radius: 4px;
+  border-radius: 0;
   cursor: pointer;
 }
 
@@ -509,15 +509,27 @@ button:disabled {
 
 .section h2 {
   margin: 0;
-  font-size: 42px;
-  line-height: 1;
-  letter-spacing: 0;
+  font-size: clamp(40px, 9vw, 56px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
 }
 
-.section--paper {
+/* Each section takes a whole color block rather than sitting on a shared
+   ground. Running them in sequence is what produces the clash. */
+.section--music {
   color: var(--ink);
-  background: var(--paper);
+  background: var(--magenta);
+}
+
+/* The default eyebrow is a warm grey tuned for light grounds; on the accent
+   blocks it needs a dark tone drawn from the block's own hue. */
+.section--music .eyebrow {
+  color: var(--on-magenta);
+}
+
+.section--merch .eyebrow {
+  color: #063b45;
 }
 
 .section-heading {
@@ -525,14 +537,16 @@ button:disabled {
   align-items: flex-end;
   justify-content: space-between;
   padding-bottom: 20px;
-  border-bottom: 2px solid var(--ink);
+  border-bottom: var(--rule) solid var(--ink);
 }
 
+/* Base is light for the dark sections; --dark is used on the accent blocks. */
 .section-index {
-  color: var(--red);
-  font-family: var(--font-mono);
-  font-size: 16px;
-  font-weight: 900;
+  color: var(--paper);
+  font-family: var(--font-pixel);
+  font-size: 20px;
+  font-weight: 700;
+  opacity: 0.55;
 }
 
 .release-grid {
@@ -541,19 +555,22 @@ button:disabled {
   margin-top: 24px;
 }
 
+/* Black card inset into the magenta block, the way the mockup nests the
+   featured release inside its section color. */
 .release-card {
   display: grid;
   overflow: hidden;
-  background: #fff;
-  border: 1px solid var(--line-light);
-  border-radius: 6px;
+  color: var(--paper);
+  background: var(--ink);
+  border: 0;
+  border-radius: 0;
 }
 
 .release-card__art-link {
   display: block;
   aspect-ratio: 1;
   overflow: hidden;
-  background: #d8d4ca;
+  background: var(--ink-panel);
 }
 
 .release-card__art {
@@ -581,14 +598,26 @@ button:disabled {
 .release-card__body > p:not(.eyebrow) {
   max-width: 620px;
   margin: 14px 0 0;
-  color: #494740;
+  color: var(--paper-muted);
   line-height: 1.6;
+}
+
+.release-card .eyebrow {
+  color: var(--lime);
+}
+
+/* The quiet variant is ink-on-light by default, which disappears against the
+   card. Cyan outline matches the mockup's secondary actions. */
+.release-card .button--quiet {
+  color: var(--cyan);
+  border-color: var(--cyan);
 }
 
 .section--game {
   position: relative;
   overflow: hidden;
-  background: var(--blue);
+  color: var(--paper);
+  background: var(--ink);
 }
 
 .tree-game {
@@ -602,17 +631,34 @@ button:disabled {
   margin-inline: auto;
 }
 
+/* Lime block behind the game title, matching the mockup's mobile screen where
+   the heading is its own color panel above the scene. */
 .tree-game__heading {
   grid-area: heading;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
+  padding: 18px 20px;
+  color: var(--ink);
+  background: var(--lime);
+}
+
+.tree-game__heading .eyebrow,
+.tree-game__heading .eyebrow--light {
+  color: var(--on-lime);
 }
 
 .tree-game__heading h2 {
   max-width: 620px;
-  font-size: 48px;
+  font-size: clamp(34px, 8vw, 44px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.tree-game__reset.icon-button {
+  color: var(--ink);
+  border-color: var(--ink);
 }
 
 .tree-game__reset {
@@ -1007,7 +1053,7 @@ button:disabled {
   color: var(--ink);
   background: var(--paper);
   border: 3px solid var(--ink);
-  border-radius: 4px;
+  border-radius: 0;
   box-shadow: 7px 7px 0 var(--red);
   font-family: var(--font-mono);
   font-size: 22px;
@@ -1058,7 +1104,7 @@ button:disabled {
 
 .section--events {
   color: var(--paper);
-  background: #172027;
+  background: var(--ink-soft);
 }
 
 .section-heading--light {
@@ -1081,7 +1127,7 @@ button:disabled {
   overflow: hidden;
   background: #0d1317;
   border: 1px solid #3e4a50;
-  border-radius: 6px;
+  border-radius: 0;
 }
 
 .event-card__art {
@@ -1228,7 +1274,7 @@ button:disabled {
 
 .section--merch {
   color: var(--ink);
-  background: #d5c75c;
+  background: var(--cyan);
 }
 
 .merch-grid {
@@ -1239,7 +1285,7 @@ button:disabled {
   overflow: hidden;
   background: var(--paper);
   border: 2px solid var(--ink);
-  border-radius: 6px;
+  border-radius: 0;
   box-shadow: 6px 6px 0 var(--ink);
 }
 
@@ -1288,17 +1334,33 @@ button:disabled {
 }
 
 .listing-empty--merch .listing-empty__copy > p:not(.eyebrow) {
-  color: #3e3b2a;
+  color: #063b45;
 }
 
 .listing-status--dark {
-  color: #4a4631;
+  color: #063b45;
   border-color: var(--ink);
 }
 
+/* Lime close, following the mockup's desktop join panel. */
 .section--join {
   color: var(--ink);
-  background: var(--red);
+  background: var(--lime);
+}
+
+.section--join .eyebrow {
+  color: var(--on-lime);
+}
+
+.join-action p {
+  color: var(--on-lime);
+}
+
+/* Black button with lime type, as the mockup renders the join CTA. */
+.section--join .button--dark {
+  color: var(--lime);
+  background: var(--ink);
+  border-color: var(--ink);
 }
 
 .join-layout {
@@ -1686,7 +1748,7 @@ button:disabled {
   color: var(--ink);
   background: var(--paper);
   border: 3px solid var(--ink);
-  border-radius: 4px;
+  border-radius: 0;
   box-shadow: 6px 6px 0 var(--green);
 }
 
@@ -1729,7 +1791,7 @@ button:disabled {
   color: var(--paper);
   background: transparent;
   border: 1px solid var(--paper-muted);
-  border-radius: 3px;
+  border-radius: 0;
   cursor: pointer;
 }
 
