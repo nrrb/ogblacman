@@ -27,6 +27,46 @@ test('home presents the artist and core sections', async ({ page }) => {
   expect(layout.gameSceneRatio).toBeCloseTo(0.8, 1)
 })
 
+test('hero video plays from a poster and offers multiple sources', async ({ page }) => {
+  const requested: string[] = []
+  page.on('request', (request) => {
+    if (request.url().includes('/video/')) requested.push(request.url().split('/').pop()!)
+  })
+
+  await page.goto('/')
+  const video = page.locator('video.hero__media')
+  await expect(video).toHaveAttribute('poster', '/video/hero-poster.jpg')
+  await expect(video.locator('source')).toHaveCount(2)
+
+  // Vue manages muted as a DOM property and drops the attribute on hydration,
+  // so assert the property. Autoplay stays unblocked either way because the
+  // prerendered HTML carries muted before Vue takes over.
+  await expect
+    .poll(async () => video.evaluate((el: HTMLVideoElement) => el.muted && el.playsInline && el.loop))
+    .toBe(true)
+
+  await expect
+    .poll(async () => video.evaluate((el: HTMLVideoElement) => el.currentTime > 0))
+    .toBe(true)
+
+  // Only the first decodable source is fetched, so the alternates are free.
+  expect(requested).toContain('hero.mp4')
+  expect(requested).not.toContain('hero.webm')
+})
+
+test('hero video holds on its poster frame under reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/')
+
+  const video = page.locator('video.hero__media')
+  await expect(video).toBeVisible()
+  await page.waitForTimeout(900)
+
+  const state = await video.evaluate((el: HTMLVideoElement) => ({ paused: el.paused, time: el.currentTime }))
+  expect(state.paused).toBe(true)
+  expect(state.time).toBe(0)
+})
+
 test('mailing-list form exposes labelled fields and its unconfigured state', async ({ page }) => {
   await page.goto('/#join')
 

@@ -99,7 +99,8 @@ a {
   color: inherit;
 }
 
-img {
+img,
+video {
   display: block;
   max-width: 100%;
 }
@@ -266,7 +267,10 @@ button:disabled {
 .hero__media {
   z-index: -2;
   object-fit: cover;
-  object-position: 54% 38%;
+  /* Horizontally centred keeps the figure and trunk in frame when portrait
+     viewports crop the 16:9 source hard on both sides. */
+  object-position: 50% 42%;
+  background: var(--ink);
 }
 
 .hero__shade {

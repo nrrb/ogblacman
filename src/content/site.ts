@@ -2,8 +2,12 @@ import type { ArtistProfile } from '@/types/content'
 
 export const siteUrl = import.meta.env.VITE_SITE_URL || 'https://ogblacman.com'
 
-export const placeholderImages = {
-  artistPortrait: 'https://placecats.com/neo/1600/1200?position=top',
+export const heroVideo = {
+  poster: '/video/hero-poster.jpg',
+  sources: [
+    { src: '/video/hero.mp4', type: 'video/mp4' },
+    { src: '/video/hero.webm', type: 'video/webm' },
+  ],
 } as const
 
 export const projectImages = {

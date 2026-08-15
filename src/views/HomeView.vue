@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { ArrowDown, Radio } from '@lucide/vue'
 import { useHead } from '@unhead/vue'
 
@@ -9,11 +10,40 @@ import SignupForm from '@/components/SignupForm.vue'
 import TreeHuggingGame from '@/components/TreeHuggingGame.vue'
 import { events, merchandise } from '@/content/marketplace'
 import { releases } from '@/content/releases'
-import { artist, placeholderImages, siteUrl } from '@/content/site'
+import { artist, heroVideo, siteUrl } from '@/content/site'
 import { usePageMeta } from '@/composables/usePageMeta'
 import { useBlackBuddhaStore } from '@/stores/blackBuddha'
 
 const blackBuddha = useBlackBuddhaStore()
+
+// A looping background video is nonessential motion, so reduced-motion holds
+// it on the poster frame. The autoplay attribute stays in the markup so the
+// video still plays without JavaScript.
+const heroVideoEl = ref<HTMLVideoElement | null>(null)
+let motionPreference: MediaQueryList | null = null
+
+function applyMotionPreference() {
+  const video = heroVideoEl.value
+  if (!video) return
+  if (motionPreference?.matches) {
+    video.pause()
+    video.currentTime = 0
+    return
+  }
+  void video.play().catch(() => {
+    // Autoplay can still be refused; the poster frame remains.
+  })
+}
+
+onMounted(() => {
+  motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
+  motionPreference.addEventListener('change', applyMotionPreference)
+  applyMotionPreference()
+})
+
+onBeforeUnmount(() => {
+  motionPreference?.removeEventListener('change', applyMotionPreference)
+})
 
 usePageMeta({
   title: 'OG Blacman | Independent Chicago Artist',
@@ -43,14 +73,24 @@ useHead({
 
 <template>
   <section class="hero" aria-labelledby="hero-title">
-    <img
+    <!-- Extra <source> entries are free at runtime: the browser downloads only
+         the first one it can decode. Ordered smallest-first for this asset. -->
+    <video
+      ref="heroVideoEl"
       class="hero__media"
-      :src="placeholderImages.artistPortrait"
-      alt="Placeholder portrait of a cat"
-      width="1600"
-      height="1200"
-      fetchpriority="high"
-    />
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      :poster="heroVideo.poster"
+      width="1280"
+      height="716"
+      role="img"
+      aria-label="OG Blacman hugging a giant tree towering over the Chicago skyline"
+    >
+      <source v-for="source in heroVideo.sources" :key="source.src" :src="source.src" :type="source.type" />
+    </video>
     <div class="hero__shade" aria-hidden="true"></div>
     <div class="container hero__content">
       <p class="eyebrow eyebrow--chip">{{ artist.location }} // {{ artist.descriptor }}</p>

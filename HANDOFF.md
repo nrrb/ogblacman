@@ -98,7 +98,8 @@ The sync script reads embedded title/artist metadata and duration, derives URL-s
 | App shell | `src/App.vue`, `src/components/SiteHeader.vue`, `src/components/SiteFooter.vue` | OGAmp and Black Buddha live outside route views so they survive navigation. |
 | Homepage composition | `src/views/HomeView.vue` | Main section ordering and homepage metadata. |
 | Global design | `src/styles/main.css` | Single large stylesheet; mobile-first with the main desktop breakpoint at 720px. |
-| Artist/site content | `src/content/site.ts` | Biography, location, navigation, social links, and current Placecats hero placeholder. |
+| Artist/site content | `src/content/site.ts` | Biography, location, navigation, social links, and hero video sources. |
+| Hero video | `public/video/`, `src/content/site.ts` | Client-supplied clip. Sources are ordered smallest-first; only the first decodable one downloads. |
 | Releases | `src/content/releases.ts`, `src/views/ReleaseView.vue`, `src/components/ReleaseCard.vue` | Current release is provisional and therefore `noindex`. |
 | Music metadata | `src/content/playlist.json`, `src/content/tracks.ts` | JSON manifest is authoritative. |
 | Music metadata tool | `scripts/sync-playlist.mjs` | Requires `ffprobe`. |
@@ -140,7 +141,7 @@ Most recent verified result:
 npm run typecheck  -> passed
 npm test           -> 10 files, 49 tests passed
 npm run build      -> passed; 3 routes prerendered
-npm run test:e2e   -> 22 tests passed across Pixel 7 and desktop Chrome
+npm run test:e2e   -> 26 tests passed across Pixel 7 and desktop Chrome
 ```
 
 The spectrum browser test verifies that the renderer is a canvas, that idle and successive playback frames differ, and that switching to reduced-motion freezes the visualization. Manual automation also verified that hiding the document stops canvas changes and returning to it resumes animation.
@@ -173,7 +174,6 @@ OGAmp is a fixed bar: small spectrum left, track readout centre, four controls r
 ## Known Intentional Gaps
 
 - All site copy is derived from the artist's Instagram captions and is written in first person, so it needs his approval before launch.
-- The hero still uses a Placecats image and placeholder alt text.
 - Final logo files, artist photography, biography, and approved brand copy are missing.
 - The only release entry is provisional, points to placeholder artwork, and is marked `noindex`.
 - Current music and its release mapping are provisional.
@@ -192,7 +192,7 @@ OGAmp is a fixed bar: small spectrum left, track readout centre, four controls r
 The next phase should focus on replacing provisional presentation and completing launch integrations rather than expanding the application architecture.
 
 1. Use Claude Design to establish the final art direction for hero, artist story, release system, and section transitions using approved assets.
-2. Replace the Placecats hero, temporary avatar, provisional release art, biography, and placeholder copy.
+2. Replace the temporary tree-game avatar, provisional release art, and remaining placeholder copy. The hero video and biography are done.
 3. Populate final releases and platform/video links through the typed content files.
 4. Review and approve Black Buddha voice/lore, then replace only `src/content/blackBuddha.ts` dialogue unless behavior also needs revision.
 5. ~~Add a small analytics abstraction and instrument key interactions.~~ Done; set `VITE_GA_MEASUREMENT_ID` to activate.
