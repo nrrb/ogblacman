@@ -1,0 +1,66 @@
+#app,
+#app > main {
+  min-height: 100%;
+}
+
+video {
+  object-fit: cover;
+}
+
+.logo_component-slider {
+  animation: reference-marquee 120s linear infinite;
+  animation-play-state: paused;
+  will-change: transform;
+}
+
+.logo_component-slider.is-marquee-active {
+  animation-play-state: running;
+}
+
+@keyframes reference-marquee {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-400px, 0, 0); }
+}
+
+@media screen and (max-width: 479px) {
+  #app,
+  #app > main {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .mobile .w-slider-mask {
+    display: flex;
+    width: 100%;
+    height: 100%;
+  }
+
+  .mobile .w-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    transition: transform 300ms ease-in-out;
+    will-change: transform;
+  }
+
+  .mobile .w-slide[aria-hidden="true"] {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .mobile .w-background-video > video {
+    z-index: 0;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo_component-slider {
+    animation-play-state: paused;
+  }
+
+  .mobile .w-slider-mask {
+    transition: none;
+  }
+}
