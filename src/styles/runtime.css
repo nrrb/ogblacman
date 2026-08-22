@@ -28,6 +28,18 @@ video {
   object-fit: cover;
 }
 
+.site--desktop .background-media--desktop-hero {
+  isolation: isolate;
+}
+
+.site--desktop .background-media--desktop-hero > video {
+  z-index: 0;
+}
+
+.site--desktop .background-media--desktop-hero > :not(video) {
+  z-index: 1;
+}
+
 .site--desktop .display-heading--about,
 .site--desktop .heading-title--about {
   width: 100%;
