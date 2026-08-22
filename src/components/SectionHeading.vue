@@ -13,10 +13,10 @@ defineProps({
   <div :class="['display-heading', wrapperClass]">
     <template v-if="accentFirst">
       <div :class="['display-heading__accent', accentClass]">{{ heading.accent }}</div>
-      <div :id="titleId" :class="['display-heading__title', titleClass]">{{ heading.title }}</div>
+      <div :id="titleId" :class="['display-heading__title', titleClass, 'metallic-text']">{{ heading.title }}</div>
     </template>
     <template v-else>
-      <div :id="titleId" :class="['display-heading__title', titleClass]">{{ heading.title }}</div>
+      <div :id="titleId" :class="['display-heading__title', titleClass, 'metallic-text']">{{ heading.title }}</div>
       <div :class="['display-heading__accent', accentClass]">{{ heading.accent }}</div>
     </template>
   </div>
