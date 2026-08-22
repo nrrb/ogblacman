@@ -71,7 +71,7 @@ social_links:
         - { src: /assets/reference/social-linkedin-icon.png, width: 720 }
 
 sections:
-  hero:
+  game:
     heading: { title: SECTION 1 BIG TEXT, accent: SECTION 1 ACCENT TEXT }
     cta: { label: SECTION 1 CTA TEXT, url: null, title: null }
     media:
@@ -85,60 +85,71 @@ sections:
         sources:
           - { src: /assets/reference/hero-mobile-background.mp4, type: video/mp4 }
           - { src: /assets/reference/hero-mobile-background.webm, type: video/webm }
-  about:
+  top_pick:
     heading: { title: SECTION 2 BIG TEXT, accent: SECTION 2 ACCENT TEXT }
     copy: SECTION 2 COPY
     cta: { label: SECTION 2 CTA TEXT, url: /about, title: Learn more about us }
     image:
-      src: /assets/reference/about-team-photo.jpg
-      alt: Team portrait
-      sizes: 100vw
-      sources:
-        - { src: /assets/reference/about-team-photo-500w.jpg, width: 500 }
-        - { src: /assets/reference/about-team-photo-800w.jpg, width: 800 }
-        - { src: /assets/reference/about-team-photo-1080w.jpg, width: 1080 }
-        - { src: /assets/reference/about-team-photo-1600w.jpg, width: 1600 }
-        - { src: /assets/reference/about-team-photo-2000w.jpg, width: 2000 }
-        - { src: /assets/reference/about-team-photo.jpg, width: 2254 }
+      src: /assets/blacBabyJesus-popcornplayer.png
+      alt: Popcorn Player cover art by OG Blacman
+      sizes: "(max-width: 767px) 82vw, 42vw"
+    player:
+      title: Listen to Popcorn Player by OG Blacman
+      embed_url: https://embed.music.apple.com/us/album/popcorn-player-single/1745498866?i=1745498867
+    streaming_links:
+      - { id: spotify, label: SPOTIFY, url: "https://open.spotify.com/search/OG%20Blacman%20Popcorn%20Player", title: Listen to Popcorn Player on Spotify, target: _blank }
+      - { id: apple-music, label: APPLE MUSIC, url: "https://music.apple.com/us/song/1745498867", title: Listen to Popcorn Player on Apple Music, target: _blank }
     mobile_media: &standard_mobile_media
       poster: /assets/reference/mobile-standard-background-poster.jpg
       sources:
         - { src: /assets/reference/mobile-standard-background.mp4, type: video/mp4 }
         - { src: /assets/reference/mobile-standard-background.webm, type: video/webm }
-  why:
+  upcoming_shows:
     heading: { title: SECTION 3 BIG TEXT, accent: SECTION 3 ACCENT TEXT }
     copy: SECTION 3 COPY
+    items:
+      - { id: show-01, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
+      - { id: show-02, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
+      - { id: show-03, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
     mobile_media: *standard_mobile_media
-  how:
+  booking:
     heading: { title: SECTION 4 BIG TEXT, accent: SECTION 4 ACCENT TEXT }
     copy_columns:
       - SECTION 4 COPY COLUMN 1 OF 3
       - SECTION 4 COPY COLUMN 2 OF 3
       - SECTION 4 COPY COLUMN 3 OF 3
+    manager:
+      role: MANAGEMENT
+      name: MANAGER NAME
+      email: MANAGER EMAIL
+      phone: MANAGER PHONE
     mobile_media: *standard_mobile_media
-  studios:
+  merch:
     heading: { title: SECTION 6 BIG TEXT, accent: SECTION 6 ACCENT TEXT }
     copy: SECTION 6 COPY
     cta: { label: SECTION 6 CTA, url: /respectivestudios, title: Explore Respective Studios }
+    items: []
     mobile_media:
       poster: /assets/reference/mobile-studios-background-poster.jpg
       sources:
         - { src: /assets/reference/mobile-studios-background.mp4, type: video/mp4 }
         - { src: /assets/reference/mobile-studios-background.webm, type: video/webm }
-  clients:
+  newsletter:
     heading: { title: SECTION 7 BIG TEXT, accent: SECTION 7 ACCENT TEXT }
+    form:
+      required_marker: "*"
+      fields:
+        - { id: name, name: Name, type: text, label: Name, placeholder: Your name, required: false }
+        - { id: email, name: Email, type: email, label: Email, placeholder: youremail@email.com, required: true }
+      submit_label: "Sign up     →"
+      wait_label: Please wait...
+      success_message: You're on the list. Thank you for signing up!
+      error_message: Something went wrong. Please try again.
     mobile_media:
       poster: /assets/reference/mobile-clients-background-poster.jpg
       sources:
         - { src: /assets/reference/mobile-clients-background.mp4, type: video/mp4 }
         - { src: /assets/reference/mobile-clients-background.webm, type: video/webm }
-  contact:
-    heading: { title: SECTION 9 BIG TEXT, accent: SECTION 9 ACCENT TEXT }
-    mobile_media:
-      poster: /assets/reference/mobile-contact-background-poster.jpg
-      sources:
-        - { src: /assets/reference/mobile-contact-background.mp4, type: video/mp4 }
-        - { src: /assets/reference/mobile-contact-background.webm, type: video/webm }
 
 case_studies:
   heading: { title: SECTION 5 BIG TEXT, accent: SECTION 5 ACCENT TEXT }
@@ -160,46 +171,6 @@ case_studies:
     - { id: rolling-loud, title: SECTION 5 CASE 10 TEXT, year: SECTION 5 CASE 10 YEAR, url: /case-studies/rolling-loud, link_title: View case study 10 }
     - { id: snap-nation, title: SECTION 5 CASE 11 TEXT, year: SECTION 5 CASE 11 YEAR, url: /case-studies/snap-nation-x-acl, link_title: View case study 11 }
     - { id: lollapalooza, title: SECTION 5 CASE 12 TEXT, year: SECTION 5 CASE 12 YEAR, url: /case-studies/lollapalooza, link_title: View case study 12 }
-
-clients:
-  items:
-    - { id: client-01, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 1 }
-    - { id: client-02, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 2 }
-    - { id: client-03, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 3 }
-    - { id: client-04, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 4 }
-    - { id: client-05, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 5 }
-    - { id: client-06, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 6 }
-    - { id: client-07, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 7 }
-    - { id: client-08, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 8 }
-    - { id: client-09, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 9 }
-    - { id: client-10, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 10 }
-    - { id: client-11, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 11 }
-    - { id: client-12, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 12 }
-    - { id: client-13, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 13 }
-    - { id: client-14, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 14 }
-    - { id: client-15, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 15 }
-    - { id: client-16, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 16 }
-    - { id: client-17, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 17 }
-    - { id: client-18, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 18 }
-    - { id: client-19, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 19 }
-    - { id: client-20, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 20 }
-    - { id: client-21, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 21 }
-    - { id: client-22, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 22 }
-
-carousel:
-  items: []
-
-form:
-  required_marker: "*"
-  fields:
-    - { id: name, name: Name, type: text, label: Name, placeholder: First Name // Company, required: true }
-    - { id: email, name: Email, type: email, label: Email, placeholder: youremail@email.com, required: true }
-    - { id: phone, name: Phone-Number, type: tel, label: Phone Number, placeholder: "(800) 555-0100", required: false }
-    - { id: message, name: Paragraph, type: text, label: What do we need to know?, placeholder: Let us know what you're contacting us for, required: true, multiline: true }
-  submit_label: "Submit     →"
-  wait_label: Please wait...
-  success_message: Thank you! Your submission has been received!
-  error_message: Oops! Something went wrong while submitting the form.
 
 footer:
   copyright: © COPYRIGHT 2026 OG BLACMAN. ALL RIGHTS RESERVED.

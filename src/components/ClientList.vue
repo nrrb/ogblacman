@@ -16,7 +16,14 @@ defineProps({
         role="listitem"
         :class="['client-grid__item', variant === 'mobile' ? 'client-grid__item--half' : 'client-grid__item--quarter']"
       >
-        <AppLink :link="{ url: item.url, title: item.link_title, label: item.label }" class="client-link" />
+        <AppLink
+          :link="{ url: item.url, title: item.link_title, label: item.label }"
+          class="client-link show-link"
+        >
+          <span v-if="item.meta" class="show-link__date">{{ item.meta }}</span>
+          <span class="show-link__location">{{ item.label }}</span>
+          <span v-if="item.action_label" class="show-link__action">{{ item.action_label }}</span>
+        </AppLink>
       </div>
     </div>
   </div>

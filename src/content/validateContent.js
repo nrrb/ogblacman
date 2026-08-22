@@ -68,6 +68,24 @@ function link(value, path, { optional = false } = {}) {
   }
 }
 
+function form(value, path) {
+  object(value, path)
+  string(value.required_marker, `${path}.required_marker`)
+  const fields = array(value.fields, `${path}.fields`)
+  uniqueIds(fields, `${path}.fields`)
+  fields.forEach((field, index) => {
+    string(field.name, `${path}.fields[${index}].name`)
+    string(field.type, `${path}.fields[${index}].type`)
+    string(field.label, `${path}.fields[${index}].label`)
+    string(field.placeholder, `${path}.fields[${index}].placeholder`)
+    if (typeof field.required !== 'boolean') fail(`${path}.fields[${index}].required`, 'expected a boolean')
+  })
+  for (const key of ['submit_label', 'wait_label', 'success_message', 'error_message']) {
+    string(value[key], `${path}.${key}`)
+  }
+  return fields
+}
+
 export function validateContent(content) {
   object(content, 'root')
   object(content.accessibility, 'accessibility')
@@ -93,23 +111,59 @@ export function validateContent(content) {
   })
 
   const sections = object(content.sections, 'sections')
-  for (const name of ['hero', 'about', 'why', 'how', 'studios', 'clients', 'contact']) {
+  for (const name of ['game', 'top_pick', 'upcoming_shows', 'booking', 'merch', 'newsletter']) {
     const section = object(sections[name], `sections.${name}`)
     heading(section.heading, `sections.${name}.heading`)
   }
-  video(sections.hero.media.desktop, 'sections.hero.media.desktop')
-  video(sections.hero.media.mobile, 'sections.hero.media.mobile')
-  link(sections.hero.cta, 'sections.hero.cta')
-  image(sections.about.image, 'sections.about.image')
-  string(sections.about.copy, 'sections.about.copy')
-  link(sections.about.cta, 'sections.about.cta')
-  string(sections.why.copy, 'sections.why.copy')
-  string(sections.studios.copy, 'sections.studios.copy')
-  link(sections.studios.cta, 'sections.studios.cta')
-  for (const name of ['about', 'why', 'how', 'studios', 'clients', 'contact']) {
+  video(sections.game.media.desktop, 'sections.game.media.desktop')
+  video(sections.game.media.mobile, 'sections.game.media.mobile')
+  link(sections.game.cta, 'sections.game.cta')
+  image(sections.top_pick.image, 'sections.top_pick.image')
+  string(sections.top_pick.copy, 'sections.top_pick.copy')
+  link(sections.top_pick.cta, 'sections.top_pick.cta')
+  object(sections.top_pick.player, 'sections.top_pick.player')
+  string(sections.top_pick.player.title, 'sections.top_pick.player.title')
+  string(sections.top_pick.player.embed_url, 'sections.top_pick.player.embed_url')
+  const streamingLinks = array(sections.top_pick.streaming_links, 'sections.top_pick.streaming_links')
+  uniqueIds(streamingLinks, 'sections.top_pick.streaming_links')
+  streamingLinks.forEach((item, index) => link(item, `sections.top_pick.streaming_links[${index}]`))
+
+  string(sections.upcoming_shows.copy, 'sections.upcoming_shows.copy')
+  const shows = array(sections.upcoming_shows.items, 'sections.upcoming_shows.items')
+  uniqueIds(shows, 'sections.upcoming_shows.items')
+  shows.forEach((item, index) => {
+    link(item, `sections.upcoming_shows.items[${index}]`)
+    string(item.meta, `sections.upcoming_shows.items[${index}].meta`)
+    string(item.action_label, `sections.upcoming_shows.items[${index}].action_label`)
+  })
+
+  const bookingCopy = array(sections.booking.copy_columns, 'sections.booking.copy_columns')
+  bookingCopy.forEach((value, index) => string(value, `sections.booking.copy_columns[${index}]`))
+  object(sections.booking.manager, 'sections.booking.manager')
+  for (const key of ['role', 'name', 'email', 'phone']) {
+    string(sections.booking.manager[key], `sections.booking.manager.${key}`)
+  }
+
+  string(sections.merch.copy, 'sections.merch.copy')
+  link(sections.merch.cta, 'sections.merch.cta')
+  const merchItems = array(sections.merch.items, 'sections.merch.items')
+  uniqueIds(merchItems, 'sections.merch.items')
+  merchItems.forEach((item, index) => {
+    image(item.image, `sections.merch.items[${index}].image`)
+    link(item.link, `sections.merch.items[${index}].link`)
+  })
+
+  const newsletterFields = form(sections.newsletter.form, 'sections.newsletter.form')
+  const nameField = newsletterFields.find(field => field.id === 'name')
+  const emailField = newsletterFields.find(field => field.id === 'email')
+  if (!nameField || nameField.required) fail('sections.newsletter.form.fields', 'name field must exist and be optional')
+  if (!emailField || emailField.type !== 'email' || !emailField.required) {
+    fail('sections.newsletter.form.fields', 'email field must exist, use type email, and be required')
+  }
+
+  for (const name of ['top_pick', 'upcoming_shows', 'booking', 'merch', 'newsletter']) {
     video(sections[name].mobile_media, `sections.${name}.mobile_media`)
   }
-  array(sections.how.copy_columns, 'sections.how.copy_columns').forEach((value, index) => string(value, `sections.how.copy_columns[${index}]`))
 
   object(content.case_studies, 'case_studies')
   heading(content.case_studies.heading, 'case_studies.heading')
@@ -122,36 +176,6 @@ export function validateContent(content) {
     string(item.url, `case_studies.items[${index}].url`)
     string(item.link_title, `case_studies.items[${index}].link_title`)
   })
-
-  object(content.clients, 'clients')
-  const clients = array(content.clients.items, 'clients.items')
-  uniqueIds(clients, 'clients.items')
-  clients.forEach((item, index) => {
-    string(item.label, `clients.items[${index}].label`)
-    string(item.url, `clients.items[${index}].url`)
-    string(item.link_title, `clients.items[${index}].link_title`)
-  })
-
-  object(content.carousel, 'carousel')
-  const carousel = array(content.carousel.items, 'carousel.items')
-  uniqueIds(carousel, 'carousel.items')
-  carousel.forEach((item, index) => {
-    image(item.image, `carousel.items[${index}].image`)
-    link(item.link, `carousel.items[${index}].link`, { optional: true })
-  })
-
-  object(content.form, 'form')
-  string(content.form.required_marker, 'form.required_marker')
-  const fields = array(content.form.fields, 'form.fields')
-  uniqueIds(fields, 'form.fields')
-  fields.forEach((field, index) => {
-    string(field.name, `form.fields[${index}].name`)
-    string(field.type, `form.fields[${index}].type`)
-    string(field.label, `form.fields[${index}].label`)
-    string(field.placeholder, `form.fields[${index}].placeholder`)
-    if (typeof field.required !== 'boolean') fail(`form.fields[${index}].required`, 'expected a boolean')
-  })
-  for (const key of ['submit_label', 'wait_label', 'success_message', 'error_message']) string(content.form[key], `form.${key}`)
 
   object(content.footer, 'footer')
   string(content.footer.copyright, 'footer.copyright')

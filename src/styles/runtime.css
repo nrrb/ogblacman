@@ -63,6 +63,125 @@ video {
   object-fit: contain;
 }
 
+.top-pick-release {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+}
+
+.top-pick-release__art {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.top-pick-release__listen {
+  display: grid;
+  gap: 14px;
+}
+
+.top-pick-release__player {
+  width: 100%;
+  height: 175px;
+  border: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.streaming-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.streaming-link,
+.show-link {
+  color: var(--color-body-text);
+  font-family: Neuehaasdisplaymediu, Arial, sans-serif;
+  text-decoration: none;
+}
+
+.streaming-link {
+  border: 1px solid currentColor;
+  padding: 10px 14px;
+  font-size: 14px;
+  letter-spacing: .06em;
+}
+
+.streaming-link:hover,
+.streaming-link:focus-visible,
+.show-link:hover,
+.show-link:focus-visible {
+  color: var(--color-gold-1);
+}
+
+.feature-block--why .client-grid,
+.feature-block--why .client-grid__item {
+  width: 100%;
+  padding-left: 0;
+}
+
+.show-link {
+  display: grid;
+  grid-template-columns: minmax(140px, .45fr) minmax(240px, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  padding: 18px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-body-text) 38%, transparent);
+  text-align: left;
+}
+
+.show-link__date,
+.show-link__action {
+  font-size: 13px;
+  letter-spacing: .08em;
+}
+
+.show-link__location {
+  font-size: 22px;
+}
+
+.booking-manager {
+  margin-top: 54px;
+  padding: 24px;
+  border: 1px solid color-mix(in srgb, var(--color-body-text) 45%, transparent);
+  color: var(--color-body-text);
+  font-family: NeueHaasDisplayLight, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.booking-manager__role {
+  margin-bottom: 12px;
+  font-family: Neuehaasdisplaymediu, Arial, sans-serif;
+  font-size: 13px;
+  letter-spacing: .12em;
+}
+
+.booking-manager__name {
+  font-size: 26px;
+}
+
+.newsletter-form {
+  width: min(100%, 640px);
+  color: var(--color-body-text);
+}
+
+.newsletter-form .form-submit {
+  color: var(--color-body-text);
+  padding: 12px 18px;
+}
+
+.newsletter-footer {
+  margin-top: 80px;
+  color: color-mix(in srgb, var(--color-body-text) 60%, transparent);
+  font-family: Neuehaasdisplayroman, Arial, sans-serif;
+  font-size: 13px;
+}
+
 @media screen and (max-width: 479px) {
   #app,
   #app > main {
@@ -92,6 +211,104 @@ video {
 
   .site--mobile .background-media > video {
     z-index: 0;
+  }
+
+  .mobile-slide__content--top-pick {
+    justify-content: center;
+    gap: 10px;
+    padding: 35px 24px 68px;
+  }
+
+  .mobile-slide__content--top-pick .display-heading--stacked {
+    margin-bottom: 0;
+  }
+
+  .mobile-slide__content--top-pick .heading-title--mobile-about {
+    font-size: 96px;
+    line-height: 76px;
+  }
+
+  .mobile-slide__content--top-pick .body-copy--mobile-about {
+    font-size: 14px;
+    line-height: 18px;
+  }
+
+  .site--mobile .top-pick-release {
+    grid-template-columns: minmax(0, 115px) minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+  }
+
+  .site--mobile .top-pick-release__player {
+    height: 94px;
+  }
+
+  .site--mobile .top-pick-release__listen {
+    gap: 8px;
+  }
+
+  .site--mobile .streaming-links {
+    gap: 6px;
+  }
+
+  .site--mobile .streaming-link {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  .site--mobile .show-link {
+    grid-template-columns: 1fr;
+    gap: 3px;
+    padding: 10px 0;
+  }
+
+  .site--mobile .show-link__date,
+  .site--mobile .show-link__action {
+    font-size: 9px;
+  }
+
+  .site--mobile .show-link__location {
+    font-size: 15px;
+  }
+
+  .site--mobile .booking-manager {
+    width: 100%;
+    margin-top: 16px;
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .site--mobile .booking-manager__role {
+    margin-bottom: 4px;
+    font-size: 9px;
+  }
+
+  .site--mobile .booking-manager__name {
+    font-size: 16px;
+  }
+
+  .mobile-slide__content--merch .logo-marquee {
+    width: 100vw;
+    height: 180px;
+  }
+
+  .mobile-slide__content--merch .logo-marquee__track {
+    height: 180px;
+  }
+
+  .mobile-slide__content--newsletter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: auto;
+    padding: 50px 36px 75px;
+    position: fixed;
+    inset: 0;
+  }
+
+  .mobile-slide__content--newsletter .newsletter-footer {
+    margin-top: 45px;
+    font-size: 10px;
   }
 
 }
