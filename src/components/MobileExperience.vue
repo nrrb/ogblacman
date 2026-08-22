@@ -57,15 +57,7 @@ defineProps({ content: { type: Object, required: true } })
           accent-class="heading-accent--mobile"
           accent-first
         />
-        <div class="body-copy__frame">
-          <p class="body-copy body-copy--mobile-about">{{ content.sections.top_pick.copy }}</p>
-        </div>
         <TopPickRelease :release="content.sections.top_pick" />
-        <TextCta
-          :cta="content.sections.top_pick.cta"
-          :arrow="content.shared.arrow"
-          wrapper-class="text-cta--mobile"
-        />
       </div>
       <BackgroundVideo
         :media="content.sections.top_pick.mobile_media"

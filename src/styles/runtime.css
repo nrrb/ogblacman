@@ -75,14 +75,6 @@ video {
   width: 100%;
 }
 
-.top-pick-release__art {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
-}
-
 .top-pick-release__listen {
   display: grid;
   gap: 14px;
@@ -234,14 +226,8 @@ video {
     line-height: 76px;
   }
 
-  .mobile-slide__content--top-pick .body-copy--mobile-about {
-    font-size: 14px;
-    line-height: 18px;
-  }
-
   .site--mobile .top-pick-release {
-    grid-template-columns: minmax(0, 115px) minmax(0, 1fr);
-    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
 

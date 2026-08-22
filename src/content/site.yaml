@@ -73,12 +73,6 @@ sections:
           - { src: /assets/reference/hero-mobile-background.webm, type: video/webm }
   top_pick:
     heading: { title: TOP PICK, accent: popcorn player }
-    copy: SECTION 2 COPY
-    cta: { label: SECTION 2 CTA TEXT, url: /about, title: Learn more about us }
-    image:
-      src: /assets/blacBabyJesus-popcornplayer.png
-      alt: Popcorn Player cover art by OG Blacman
-      sizes: "(max-width: 767px) 82vw, 42vw"
     player:
       title: Listen to Popcorn Player by OG Blacman
       embed_url: https://embed.music.apple.com/us/album/popcorn-player-single/1745498866?i=1745498867

@@ -44,21 +44,7 @@ defineProps({ content: { type: Object, required: true } })
           accent-class="heading-accent--desktop"
           accent-first
         />
-        <div class="split-layout split-layout--about">
-          <div id="w-node-_142369e1-0c98-9e5f-7470-2ba633607d2d-0e0f149c" class="split-layout__content">
-            <div class="content-block">
-              <p class="body-copy body-copy--about">{{ content.sections.top_pick.copy }}</p>
-              <TextCta
-                :cta="content.sections.top_pick.cta"
-                :arrow="content.shared.arrow"
-                wrapper-class="text-cta--inline"
-              />
-            </div>
-          </div>
-          <div id="w-node-_142369e1-0c98-9e5f-7470-2ba633607d38-0e0f149c" class="split-layout__media">
-            <TopPickRelease :release="content.sections.top_pick" />
-          </div>
-        </div>
+        <TopPickRelease :release="content.sections.top_pick" />
 
         <div id="w-node-_979f9f33-1dd2-e54e-b449-3b056707e4bf-0e0f149c" class="feature-block feature-block--why">
           <div class="content-block">
