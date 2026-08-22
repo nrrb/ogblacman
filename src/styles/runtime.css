@@ -3,6 +3,27 @@
   min-height: 100%;
 }
 
+html,
+body,
+#app,
+#app > main,
+.section--contact,
+.mobile-slide {
+  background-color: var(--color-page-background);
+}
+
+body,
+.body-copy,
+.copy-grid__item {
+  color: var(--color-body-text);
+}
+
+.display-heading__accent {
+  color: var(--color-accent-text);
+  -webkit-text-fill-color: currentColor;
+  background-image: none;
+}
+
 video {
   object-fit: cover;
 }

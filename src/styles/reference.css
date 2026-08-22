@@ -4,6 +4,48 @@ html {
   font-family: sans-serif;
 }
 
+:root {
+  /*
+   * Four-corner mesh used by the primary display type. Override these custom
+   * properties on :root, main, a section, or an individual heading to recolor
+   * the mesh without changing the gradient itself.
+   */
+  --color-page-background: var(--color-black-2);
+  --color-body-text: var(--color-white);
+  --color-accent-text: var(--color-white);
+  --gradient-primary-top-left: var(--color-gold-1);
+  --gradient-primary-top-right: var(--color-gold-2);
+  --gradient-primary-bottom-left: var(--color-gold-2);
+  --gradient-primary-bottom-right: var(--color-gold-1);
+  --gradient-primary-soft-edge: 72%;
+  --image-gradient-primary:
+    radial-gradient(
+      ellipse 78% 76% at 10% -8%,
+      var(--gradient-primary-top-left) 0%,
+      transparent var(--gradient-primary-soft-edge)
+    ),
+    radial-gradient(
+      ellipse 72% 88% at 104% 4%,
+      var(--gradient-primary-top-right) 0%,
+      transparent var(--gradient-primary-soft-edge)
+    ),
+    radial-gradient(
+      ellipse 68% 82% at -4% 104%,
+      var(--gradient-primary-bottom-left) 0%,
+      transparent var(--gradient-primary-soft-edge)
+    ),
+    radial-gradient(
+      ellipse 78% 78% at 96% 106%,
+      var(--gradient-primary-bottom-right) 0%,
+      transparent var(--gradient-primary-soft-edge)
+    ),
+    linear-gradient(
+      var(--gradient-primary-bottom-left),
+      var(--gradient-primary-bottom-left)
+    );
+  --image-gradient-secondary: var(--image-gradient-primary);
+}
+
 body {
   margin: 0;
 }
