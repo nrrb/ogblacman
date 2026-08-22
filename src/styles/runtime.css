@@ -28,6 +28,12 @@ video {
   object-fit: cover;
 }
 
+.site--desktop .display-heading--about,
+.site--desktop .heading-title--about {
+  width: 100%;
+  text-align: center;
+}
+
 .form-status--success {
   display: block;
 }

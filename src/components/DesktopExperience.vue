@@ -37,16 +37,16 @@ defineProps({ content: { type: Object, required: true } })
       </BackgroundVideo>
 
       <div class="section section--content">
+        <SectionHeading
+          :heading="content.sections.top_pick.heading"
+          wrapper-class="display-heading--about"
+          title-class="heading-title--about"
+          accent-class="heading-accent--desktop"
+          accent-first
+        />
         <div class="split-layout split-layout--about">
           <div id="w-node-_142369e1-0c98-9e5f-7470-2ba633607d2d-0e0f149c" class="split-layout__content">
             <div class="content-block">
-              <SectionHeading
-                :heading="content.sections.top_pick.heading"
-                wrapper-class="display-heading--about"
-                title-class="heading-title--about"
-                accent-class="heading-accent--desktop"
-                accent-first
-              />
               <p class="body-copy body-copy--about">{{ content.sections.top_pick.copy }}</p>
               <TextCta
                 :cta="content.sections.top_pick.cta"
