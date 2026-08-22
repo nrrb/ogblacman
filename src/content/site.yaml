@@ -1,0 +1,205 @@
+accessibility:
+  slider_dot_label: "Show slide {current} of {total}"
+  previous_slide_label: Previous slide
+  next_slide_label: Next slide
+
+shared:
+  style_images:
+    primary_gradient: /assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg
+    secondary_gradient: /assets/reference/67587c8de3471c30fb333733_RGRAD.jpg
+    grain_overlay: /assets/reference/679ba26c5a7f75022c19fcb3_Grain.gif
+    grain_background: /assets/reference/679ba1513d9a359a96a88bbc_GrainBackround.webp
+  arrow:
+    src: /assets/reference/67587fc5ad54469d1ac41c17_Group%208.png
+    alt: ""
+  texture:
+    src: /assets/reference/677dab4d58f395a6f4fe043a_Texturelabs_InkPaint_211L.png
+    alt: ""
+    sizes: "(max-width: 1384px) 100vw, 1384px, 100vw"
+    sources:
+      - { src: /assets/reference/677dab4d58f395a6f4fe043a_Texturelabs_InkPaint_211L-p-500.png, width: 500 }
+      - { src: /assets/reference/677dab4d58f395a6f4fe043a_Texturelabs_InkPaint_211L-p-800.png, width: 800 }
+      - { src: /assets/reference/677dab4d58f395a6f4fe043a_Texturelabs_InkPaint_211L-p-1080.png, width: 1080 }
+      - { src: /assets/reference/677dab4d58f395a6f4fe043a_Texturelabs_InkPaint_211L.png, width: 1384 }
+
+social_links:
+  - id: instagram
+    label: Instagram
+    url: https://www.instagram.com/respectivecollective/?hl=en
+    title: Follow us on Instagram
+    target: _blank
+    icon:
+      src: /assets/reference/67acc1a62d73d654ae09761b_004-instagram.svg
+      alt: Instagram
+  - id: tiktok
+    label: TikTok
+    url: https://www.tiktok.com/@respectivetok?lang=en
+    title: Follow us on TikTok
+    target: _blank
+    icon:
+      src: /assets/reference/67acc20a127a11f65b6b85a2_937599284d2b94f35a8afb7db2e5533a.png
+      alt: TikTok
+      sizes: "(max-width: 1168px) 100vw, 1168px"
+      sources:
+        - { src: /assets/reference/67acc20a127a11f65b6b85a2_937599284d2b94f35a8afb7db2e5533a-p-500.png, width: 500 }
+        - { src: /assets/reference/67acc20a127a11f65b6b85a2_937599284d2b94f35a8afb7db2e5533a-p-800.png, width: 800 }
+        - { src: /assets/reference/67acc20a127a11f65b6b85a2_937599284d2b94f35a8afb7db2e5533a-p-1080.png, width: 1080 }
+        - { src: /assets/reference/67acc20a127a11f65b6b85a2_937599284d2b94f35a8afb7db2e5533a.png, width: 1168 }
+  - id: youtube
+    label: YouTube
+    url: https://www.youtube.com/@RespectiveCollective
+    title: Watch us on YouTube
+    target: _blank
+    icon:
+      src: /assets/reference/67c8b97c17a44dd5243506ca_yt.png
+      alt: YouTube
+      sizes: "(max-width: 512px) 100vw, 512px"
+      sources:
+        - { src: /assets/reference/67c8b97c17a44dd5243506ca_yt-p-500.png, width: 500 }
+        - { src: /assets/reference/67c8b97c17a44dd5243506ca_yt.png, width: 512 }
+  - id: linkedin
+    label: LinkedIn
+    url: https://www.linkedin.com/company/respective
+    title: Connect with us on LinkedIn
+    target: _blank
+    icon:
+      src: /assets/reference/67c8c37e803ae9d613293f99_li.png
+      alt: LinkedIn
+      sizes: "(max-width: 720px) 100vw, 720px"
+      sources:
+        - { src: /assets/reference/67c8c37e803ae9d613293f99_li-p-500.png, width: 500 }
+        - { src: /assets/reference/67c8c37e803ae9d613293f99_li.png, width: 720 }
+
+sections:
+  hero:
+    heading: { title: SECTION 1 BIG TEXT, accent: SECTION 1 ACCENT TEXT }
+    cta: { label: SECTION 1 CTA TEXT, url: null, title: null }
+    media:
+      desktop:
+        poster: /assets/reference/67c73a9bc0090b00c171d91e_Untitled%20video%20-%20Made%20with%20Clipchamp%20(4)%20(1)-poster-00001.jpg
+        sources:
+          - { src: /assets/reference/67c73a9bc0090b00c171d91e_Untitled%20video%20-%20Made%20with%20Clipchamp%20(4)%20(1)-transcode.mp4, type: video/mp4 }
+          - { src: /assets/reference/67c73a9bc0090b00c171d91e_Untitled%20video%20-%20Made%20with%20Clipchamp%20(4)%20(1)-transcode.webm, type: video/webm }
+      mobile:
+        poster: /assets/reference/67c73bf0f58cdc6e109808ba_Untitled%20video%20-%20Made%20with%20Clipchamp%20(5)%20(1)-poster-00001.jpg
+        sources:
+          - { src: /assets/reference/67c73bf0f58cdc6e109808ba_Untitled%20video%20-%20Made%20with%20Clipchamp%20(5)%20(1)-transcode.mp4, type: video/mp4 }
+          - { src: /assets/reference/67c73bf0f58cdc6e109808ba_Untitled%20video%20-%20Made%20with%20Clipchamp%20(5)%20(1)-transcode.webm, type: video/webm }
+  about:
+    heading: { title: SECTION 2 BIG TEXT, accent: SECTION 2 ACCENT TEXT }
+    copy: SECTION 2 COPY
+    cta: { label: SECTION 2 CTA TEXT, url: /about, title: Learn more about us }
+    image:
+      src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62.jpg
+      alt: Team portrait
+      sizes: 100vw
+      sources:
+        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62-p-500.jpg, width: 500 }
+        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62-p-800.jpg, width: 800 }
+        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62-p-1080.jpg, width: 1080 }
+        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62-p-1600.jpg, width: 1600 }
+        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62-p-2000.jpg, width: 2000 }
+        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62.jpg, width: 2254 }
+    mobile_media: &standard_mobile_media
+      poster: /assets/reference/679b98c33b70d6ff1c89759e_Sequence%2001_1-poster-00001.jpg
+      sources:
+        - { src: /assets/reference/679b98c33b70d6ff1c89759e_Sequence%2001_1-transcode.mp4, type: video/mp4 }
+        - { src: /assets/reference/679b98c33b70d6ff1c89759e_Sequence%2001_1-transcode.webm, type: video/webm }
+  why:
+    heading: { title: SECTION 3 BIG TEXT, accent: SECTION 3 ACCENT TEXT }
+    copy: SECTION 3 COPY
+    mobile_media: *standard_mobile_media
+  how:
+    heading: { title: SECTION 4 BIG TEXT, accent: SECTION 4 ACCENT TEXT }
+    copy_columns:
+      - SECTION 4 COPY COLUMN 1 OF 3
+      - SECTION 4 COPY COLUMN 2 OF 3
+      - SECTION 4 COPY COLUMN 3 OF 3
+    mobile_media: *standard_mobile_media
+  studios:
+    heading: { title: SECTION 6 BIG TEXT, accent: SECTION 6 ACCENT TEXT }
+    copy: SECTION 6 COPY
+    cta: { label: SECTION 6 CTA, url: /respectivestudios, title: Explore Respective Studios }
+    mobile_media:
+      poster: /assets/reference/67bd4f1b653e6045a81a8323_opt%202%20vert%20(1)-poster-00001.jpg
+      sources:
+        - { src: /assets/reference/67bd4f1b653e6045a81a8323_opt%202%20vert%20(1)-transcode.mp4, type: video/mp4 }
+        - { src: /assets/reference/67bd4f1b653e6045a81a8323_opt%202%20vert%20(1)-transcode.webm, type: video/webm }
+  clients:
+    heading: { title: SECTION 7 BIG TEXT, accent: SECTION 7 ACCENT TEXT }
+    mobile_media:
+      poster: /assets/reference/679b9c36781162267ce1aaaa_Sequence%2001_2-poster-00001.jpg
+      sources:
+        - { src: /assets/reference/679b9c36781162267ce1aaaa_Sequence%2001_2-transcode.mp4, type: video/mp4 }
+        - { src: /assets/reference/679b9c36781162267ce1aaaa_Sequence%2001_2-transcode.webm, type: video/webm }
+  contact:
+    heading: { title: SECTION 9 BIG TEXT, accent: SECTION 9 ACCENT TEXT }
+    mobile_media:
+      poster: /assets/reference/679cf67654d83fb69a7c535d_EDCO2024_1109_CLOSINGCEREMONY_GJC%20(1)-poster-00001.jpg
+      sources:
+        - { src: /assets/reference/679cf67654d83fb69a7c535d_EDCO2024_1109_CLOSINGCEREMONY_GJC%20(1)-transcode.mp4, type: video/mp4 }
+        - { src: /assets/reference/679cf67654d83fb69a7c535d_EDCO2024_1109_CLOSINGCEREMONY_GJC%20(1)-transcode.webm, type: video/webm }
+
+case_studies:
+  heading: { title: SECTION 5 BIG TEXT, accent: SECTION 5 ACCENT TEXT }
+  mobile_media:
+    poster: /assets/reference/679b9ace0bd979d3d633adc6_Sequence%2001_1_1-poster-00001.jpg
+    sources:
+      - { src: /assets/reference/679b9ace0bd979d3d633adc6_Sequence%2001_1_1-transcode.mp4, type: video/mp4 }
+      - { src: /assets/reference/679b9ace0bd979d3d633adc6_Sequence%2001_1_1-transcode.webm, type: video/webm }
+  items:
+    - { id: harry-styles, title: SECTION 5 CASE 1 TEXT, year: SECTION 5 CASE 1 YEAR, url: /case-studies/harry-styles, link_title: View case study 1 }
+    - { id: grammy-awards, title: SECTION 5 CASE 2 TEXT, year: SECTION 5 CASE 2 YEAR, url: /case-studies/the-68th-grammy-awards, link_title: View case study 2 }
+    - { id: lollapalooza-2025, title: SECTION 5 CASE 3 TEXT, year: SECTION 5 CASE 3 YEAR, url: /case-studies/lollapalooza-2025, link_title: View case study 3 }
+    - { id: spotify, title: SECTION 5 CASE 4 TEXT, year: SECTION 5 CASE 4 YEAR, url: /case-studies/spotify, link_title: View case study 4 }
+    - { id: tyler-rollout, title: SECTION 5 CASE 5 TEXT, year: SECTION 5 CASE 5 YEAR, url: /case-studies/tyler-the-creator-rollout, link_title: View case study 5 }
+    - { id: don-lemon, title: SECTION 5 CASE 6 TEXT, year: SECTION 5 CASE 6 YEAR, url: /case-studies/don-lemon, link_title: View case study 6 }
+    - { id: all-things-go, title: SECTION 5 CASE 7 TEXT, year: SECTION 5 CASE 7 YEAR, url: /case-studies/all-things-go, link_title: View case study 7 }
+    - { id: burna-boy, title: SECTION 5 CASE 8 TEXT, year: SECTION 5 CASE 8 YEAR, url: /case-studies/burna-boy-album-rollout, link_title: View case study 8 }
+    - { id: raising-canes, title: SECTION 5 CASE 9 TEXT, year: SECTION 5 CASE 9 YEAR, url: /case-studies/raising-canes, link_title: View case study 9 }
+    - { id: rolling-loud, title: SECTION 5 CASE 10 TEXT, year: SECTION 5 CASE 10 YEAR, url: /case-studies/rolling-loud, link_title: View case study 10 }
+    - { id: snap-nation, title: SECTION 5 CASE 11 TEXT, year: SECTION 5 CASE 11 YEAR, url: /case-studies/snap-nation-x-acl, link_title: View case study 11 }
+    - { id: lollapalooza, title: SECTION 5 CASE 12 TEXT, year: SECTION 5 CASE 12 YEAR, url: /case-studies/lollapalooza, link_title: View case study 12 }
+
+clients:
+  items:
+    - { id: client-01, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 1 }
+    - { id: client-02, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 2 }
+    - { id: client-03, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 3 }
+    - { id: client-04, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 4 }
+    - { id: client-05, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 5 }
+    - { id: client-06, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 6 }
+    - { id: client-07, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 7 }
+    - { id: client-08, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 8 }
+    - { id: client-09, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 9 }
+    - { id: client-10, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 10 }
+    - { id: client-11, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 11 }
+    - { id: client-12, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 12 }
+    - { id: client-13, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 13 }
+    - { id: client-14, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 14 }
+    - { id: client-15, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 15 }
+    - { id: client-16, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 16 }
+    - { id: client-17, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 17 }
+    - { id: client-18, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 18 }
+    - { id: client-19, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 19 }
+    - { id: client-20, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 20 }
+    - { id: client-21, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 21 }
+    - { id: client-22, label: SECTION 8 LINK TEXT, url: SECTION 8 LINK URL, link_title: Visit client 22 }
+
+carousel:
+  items: []
+
+form:
+  required_marker: "*"
+  fields:
+    - { id: name, name: Name, type: text, label: Name, placeholder: First Name // Company, required: true }
+    - { id: email, name: Email, type: email, label: Email, placeholder: youremail@email.com, required: true }
+    - { id: phone, name: Phone-Number, type: tel, label: Phone Number, placeholder: "(800) 555-0100", required: false }
+    - { id: message, name: Paragraph, type: text, label: What do we need to know?, placeholder: Let us know what you're contacting us for, required: true, multiline: true }
+  submit_label: "Submit     →"
+  wait_label: Please wait...
+  success_message: Thank you! Your submission has been received!
+  error_message: Oops! Something went wrong while submitting the form.
+
+footer:
+  copyright: © COPYRIGHT 2026 OG BLACMAN. ALL RIGHTS RESERVED.

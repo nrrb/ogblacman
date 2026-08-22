@@ -8,10 +8,12 @@
     "build": "vite build",
     "preview": "vite preview",
     "test:interaction": "node tests/interaction.mjs",
+    "test:content": "node tests/content.mjs",
     "test:visual": "node tests/visual/compare.mjs"
   },
   "dependencies": {
-    "vue": "latest"
+    "vue": "latest",
+    "yaml": "^2.8.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "latest",
