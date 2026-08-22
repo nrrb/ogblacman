@@ -65,9 +65,6 @@ defineProps({ content: { type: Object, required: true } })
           title-class="heading-title--feature"
           accent-class="heading-accent--desktop"
         />
-        <div class="copy-grid">
-          <div v-for="column in content.sections.booking.copy_columns" :key="column" class="copy-grid__item">{{ column }}</div>
-        </div>
         <div class="booking-manager">
           <div class="booking-manager__role">{{ content.sections.booking.manager.role }}</div>
           <div class="booking-manager__name">{{ content.sections.booking.manager.name }}</div>

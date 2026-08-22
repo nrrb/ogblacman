@@ -59,7 +59,7 @@ social_links:
 sections:
   game:
     heading: { title: OG BLACMAN, accent: play me }
-    cta: { label: SECTION 1 CTA TEXT, url: null, title: null }
+    cta: { label: CLIMB DOWN, url: null, title: null }
     media:
       desktop:
         poster: /assets/hero/hero-montage-desktop-poster.jpg
@@ -72,7 +72,7 @@ sections:
           - { src: /assets/hero/hero-montage-mobile.mp4, type: video/mp4 }
           - { src: /assets/hero/hero-montage-mobile.webm, type: video/webm }
   top_pick:
-    heading: { title: TOP PICK, accent: popcorn player }
+    heading: { title: POPCORN PLAYER, accent: TOP PICK }
     player:
       artist: OG Blacman
       title: Time Not Real
@@ -84,28 +84,24 @@ sections:
         - { src: /assets/reference/mobile-standard-background.mp4, type: video/mp4 }
         - { src: /assets/reference/mobile-standard-background.webm, type: video/webm }
   upcoming_shows:
-    heading: { title: SECTION 3 BIG TEXT, accent: SECTION 3 ACCENT TEXT }
-    copy: SECTION 3 COPY
+    heading: { title: UPCOMING SHOWS, accent: GET THE LOVE }
+    copy: Catch OG Blacman live. New dates and ticket links will be added as shows are announced.
     items:
       - { id: show-01, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
       - { id: show-02, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
       - { id: show-03, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
     mobile_media: *standard_mobile_media
   booking:
-    heading: { title: SECTION 4 BIG TEXT, accent: SECTION 4 ACCENT TEXT }
-    copy_columns:
-      - SECTION 4 COPY COLUMN 1 OF 3
-      - SECTION 4 COPY COLUMN 2 OF 3
-      - SECTION 4 COPY COLUMN 3 OF 3
+    heading: { title: BOOKING, accent: LET'S MAKE IT HAPPEN }
     manager:
       role: MANAGEMENT
-      name: MANAGER NAME
-      email: MANAGER EMAIL
-      phone: MANAGER PHONE
+      name: BOOKING & BUSINESS INQUIRIES
+      email: CONTACT @OGBLACMAN ON INSTAGRAM
+      phone: DETAILS AVAILABLE UPON REQUEST
     mobile_media: *standard_mobile_media
   merch:
-    heading: { title: SECTION 6 BIG TEXT, accent: SECTION 6 ACCENT TEXT }
-    copy: SECTION 6 COPY
+    heading: { title: OFFICIAL MERCH, accent: WEAR THE MOVEMENT }
+    copy: Rep OG Blacman with official apparel and limited drops. Tap a product to shop the collection on Fourthwall.
     cta: { label: SECTION 6 CTA, url: /respectivestudios, title: Explore Respective Studios }
     items: []
     mobile_media:
@@ -114,7 +110,7 @@ sections:
         - { src: /assets/reference/mobile-studios-background.mp4, type: video/mp4 }
         - { src: /assets/reference/mobile-studios-background.webm, type: video/webm }
   newsletter:
-    heading: { title: SECTION 7 BIG TEXT, accent: SECTION 7 ACCENT TEXT }
+    heading: { title: STAY IN THE LOOP, accent: JOIN THE LIST }
     form:
       required_marker: "*"
       fields:
@@ -131,7 +127,7 @@ sections:
         - { src: /assets/reference/mobile-clients-background.webm, type: video/webm }
 
 case_studies:
-  heading: { title: SECTION 5 BIG TEXT, accent: SECTION 5 ACCENT TEXT }
+  heading: { title: MORE TO COME, accent: STAY TUNED }
   mobile_media:
     poster: /assets/reference/mobile-case-studies-background-poster.jpg
     sources:

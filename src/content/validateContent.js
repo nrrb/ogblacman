@@ -135,8 +135,6 @@ export function validateContent(content) {
     string(item.action_label, `sections.upcoming_shows.items[${index}].action_label`)
   })
 
-  const bookingCopy = array(sections.booking.copy_columns, 'sections.booking.copy_columns')
-  bookingCopy.forEach((value, index) => string(value, `sections.booking.copy_columns[${index}]`))
   object(sections.booking.manager, 'sections.booking.manager')
   for (const key of ['role', 'name', 'email', 'phone']) {
     string(sections.booking.manager[key], `sections.booking.manager.${key}`)

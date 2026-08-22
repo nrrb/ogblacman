@@ -94,13 +94,6 @@ defineProps({ content: { type: Object, required: true } })
           title-class="heading-title--mobile-how"
           accent-class="heading-accent--mobile-how"
         />
-        <div class="body-copy__frame">
-          <p class="body-copy body-copy--mobile-how">
-            <template v-for="(column, index) in content.sections.booking.copy_columns" :key="column">
-              <br v-if="index"><br v-if="index">{{ column }}
-            </template>
-          </p>
-        </div>
         <div class="booking-manager booking-manager--mobile">
           <div class="booking-manager__role">{{ content.sections.booking.manager.role }}</div>
           <div class="booking-manager__name">{{ content.sections.booking.manager.name }}</div>
