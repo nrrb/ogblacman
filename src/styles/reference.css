@@ -784,7 +784,7 @@ body {
 
 .heading-title--contact {
   -webkit-text-fill-color: transparent;
-  background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+  background-image: var(--image-gradient-primary);
   background-position: 50%;
   background-size: cover;
   -webkit-background-clip: text;
@@ -856,7 +856,7 @@ body {
 
 .heading-title--about {
   -webkit-text-fill-color: transparent;
-  background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+  background-image: var(--image-gradient-primary);
   background-position: 100% 100%;
   background-size: auto;
   -webkit-background-clip: text;
@@ -937,7 +937,7 @@ body {
 
 .heading-title--cases {
   -webkit-text-fill-color: transparent;
-  background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+  background-image: var(--image-gradient-primary);
   background-position: 0 0;
   background-size: auto;
   -webkit-background-clip: text;
@@ -963,7 +963,7 @@ body {
 
 .case-item:hover {
   -webkit-text-fill-color: transparent;
-  background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+  background-image: var(--image-gradient-primary);
   background-position: 50%;
   background-size: cover;
   -webkit-background-clip: text;
@@ -976,7 +976,7 @@ body {
   pointer-events: none;
   -webkit-text-fill-color: inherit;
   z-index: 100;
-  background-image: url("/assets/reference/679ba26c5a7f75022c19fcb3_Grain.gif");
+  background-image: var(--image-grain-overlay);
   background-position: 0 0;
   background-size: auto;
   background-clip: border-box;
@@ -1035,7 +1035,7 @@ body {
 
 .client-link:hover {
   -webkit-text-fill-color: transparent;
-  background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+  background-image: var(--image-gradient-primary);
   background-position: 0 0;
   background-size: cover;
   -webkit-background-clip: text;
@@ -1115,7 +1115,7 @@ body {
 
 .heading-title--clients {
   -webkit-text-fill-color: transparent;
-  background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+  background-image: var(--image-gradient-primary);
   background-position: 0 0;
   background-size: auto;
   -webkit-background-clip: text;
@@ -1227,7 +1227,7 @@ body {
 
 .heading-title--desktop-hero {
   -webkit-text-fill-color: transparent;
-  background-image: url("/assets/reference/67587c8de3471c30fb333733_RGRAD.jpg");
+  background-image: var(--image-gradient-secondary);
   background-position: 0 0;
   background-size: cover;
   -webkit-background-clip: text;
@@ -1249,7 +1249,7 @@ body {
 
 .form-required {
   -webkit-text-fill-color: transparent;
-  background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+  background-image: var(--image-gradient-primary);
   background-position: 50%;
   background-size: auto;
   -webkit-background-clip: text;
@@ -1281,7 +1281,7 @@ body {
 
 .heading-title--why {
   -webkit-text-fill-color: transparent;
-  background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+  background-image: var(--image-gradient-primary);
   background-position: 100% 100%;
   background-size: auto;
   -webkit-background-clip: text;
@@ -1349,7 +1349,7 @@ body {
 
 .heading-title--feature {
   -webkit-text-fill-color: transparent;
-  background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+  background-image: var(--image-gradient-primary);
   background-position: 100% 0;
   background-size: cover;
   -webkit-background-clip: text;
@@ -1422,7 +1422,7 @@ body {
 
   .heading-title--contact {
     -webkit-text-fill-color: transparent;
-    background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+    background-image: var(--image-gradient-primary);
     background-position: 50%;
     background-size: cover;
     -webkit-background-clip: text;
@@ -1604,7 +1604,7 @@ body {
   .heading-title--mobile-hero {
     -webkit-text-fill-color: transparent;
     background-color: #9e474700;
-    background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+    background-image: var(--image-gradient-primary);
     background-position: 0 0;
     background-size: cover;
     -webkit-background-clip: text;
@@ -1702,7 +1702,7 @@ body {
   .heading-title--mobile-about {
     text-align: center;
     -webkit-text-fill-color: transparent;
-    background-image: url("/assets/reference/67587c8de3471c30fb333733_RGRAD.jpg");
+    background-image: var(--image-gradient-secondary);
     background-position: 50%;
     background-size: cover;
     -webkit-background-clip: text;
@@ -1797,7 +1797,7 @@ body {
   .heading-title--mobile-clients {
     text-align: center;
     -webkit-text-fill-color: transparent;
-    background-image: url("/assets/reference/67587c8de3471c30fb333733_RGRAD.jpg");
+    background-image: var(--image-gradient-secondary);
     background-position: 50%;
     background-size: cover;
     -webkit-background-clip: text;
@@ -1875,7 +1875,7 @@ body {
   .heading-title--contact {
     text-align: center;
     -webkit-text-fill-color: transparent;
-    background-image: url("/assets/reference/67587c8de3471c30fb333733_RGRAD.jpg");
+    background-image: var(--image-gradient-secondary);
     background-position: 50%;
     background-size: cover;
     -webkit-background-clip: text;
@@ -1929,7 +1929,7 @@ body {
 
   .heading-title--mobile-hero {
     -webkit-text-fill-color: transparent;
-    background-image: url("/assets/reference/67587c8de3471c30fb333733_RGRAD.jpg");
+    background-image: var(--image-gradient-secondary);
     background-position: 50% 0;
     background-size: cover;
     -webkit-background-clip: text;
@@ -2013,7 +2013,7 @@ body {
     opacity: .04;
     z-index: 2;
     pointer-events: none;
-    background-image: url("/assets/reference/679ba1513d9a359a96a88bbc_GrainBackround.webp");
+    background-image: var(--image-grain-background);
     background-position: 50%;
     background-size: auto;
     position: fixed;
@@ -2113,7 +2113,7 @@ body {
   .heading-title--mobile-why {
     text-align: center;
     -webkit-text-fill-color: transparent;
-    background-image: url("/assets/reference/67587c8de3471c30fb333733_RGRAD.jpg");
+    background-image: var(--image-gradient-secondary);
     background-position: 50%;
     background-size: cover;
     -webkit-background-clip: text;
@@ -2190,7 +2190,7 @@ body {
 
   .form-required {
     -webkit-text-fill-color: transparent;
-    background-image: url("/assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg");
+    background-image: var(--image-gradient-primary);
     background-position: 0 0;
     background-size: auto;
     -webkit-background-clip: text;
@@ -2215,7 +2215,7 @@ body {
   .heading-title--mobile-why {
     text-align: center;
     -webkit-text-fill-color: transparent;
-    background-image: url("/assets/reference/67587c8de3471c30fb333733_RGRAD.jpg");
+    background-image: var(--image-gradient-secondary);
     background-position: 50%;
     background-size: cover;
     -webkit-background-clip: text;
@@ -2277,7 +2277,7 @@ body {
   .heading-title--mobile-cases {
     text-align: center;
     -webkit-text-fill-color: transparent;
-    background-image: url("/assets/reference/67587c8de3471c30fb333733_RGRAD.jpg");
+    background-image: var(--image-gradient-secondary);
     background-position: 50%;
     background-size: cover;
     -webkit-background-clip: text;
@@ -2302,7 +2302,7 @@ body {
   .heading-title--mobile-studios {
     text-align: center;
     -webkit-text-fill-color: transparent;
-    background-image: url("/assets/reference/67587c8de3471c30fb333733_RGRAD.jpg");
+    background-image: var(--image-gradient-secondary);
     background-position: 50%;
     background-size: cover;
     -webkit-background-clip: text;
@@ -2339,7 +2339,7 @@ body {
   .heading-accent--mobile-how {
     text-align: center;
     -webkit-text-fill-color: transparent;
-    background-image: url("/assets/reference/67587c8de3471c30fb333733_RGRAD.jpg");
+    background-image: var(--image-gradient-secondary);
     background-position: 50%;
     background-size: cover;
     -webkit-background-clip: text;

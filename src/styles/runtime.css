@@ -7,6 +7,10 @@ video {
   object-fit: cover;
 }
 
+.form-status--success {
+  display: block;
+}
+
 .logo-marquee__track {
   animation: reference-marquee 120s linear infinite;
   animation-play-state: paused;
@@ -20,6 +24,22 @@ video {
 @keyframes reference-marquee {
   0%, 100% { transform: translate3d(0, 0, 0); }
   50% { transform: translate3d(-400px, 0, 0); }
+}
+
+.logo-marquee__item {
+  flex: 0 0 auto;
+  height: 100%;
+}
+
+.logo-marquee__link {
+  display: block;
+  height: 100%;
+}
+
+.logo-marquee__image {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
 }
 
 @media screen and (max-width: 479px) {
