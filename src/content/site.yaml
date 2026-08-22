@@ -5,22 +5,22 @@ accessibility:
 
 shared:
   style_images:
-    primary_gradient: /assets/reference/677d813748d5ed50f230b371_RGRAD2.jpg
-    secondary_gradient: /assets/reference/67587c8de3471c30fb333733_RGRAD.jpg
-    grain_overlay: /assets/reference/679ba26c5a7f75022c19fcb3_Grain.gif
-    grain_background: /assets/reference/679ba1513d9a359a96a88bbc_GrainBackround.webp
+    primary_gradient: /assets/reference/text-gradient-primary.jpg
+    secondary_gradient: /assets/reference/text-gradient-secondary.jpg
+    grain_overlay: /assets/reference/grain-overlay.gif
+    grain_background: /assets/reference/grain-background.webp
   arrow:
-    src: /assets/reference/67587fc5ad54469d1ac41c17_Group%208.png
+    src: /assets/reference/cta-arrow.png
     alt: ""
   texture:
-    src: /assets/reference/677dab4d58f395a6f4fe043a_Texturelabs_InkPaint_211L.png
+    src: /assets/reference/cta-ink-texture.png
     alt: ""
     sizes: "(max-width: 1384px) 100vw, 1384px, 100vw"
     sources:
-      - { src: /assets/reference/677dab4d58f395a6f4fe043a_Texturelabs_InkPaint_211L-p-500.png, width: 500 }
-      - { src: /assets/reference/677dab4d58f395a6f4fe043a_Texturelabs_InkPaint_211L-p-800.png, width: 800 }
-      - { src: /assets/reference/677dab4d58f395a6f4fe043a_Texturelabs_InkPaint_211L-p-1080.png, width: 1080 }
-      - { src: /assets/reference/677dab4d58f395a6f4fe043a_Texturelabs_InkPaint_211L.png, width: 1384 }
+      - { src: /assets/reference/cta-ink-texture-500w.png, width: 500 }
+      - { src: /assets/reference/cta-ink-texture-800w.png, width: 800 }
+      - { src: /assets/reference/cta-ink-texture-1080w.png, width: 1080 }
+      - { src: /assets/reference/cta-ink-texture.png, width: 1384 }
 
 social_links:
   - id: instagram
@@ -29,7 +29,7 @@ social_links:
     title: Follow us on Instagram
     target: _blank
     icon:
-      src: /assets/reference/67acc1a62d73d654ae09761b_004-instagram.svg
+      src: /assets/reference/social-instagram-icon.svg
       alt: Instagram
   - id: tiktok
     label: TikTok
@@ -37,38 +37,38 @@ social_links:
     title: Follow us on TikTok
     target: _blank
     icon:
-      src: /assets/reference/67acc20a127a11f65b6b85a2_937599284d2b94f35a8afb7db2e5533a.png
+      src: /assets/reference/social-tiktok-icon.png
       alt: TikTok
       sizes: "(max-width: 1168px) 100vw, 1168px"
       sources:
-        - { src: /assets/reference/67acc20a127a11f65b6b85a2_937599284d2b94f35a8afb7db2e5533a-p-500.png, width: 500 }
-        - { src: /assets/reference/67acc20a127a11f65b6b85a2_937599284d2b94f35a8afb7db2e5533a-p-800.png, width: 800 }
-        - { src: /assets/reference/67acc20a127a11f65b6b85a2_937599284d2b94f35a8afb7db2e5533a-p-1080.png, width: 1080 }
-        - { src: /assets/reference/67acc20a127a11f65b6b85a2_937599284d2b94f35a8afb7db2e5533a.png, width: 1168 }
+        - { src: /assets/reference/social-tiktok-icon-500w.png, width: 500 }
+        - { src: /assets/reference/social-tiktok-icon-800w.png, width: 800 }
+        - { src: /assets/reference/social-tiktok-icon-1080w.png, width: 1080 }
+        - { src: /assets/reference/social-tiktok-icon.png, width: 1168 }
   - id: youtube
     label: YouTube
     url: https://www.youtube.com/@RespectiveCollective
     title: Watch us on YouTube
     target: _blank
     icon:
-      src: /assets/reference/67c8b97c17a44dd5243506ca_yt.png
+      src: /assets/reference/social-youtube-icon.png
       alt: YouTube
       sizes: "(max-width: 512px) 100vw, 512px"
       sources:
-        - { src: /assets/reference/67c8b97c17a44dd5243506ca_yt-p-500.png, width: 500 }
-        - { src: /assets/reference/67c8b97c17a44dd5243506ca_yt.png, width: 512 }
+        - { src: /assets/reference/social-youtube-icon-500w.png, width: 500 }
+        - { src: /assets/reference/social-youtube-icon.png, width: 512 }
   - id: linkedin
     label: LinkedIn
     url: https://www.linkedin.com/company/respective
     title: Connect with us on LinkedIn
     target: _blank
     icon:
-      src: /assets/reference/67c8c37e803ae9d613293f99_li.png
+      src: /assets/reference/social-linkedin-icon.png
       alt: LinkedIn
       sizes: "(max-width: 720px) 100vw, 720px"
       sources:
-        - { src: /assets/reference/67c8c37e803ae9d613293f99_li-p-500.png, width: 500 }
-        - { src: /assets/reference/67c8c37e803ae9d613293f99_li.png, width: 720 }
+        - { src: /assets/reference/social-linkedin-icon-500w.png, width: 500 }
+        - { src: /assets/reference/social-linkedin-icon.png, width: 720 }
 
 sections:
   hero:
@@ -76,35 +76,35 @@ sections:
     cta: { label: SECTION 1 CTA TEXT, url: null, title: null }
     media:
       desktop:
-        poster: /assets/reference/67c73a9bc0090b00c171d91e_Untitled%20video%20-%20Made%20with%20Clipchamp%20(4)%20(1)-poster-00001.jpg
+        poster: /assets/reference/hero-desktop-background-poster.jpg
         sources:
-          - { src: /assets/reference/67c73a9bc0090b00c171d91e_Untitled%20video%20-%20Made%20with%20Clipchamp%20(4)%20(1)-transcode.mp4, type: video/mp4 }
-          - { src: /assets/reference/67c73a9bc0090b00c171d91e_Untitled%20video%20-%20Made%20with%20Clipchamp%20(4)%20(1)-transcode.webm, type: video/webm }
+          - { src: /assets/reference/hero-desktop-background.mp4, type: video/mp4 }
+          - { src: /assets/reference/hero-desktop-background.webm, type: video/webm }
       mobile:
-        poster: /assets/reference/67c73bf0f58cdc6e109808ba_Untitled%20video%20-%20Made%20with%20Clipchamp%20(5)%20(1)-poster-00001.jpg
+        poster: /assets/reference/hero-mobile-background-poster.jpg
         sources:
-          - { src: /assets/reference/67c73bf0f58cdc6e109808ba_Untitled%20video%20-%20Made%20with%20Clipchamp%20(5)%20(1)-transcode.mp4, type: video/mp4 }
-          - { src: /assets/reference/67c73bf0f58cdc6e109808ba_Untitled%20video%20-%20Made%20with%20Clipchamp%20(5)%20(1)-transcode.webm, type: video/webm }
+          - { src: /assets/reference/hero-mobile-background.mp4, type: video/mp4 }
+          - { src: /assets/reference/hero-mobile-background.webm, type: video/webm }
   about:
     heading: { title: SECTION 2 BIG TEXT, accent: SECTION 2 ACCENT TEXT }
     copy: SECTION 2 COPY
     cta: { label: SECTION 2 CTA TEXT, url: /about, title: Learn more about us }
     image:
-      src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62.jpg
+      src: /assets/reference/about-team-photo.jpg
       alt: Team portrait
       sizes: 100vw
       sources:
-        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62-p-500.jpg, width: 500 }
-        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62-p-800.jpg, width: 800 }
-        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62-p-1080.jpg, width: 1080 }
-        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62-p-1600.jpg, width: 1600 }
-        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62-p-2000.jpg, width: 2000 }
-        - { src: /assets/reference/69c15a61423abc2265b75131_TeamShoot03.03.26_@JohnCotterMedia-62.jpg, width: 2254 }
+        - { src: /assets/reference/about-team-photo-500w.jpg, width: 500 }
+        - { src: /assets/reference/about-team-photo-800w.jpg, width: 800 }
+        - { src: /assets/reference/about-team-photo-1080w.jpg, width: 1080 }
+        - { src: /assets/reference/about-team-photo-1600w.jpg, width: 1600 }
+        - { src: /assets/reference/about-team-photo-2000w.jpg, width: 2000 }
+        - { src: /assets/reference/about-team-photo.jpg, width: 2254 }
     mobile_media: &standard_mobile_media
-      poster: /assets/reference/679b98c33b70d6ff1c89759e_Sequence%2001_1-poster-00001.jpg
+      poster: /assets/reference/mobile-standard-background-poster.jpg
       sources:
-        - { src: /assets/reference/679b98c33b70d6ff1c89759e_Sequence%2001_1-transcode.mp4, type: video/mp4 }
-        - { src: /assets/reference/679b98c33b70d6ff1c89759e_Sequence%2001_1-transcode.webm, type: video/webm }
+        - { src: /assets/reference/mobile-standard-background.mp4, type: video/mp4 }
+        - { src: /assets/reference/mobile-standard-background.webm, type: video/webm }
   why:
     heading: { title: SECTION 3 BIG TEXT, accent: SECTION 3 ACCENT TEXT }
     copy: SECTION 3 COPY
@@ -121,32 +121,32 @@ sections:
     copy: SECTION 6 COPY
     cta: { label: SECTION 6 CTA, url: /respectivestudios, title: Explore Respective Studios }
     mobile_media:
-      poster: /assets/reference/67bd4f1b653e6045a81a8323_opt%202%20vert%20(1)-poster-00001.jpg
+      poster: /assets/reference/mobile-studios-background-poster.jpg
       sources:
-        - { src: /assets/reference/67bd4f1b653e6045a81a8323_opt%202%20vert%20(1)-transcode.mp4, type: video/mp4 }
-        - { src: /assets/reference/67bd4f1b653e6045a81a8323_opt%202%20vert%20(1)-transcode.webm, type: video/webm }
+        - { src: /assets/reference/mobile-studios-background.mp4, type: video/mp4 }
+        - { src: /assets/reference/mobile-studios-background.webm, type: video/webm }
   clients:
     heading: { title: SECTION 7 BIG TEXT, accent: SECTION 7 ACCENT TEXT }
     mobile_media:
-      poster: /assets/reference/679b9c36781162267ce1aaaa_Sequence%2001_2-poster-00001.jpg
+      poster: /assets/reference/mobile-clients-background-poster.jpg
       sources:
-        - { src: /assets/reference/679b9c36781162267ce1aaaa_Sequence%2001_2-transcode.mp4, type: video/mp4 }
-        - { src: /assets/reference/679b9c36781162267ce1aaaa_Sequence%2001_2-transcode.webm, type: video/webm }
+        - { src: /assets/reference/mobile-clients-background.mp4, type: video/mp4 }
+        - { src: /assets/reference/mobile-clients-background.webm, type: video/webm }
   contact:
     heading: { title: SECTION 9 BIG TEXT, accent: SECTION 9 ACCENT TEXT }
     mobile_media:
-      poster: /assets/reference/679cf67654d83fb69a7c535d_EDCO2024_1109_CLOSINGCEREMONY_GJC%20(1)-poster-00001.jpg
+      poster: /assets/reference/mobile-contact-background-poster.jpg
       sources:
-        - { src: /assets/reference/679cf67654d83fb69a7c535d_EDCO2024_1109_CLOSINGCEREMONY_GJC%20(1)-transcode.mp4, type: video/mp4 }
-        - { src: /assets/reference/679cf67654d83fb69a7c535d_EDCO2024_1109_CLOSINGCEREMONY_GJC%20(1)-transcode.webm, type: video/webm }
+        - { src: /assets/reference/mobile-contact-background.mp4, type: video/mp4 }
+        - { src: /assets/reference/mobile-contact-background.webm, type: video/webm }
 
 case_studies:
   heading: { title: SECTION 5 BIG TEXT, accent: SECTION 5 ACCENT TEXT }
   mobile_media:
-    poster: /assets/reference/679b9ace0bd979d3d633adc6_Sequence%2001_1_1-poster-00001.jpg
+    poster: /assets/reference/mobile-case-studies-background-poster.jpg
     sources:
-      - { src: /assets/reference/679b9ace0bd979d3d633adc6_Sequence%2001_1_1-transcode.mp4, type: video/mp4 }
-      - { src: /assets/reference/679b9ace0bd979d3d633adc6_Sequence%2001_1_1-transcode.webm, type: video/webm }
+      - { src: /assets/reference/mobile-case-studies-background.mp4, type: video/mp4 }
+      - { src: /assets/reference/mobile-case-studies-background.webm, type: video/webm }
   items:
     - { id: harry-styles, title: SECTION 5 CASE 1 TEXT, year: SECTION 5 CASE 1 YEAR, url: /case-studies/harry-styles, link_title: View case study 1 }
     - { id: grammy-awards, title: SECTION 5 CASE 2 TEXT, year: SECTION 5 CASE 2 YEAR, url: /case-studies/the-68th-grammy-awards, link_title: View case study 2 }

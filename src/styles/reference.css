@@ -572,7 +572,7 @@ textarea.form-control {
 
 @font-face {
   font-family: Quinn;
-  src: url("/assets/reference/67587c0a4e4d90fd75494911_Quinn-Bold.ttf") format("truetype");
+  src: url("/assets/reference/font-quinn-bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -580,7 +580,7 @@ textarea.form-control {
 
 @font-face {
   font-family: Neuehaasdisplaymediu;
-  src: url("/assets/reference/67587e190c7fe77709b71d15_NeueHaasDisplayMediu.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-medium.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -588,7 +588,7 @@ textarea.form-control {
 
 @font-face {
   font-family: Neuehaasdisplayroman;
-  src: url("/assets/reference/67587e190f3b68d60a18bad7_NeueHaasDisplayRoman.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-roman.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -596,7 +596,7 @@ textarea.form-control {
 
 @font-face {
   font-family: Neuehaasdisplaythin;
-  src: url("/assets/reference/67587e1985e9bdcaeaf62529_NeueHaasDisplayThin.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-thin.ttf") format("truetype");
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -604,7 +604,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayMediumItalic;
-  src: url("/assets/reference/67587e19ed84512e9332ad1e_NeueHaasDisplayMediumItalic.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-medium-italic.ttf") format("truetype");
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -612,7 +612,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayBoldItalic;
-  src: url("/assets/reference/67587e19700e200e60789f75_NeueHaasDisplayBoldItalic.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-bold-italic.ttf") format("truetype");
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -620,7 +620,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayBlackItalic;
-  src: url("/assets/reference/67587e19d20e0f3eb8427526_NeueHaasDisplayBlackItalic.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-black-italic.ttf") format("truetype");
   font-weight: 900;
   font-style: italic;
   font-display: swap;
@@ -628,7 +628,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayXThin;
-  src: url("/assets/reference/67587e196ee14f1e1e01fa65_NeueHaasDisplayXThin.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-extra-thin.ttf") format("truetype");
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -636,7 +636,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayLightItalic;
-  src: url("/assets/reference/67587e192cc9a090ee536f4c_NeueHaasDisplayLightItalic.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-light-italic.ttf") format("truetype");
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -644,7 +644,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayBold;
-  src: url("/assets/reference/67587e19096aa63db9dda733_NeueHaasDisplayBold.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -652,7 +652,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayBlac;
-  src: url("/assets/reference/67587e191686d525192b8fa6_NeueHaasDisplayBlack.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-black.ttf") format("truetype");
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -660,7 +660,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayLight;
-  src: url("/assets/reference/67587e19db8071ef5c3dad51_NeueHaasDisplayLight.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-light.ttf") format("truetype");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -668,7 +668,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayRomanItalic;
-  src: url("/assets/reference/67587e197db89e483a9c2fa2_NeueHaasDisplayRomanItalic.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-roman-italic.ttf") format("truetype");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -676,7 +676,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayXXThinItalic;
-  src: url("/assets/reference/67587e19f501acb159c7669f_NeueHaasDisplayXXThinItalic.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-ultra-thin-italic.ttf") format("truetype");
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -684,7 +684,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayXXThin;
-  src: url("/assets/reference/67587e19fa52fad6fac0c59d_NeueHaasDisplayXXThin.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-ultra-thin.ttf") format("truetype");
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -692,7 +692,7 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayXThinItalic;
-  src: url("/assets/reference/67587e19d20e0f3eb842755b_NeueHaasDisplayXThinItalic.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-extra-thin-italic.ttf") format("truetype");
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -700,15 +700,15 @@ textarea.form-control {
 
 @font-face {
   font-family: NeueHaasDisplayThinItalic;
-  src: url("/assets/reference/67587e1b5094ad59f307e86f_NeueHaasDisplayThinItalic.ttf") format("truetype");
+  src: url("/assets/reference/font-neue-haas-display-thin-italic.ttf") format("truetype");
   font-weight: 100;
   font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: Betterworks;
-  src: url("/assets/reference/67587c2319f26f185bf4ab1c_Betterworks.otf") format("opentype");
+  font-family: "Tajamuka Script";
+  src: url("/assets/fonts/tajamuka-script.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -716,7 +716,7 @@ textarea.form-control {
 
 @font-face {
   font-family: Respective;
-  src: url("/assets/reference/677d78f379e15f7e9bbcde09_Respective.otf") format("opentype");
+  src: url("/assets/reference/font-respective-display.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -778,7 +778,7 @@ body {
   text-align: right;
   margin-top: -50px;
   margin-bottom: 100px;
-  font-family: Betterworks, Arial, sans-serif;
+  font-family: "Tajamuka Script", Arial, sans-serif;
   font-size: 65px;
 }
 
@@ -881,7 +881,7 @@ body {
 .heading-accent--desktop {
   color: #fff;
   z-index: 1;
-  font-family: Betterworks, Arial, sans-serif;
+  font-family: "Tajamuka Script", Arial, sans-serif;
   font-size: 40px;
 }
 
@@ -952,7 +952,7 @@ body {
 .heading-accent--cases {
   color: #fff;
   z-index: 1;
-  font-family: Betterworks, Arial, sans-serif;
+  font-family: "Tajamuka Script", Arial, sans-serif;
   font-size: 90px;
 }
 
@@ -1109,7 +1109,7 @@ body {
   color: #fff;
   z-index: 1;
   margin-bottom: 80px;
-  font-family: Betterworks, Arial, sans-serif;
+  font-family: "Tajamuka Script", Arial, sans-serif;
   font-size: 40px;
 }
 
@@ -1179,14 +1179,14 @@ body {
   text-align: right;
   margin-top: -50px;
   margin-bottom: 100px;
-  font-family: Betterworks, Arial, sans-serif;
+  font-family: "Tajamuka Script", Arial, sans-serif;
   font-size: 65px;
 }
 
 .heading-accent--studios {
   color: #fff;
   z-index: 1;
-  font-family: Betterworks, Arial, sans-serif;
+  font-family: "Tajamuka Script", Arial, sans-serif;
   font-size: 50px;
 }
 
@@ -1220,7 +1220,7 @@ body {
 }
 
 .heading-accent--desktop-hero {
-  font-family: Betterworks, Arial, sans-serif;
+  font-family: "Tajamuka Script", Arial, sans-serif;
   font-size: 40px;
   position: absolute;
 }
@@ -1416,7 +1416,7 @@ body {
     text-align: right;
     margin-top: -50px;
     margin-bottom: 140px;
-    font-family: Betterworks, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 70px;
   }
 
@@ -1511,7 +1511,7 @@ body {
     text-align: right;
     margin-top: -50px;
     margin-bottom: 140px;
-    font-family: Betterworks, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 70px;
   }
 
@@ -1625,7 +1625,7 @@ body {
   }
 
   .heading-accent--mobile-hero {
-    font-family: Betterworks, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 18px;
   }
 
@@ -1760,7 +1760,7 @@ body {
     align-items: flex-start;
     margin-top: 0;
     margin-left: 20px;
-    font-family: Betterworks, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 35px;
     line-height: 0;
     display: block;
@@ -1865,7 +1865,7 @@ body {
     margin-top: 0;
     margin-bottom: 0;
     margin-right: 20px;
-    font-family: Betterworks, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 50px;
     line-height: 0;
     display: block;
@@ -1950,7 +1950,7 @@ body {
 
   .heading-accent--mobile-hero {
     margin-top: 40px;
-    font-family: Betterworks, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 28px;
     line-height: 70px;
     position: fixed;
@@ -2139,7 +2139,7 @@ body {
     align-items: flex-start;
     margin-top: 80px;
     margin-right: 0;
-    font-family: Betterworks, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 23px;
     line-height: 0;
     display: block;
@@ -2154,7 +2154,7 @@ body {
     margin-top: 0;
     margin-bottom: 0;
     margin-right: 20px;
-    font-family: Betterworks, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 50px;
     line-height: 0;
     display: block;
@@ -2267,7 +2267,7 @@ body {
     margin-top: 0;
     margin-bottom: 0;
     margin-right: 0;
-    font-family: Betterworks, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 44px;
     line-height: 0;
     display: block;
@@ -2329,7 +2329,7 @@ body {
     margin-top: 60px;
     margin-left: 20px;
     margin-right: 0;
-    font-family: Betterworks, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 35px;
     line-height: 0;
     display: block;
@@ -2359,7 +2359,7 @@ body {
     align-items: flex-start;
     margin-top: 0;
     margin-left: 20px;
-    font-family: Betterworks, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 35px;
     line-height: 0;
     display: block;
