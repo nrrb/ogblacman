@@ -58,7 +58,7 @@ social_links:
         - { src: /assets/reference/social-youtube-icon.png, width: 512 }
 sections:
   game:
-    heading: { title: SECTION 1 BIG TEXT, accent: SECTION 1 ACCENT TEXT }
+    heading: { title: OG BLACMAN, accent: play me }
     cta: { label: SECTION 1 CTA TEXT, url: null, title: null }
     media:
       desktop:
@@ -72,7 +72,7 @@ sections:
           - { src: /assets/reference/hero-mobile-background.mp4, type: video/mp4 }
           - { src: /assets/reference/hero-mobile-background.webm, type: video/webm }
   top_pick:
-    heading: { title: SECTION 2 BIG TEXT, accent: SECTION 2 ACCENT TEXT }
+    heading: { title: TOP PICK, accent: popcorn player }
     copy: SECTION 2 COPY
     cta: { label: SECTION 2 CTA TEXT, url: /about, title: Learn more about us }
     image:
