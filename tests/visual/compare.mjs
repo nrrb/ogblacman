@@ -43,7 +43,7 @@ for (const viewport of viewports) {
   const screenshotPath = path.join(localDir, `${viewport.name}.png`)
   await page.screenshot({ path: screenshotPath, fullPage: true })
   const geometry = await page.evaluate(() => {
-    const selectors = ['.desktop', '.mobile', '.background-video', '.about-wrapper', '.efi-hr-01-grid-copy', '.efi-hr-01-right-content-copy', '.div-block-44', '.logo-slide_section', '.caseswrap', '.client-list', '.efi-ftr-01', '.w-slide']
+    const selectors = ['.site--desktop', '.site--mobile', '.background-media--desktop-hero', '.section--content', '.split-layout--about', '.feature-block--why', '.copy-grid', '.logo-marquee', '.section--cases', '.section--clients', '.section--contact', '.mobile-slide']
     return Object.fromEntries(selectors.map(selector => {
       const element = document.querySelector(selector)
       if (!element) return [selector, null]

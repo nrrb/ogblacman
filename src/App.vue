@@ -12,7 +12,7 @@ function listen(target, event, handler, options) {
 
 onMounted(() => {
   const host = root.value
-  const marquee = host.querySelector('.logo_component-slider')
+  const marquee = host.querySelector('.js-logo-marquee')
   if (marquee) {
     const observer = new IntersectionObserver(entries => {
       if (entries.some(entry => entry.isIntersecting)) {
@@ -23,12 +23,12 @@ onMounted(() => {
     observer.observe(marquee)
     cleanup.push(() => observer.disconnect())
   }
-  const mobile = host.querySelector('#MOBILE')
-  const mask = mobile?.querySelector('.w-slider-mask')
-  const slides = [...(mask?.querySelectorAll('.w-slide') ?? [])]
-  const nav = mobile?.querySelector('.slide-nav')
-  const previous = mobile?.querySelector('.w-slider-arrow-left')
-  const next = mobile?.querySelector('.w-slider-arrow-right')
+  const mobile = host.querySelector('.js-mobile-slider')
+  const mask = mobile?.querySelector('.js-slider-track')
+  const slides = [...(mask?.querySelectorAll('.js-mobile-slide') ?? [])]
+  const nav = mobile?.querySelector('.js-slider-nav')
+  const previous = mobile?.querySelector('.js-slider-previous')
+  const next = mobile?.querySelector('.js-slider-next')
   let active = 0
   let touchX = 0
   let touchY = 0
@@ -36,7 +36,7 @@ onMounted(() => {
 
   const dots = slides.map((_, index) => {
     const dot = document.createElement('div')
-    dot.className = 'w-slider-dot'
+    dot.className = 'slider-dot'
     dot.setAttribute('role', 'button')
     dot.setAttribute('tabindex', '0')
     dot.setAttribute('aria-label', `Show slide ${index + 1} of ${slides.length}`)
@@ -57,7 +57,7 @@ onMounted(() => {
       slide.toggleAttribute('inert', !visible)
     })
     dots.forEach((dot, dotIndex) => {
-      dot.classList.toggle('w-active', dotIndex === active)
+      dot.classList.toggle('is-active', dotIndex === active)
       dot.setAttribute('aria-current', dotIndex === active ? 'true' : 'false')
     })
   }
@@ -91,12 +91,12 @@ onMounted(() => {
     })
   }
 
-  host.querySelectorAll('form').forEach(form => {
+  host.querySelectorAll('.js-contact-form form').forEach(form => {
     listen(form, 'submit', event => {
       event.preventDefault()
       if (!form.reportValidity()) return
       form.style.display = 'none'
-      const success = form.parentElement?.querySelector('.w-form-done')
+      const success = form.parentElement?.querySelector('.js-form-success')
       if (success) success.style.display = 'block'
     })
   })
