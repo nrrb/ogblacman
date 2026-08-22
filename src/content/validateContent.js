@@ -95,7 +95,7 @@ export function validateContent(content) {
 
   object(content.shared, 'shared')
   object(content.shared.style_images, 'shared.style_images')
-  for (const key of ['primary_gradient', 'secondary_gradient', 'grain_overlay', 'grain_background']) {
+  for (const key of ['secondary_gradient', 'grain_overlay', 'grain_background']) {
     string(content.shared.style_images[key], `shared.style_images.${key}`)
   }
   image(content.shared.arrow, 'shared.arrow')

@@ -5,7 +5,6 @@ accessibility:
 
 shared:
   style_images:
-    primary_gradient: /assets/reference/text-gradient-primary.jpg
     secondary_gradient: /assets/reference/text-gradient-secondary.jpg
     grain_overlay: /assets/reference/grain-overlay.gif
     grain_background: /assets/reference/grain-background.webp
