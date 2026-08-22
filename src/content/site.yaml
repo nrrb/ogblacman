@@ -25,16 +25,16 @@ shared:
 social_links:
   - id: instagram
     label: Instagram
-    url: https://www.instagram.com/respectivecollective/?hl=en
-    title: Follow us on Instagram
+    url: https://www.instagram.com/ogblacman/
+    title: Follow OG Blacman on Instagram
     target: _blank
     icon:
       src: /assets/reference/social-instagram-icon.svg
       alt: Instagram
   - id: tiktok
     label: TikTok
-    url: https://www.tiktok.com/@respectivetok?lang=en
-    title: Follow us on TikTok
+    url: http://tiktok.com/@ogblacman
+    title: Follow OG Blacman on TikTok
     target: _blank
     icon:
       src: /assets/reference/social-tiktok-icon.png
@@ -47,8 +47,8 @@ social_links:
         - { src: /assets/reference/social-tiktok-icon.png, width: 1168 }
   - id: youtube
     label: YouTube
-    url: https://www.youtube.com/@RespectiveCollective
-    title: Watch us on YouTube
+    url: http://tiktok.com/@ogblacman
+    title: Watch OG Blacman
     target: _blank
     icon:
       src: /assets/reference/social-youtube-icon.png
@@ -57,19 +57,6 @@ social_links:
       sources:
         - { src: /assets/reference/social-youtube-icon-500w.png, width: 500 }
         - { src: /assets/reference/social-youtube-icon.png, width: 512 }
-  - id: linkedin
-    label: LinkedIn
-    url: https://www.linkedin.com/company/respective
-    title: Connect with us on LinkedIn
-    target: _blank
-    icon:
-      src: /assets/reference/social-linkedin-icon.png
-      alt: LinkedIn
-      sizes: "(max-width: 720px) 100vw, 720px"
-      sources:
-        - { src: /assets/reference/social-linkedin-icon-500w.png, width: 500 }
-        - { src: /assets/reference/social-linkedin-icon.png, width: 720 }
-
 sections:
   game:
     heading: { title: SECTION 1 BIG TEXT, accent: SECTION 1 ACCENT TEXT }
