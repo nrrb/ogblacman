@@ -57,7 +57,7 @@ defineProps({ content: { type: Object, required: true } })
           accent-class="heading-accent--mobile"
           accent-first
         />
-        <TopPickRelease :release="content.sections.top_pick" />
+        <TopPickRelease :release="content.sections.top_pick" variant="mobile" />
       </div>
       <BackgroundVideo
         :media="content.sections.top_pick.mobile_media"

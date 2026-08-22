@@ -74,11 +74,10 @@ sections:
   top_pick:
     heading: { title: TOP PICK, accent: popcorn player }
     player:
-      title: Listen to Popcorn Player by OG Blacman
-      embed_url: https://embed.music.apple.com/us/album/popcorn-player-single/1745498866?i=1745498867
-    streaming_links:
-      - { id: spotify, label: SPOTIFY, url: "https://open.spotify.com/search/OG%20Blacman%20Popcorn%20Player", title: Listen to Popcorn Player on Spotify, target: _blank }
-      - { id: apple-music, label: APPLE MUSIC, url: "https://music.apple.com/us/song/1745498867", title: Listen to Popcorn Player on Apple Music, target: _blank }
+      artist: OG Blacman
+      title: Time Not Real
+      track_src: "/music/OG Blacman -- Time Not Real [Official Video].m4a"
+      duration: 134.554875
     mobile_media: &standard_mobile_media
       poster: /assets/reference/mobile-standard-background-poster.jpg
       sources:

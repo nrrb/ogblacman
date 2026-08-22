@@ -44,7 +44,7 @@ defineProps({ content: { type: Object, required: true } })
           accent-class="heading-accent--desktop"
           accent-first
         />
-        <TopPickRelease :release="content.sections.top_pick" />
+        <TopPickRelease :release="content.sections.top_pick" variant="desktop" />
 
         <div id="w-node-_979f9f33-1dd2-e54e-b449-3b056707e4bf-0e0f149c" class="feature-block feature-block--why">
           <div class="content-block">

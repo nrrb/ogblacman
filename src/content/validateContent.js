@@ -120,10 +120,11 @@ export function validateContent(content) {
   link(sections.game.cta, 'sections.game.cta')
   object(sections.top_pick.player, 'sections.top_pick.player')
   string(sections.top_pick.player.title, 'sections.top_pick.player.title')
-  string(sections.top_pick.player.embed_url, 'sections.top_pick.player.embed_url')
-  const streamingLinks = array(sections.top_pick.streaming_links, 'sections.top_pick.streaming_links')
-  uniqueIds(streamingLinks, 'sections.top_pick.streaming_links')
-  streamingLinks.forEach((item, index) => link(item, `sections.top_pick.streaming_links[${index}]`))
+  string(sections.top_pick.player.artist, 'sections.top_pick.player.artist')
+  string(sections.top_pick.player.track_src, 'sections.top_pick.player.track_src')
+  if (!Number.isFinite(sections.top_pick.player.duration) || sections.top_pick.player.duration <= 0) {
+    fail('sections.top_pick.player.duration', 'expected a positive number')
+  }
 
   string(sections.upcoming_shows.copy, 'sections.upcoming_shows.copy')
   const shows = array(sections.upcoming_shows.items, 'sections.upcoming_shows.items')
