@@ -62,15 +62,15 @@ sections:
     cta: { label: SECTION 1 CTA TEXT, url: null, title: null }
     media:
       desktop:
-        poster: /assets/reference/hero-desktop-background-poster.jpg
+        poster: /assets/hero/hero-montage-desktop-poster.jpg
         sources:
-          - { src: /assets/reference/hero-desktop-background.mp4, type: video/mp4 }
-          - { src: /assets/reference/hero-desktop-background.webm, type: video/webm }
+          - { src: /assets/hero/hero-montage-desktop.mp4, type: video/mp4 }
+          - { src: /assets/hero/hero-montage-desktop.webm, type: video/webm }
       mobile:
-        poster: /assets/reference/hero-mobile-background-poster.jpg
+        poster: /assets/hero/hero-montage-mobile-poster.jpg
         sources:
-          - { src: /assets/reference/hero-mobile-background.mp4, type: video/mp4 }
-          - { src: /assets/reference/hero-mobile-background.webm, type: video/webm }
+          - { src: /assets/hero/hero-montage-mobile.mp4, type: video/mp4 }
+          - { src: /assets/hero/hero-montage-mobile.webm, type: video/webm }
   top_pick:
     heading: { title: TOP PICK, accent: popcorn player }
     player:
