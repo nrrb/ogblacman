@@ -31,6 +31,8 @@ if (await secondSlide.getAttribute('aria-hidden') !== 'false') throw new Error('
 if (!(await secondSlide.innerText()).includes('POPCORN PLAYER')) throw new Error('Top pick slide content is missing')
 const webamp = secondSlide.locator('.webamp-player--mobile')
 await webamp.locator('#main-window').waitFor({ state: 'visible', timeout: 15_000 })
+const marqueeFontSize = await webamp.locator('#marquee .character').first().evaluate(element => getComputedStyle(element).fontSize)
+if (marqueeFontSize !== '0px') throw new Error('Webamp marquee text fallback should remain hidden behind its bitmap glyphs')
 if (await webamp.locator('#equalizer-window').count() !== 0) throw new Error('Webamp equalizer should be disabled')
 if (await webamp.locator('#playlist-window').count() !== 0) throw new Error('Webamp playlist should be disabled')
 if (await webamp.locator('#equalizer-button').getAttribute('aria-disabled') !== 'true') throw new Error('Webamp equalizer toggle should be disabled')

@@ -150,6 +150,14 @@ video {
   transform-origin: top left;
 }
 
+.webamp-player #marquee .character {
+  /* Webamp paints each glyph as a bitmap; hide its otherwise-visible text fallback. */
+  overflow: hidden;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
+}
+
 .webamp-player #equalizer-button,
 .webamp-player #playlist-button {
   pointer-events: none !important;
