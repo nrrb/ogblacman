@@ -11,9 +11,13 @@ const props = defineProps({
 })
 
 const headingPreset = PRESETS.find((preset) => preset.name === 'Wide banner') ?? PRESETS[0]
-const heroHeadingPreset = {
+const desktopHeroHeadingPreset = {
   ...headingPreset,
-  name: 'Hero heading',
+  name: 'Desktop hero heading',
+}
+const mobileHeroHeadingPreset = {
+  ...headingPreset,
+  name: 'Mobile hero heading',
   camera: {
     ...headingPreset.camera,
     position: [0, 0.05, 8.5],
@@ -26,12 +30,13 @@ const glitchOnEnter = {
   cooldown: 1400,
   strength: 1,
 }
+const fastShine = { cycleSeconds: 8 }
 
-const activeHeadingPreset = computed(() => (
-  ['heading-title--desktop-hero', 'heading-title--mobile-hero'].includes(props.titleClass)
-    ? heroHeadingPreset
-    : headingPreset
-))
+const activeHeadingPreset = computed(() => {
+  if (props.titleClass === 'heading-title--desktop-hero') return desktopHeroHeadingPreset
+  if (props.titleClass === 'heading-title--mobile-hero') return mobileHeroHeadingPreset
+  return headingPreset
+})
 
 const titleLines = computed(() => {
   const title = props.heading.title.trim()
@@ -61,7 +66,12 @@ const titleLines = computed(() => {
   <div :class="['display-heading', wrapperClass]">
     <div :id="titleId" :class="['display-heading__title', titleClass, 'golden-heading']">
       <span class="golden-heading__label">{{ heading.title }}</span>
-      <GoldenText :preset="activeHeadingPreset" :lines="titleLines" :glitch="glitchOnEnter" />
+      <GoldenText
+        :preset="activeHeadingPreset"
+        :lines="titleLines"
+        :glitch="glitchOnEnter"
+        :shine="fastShine"
+      />
     </div>
   </div>
 </template>

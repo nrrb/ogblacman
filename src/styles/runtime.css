@@ -57,6 +57,14 @@ video {
   text-align: center;
 }
 
+.site--desktop .heading-title--desktop-hero.golden-heading {
+  width: 100vw;
+  min-height: 380px;
+  font-size: 380px;
+  line-height: 380px;
+  white-space: nowrap;
+}
+
 .site--desktop .heading-title--clients.golden-heading {
   font-size: 220px;
   line-height: 180px;
