@@ -57,6 +57,11 @@ video {
   text-align: center;
 }
 
+.site--desktop .heading-title--clients.golden-heading {
+  font-size: 220px;
+  line-height: 180px;
+}
+
 .form-status--success {
   display: block;
 }
@@ -266,11 +271,16 @@ video {
 
   .site--mobile .heading-title--mobile-hero.golden-heading,
   .site--mobile .heading-title--mobile-how.golden-heading,
-  .site--mobile .heading-title--mobile-studios.golden-heading,
-  .site--mobile .heading-title--mobile-clients.golden-heading {
+  .site--mobile .heading-title--mobile-studios.golden-heading {
     min-height: 170px;
     font-size: 180px;
     line-height: 170px;
+  }
+
+  .site--mobile .heading-title--mobile-clients.golden-heading {
+    min-height: 120px;
+    font-size: 125px;
+    line-height: 110px;
   }
 
   .site--mobile .heading-title--mobile-how.golden-heading {
