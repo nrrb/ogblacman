@@ -105,10 +105,10 @@ sections:
     cta: { label: SECTION 6 CTA, url: /respectivestudios, title: Explore Respective Studios }
     items: []
     mobile_media:
-      poster: /assets/reference/mobile-studios-background-poster.jpg
+      poster: "/assets/reference/mobile-studios-background-poster.jpg?v=montage-v1"
       sources:
-        - { src: /assets/reference/mobile-studios-background.mp4, type: video/mp4 }
-        - { src: /assets/reference/mobile-studios-background.webm, type: video/webm }
+        - { src: "/assets/reference/mobile-studios-background.mp4?v=montage-v1", type: video/mp4 }
+        - { src: "/assets/reference/mobile-studios-background.webm?v=montage-v1", type: video/webm }
   newsletter:
     heading: { title: STAY IN THE LOOP, accent: JOIN THE LIST }
     form:
@@ -121,18 +121,18 @@ sections:
       success_message: You're on the list. Thank you for signing up!
       error_message: Something went wrong. Please try again.
     mobile_media:
-      poster: /assets/reference/mobile-clients-background-poster.jpg
+      poster: "/assets/reference/mobile-clients-background-poster.jpg?v=montage-v1"
       sources:
-        - { src: /assets/reference/mobile-clients-background.mp4, type: video/mp4 }
-        - { src: /assets/reference/mobile-clients-background.webm, type: video/webm }
+        - { src: "/assets/reference/mobile-clients-background.mp4?v=montage-v1", type: video/mp4 }
+        - { src: "/assets/reference/mobile-clients-background.webm?v=montage-v1", type: video/webm }
 
 case_studies:
   heading: { title: MORE TO COME, accent: STAY TUNED }
   mobile_media:
-    poster: /assets/reference/mobile-case-studies-background-poster.jpg
+    poster: "/assets/reference/mobile-case-studies-background-poster.jpg?v=montage-v1"
     sources:
-      - { src: /assets/reference/mobile-case-studies-background.mp4, type: video/mp4 }
-      - { src: /assets/reference/mobile-case-studies-background.webm, type: video/webm }
+      - { src: "/assets/reference/mobile-case-studies-background.mp4?v=montage-v1", type: video/mp4 }
+      - { src: "/assets/reference/mobile-case-studies-background.webm?v=montage-v1", type: video/webm }
   items:
     - { id: harry-styles, title: SECTION 5 CASE 1 TEXT, year: SECTION 5 CASE 1 YEAR, url: /case-studies/harry-styles, link_title: View case study 1 }
     - { id: grammy-awards, title: SECTION 5 CASE 2 TEXT, year: SECTION 5 CASE 2 YEAR, url: /case-studies/the-68th-grammy-awards, link_title: View case study 2 }
