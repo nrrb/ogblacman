@@ -18,19 +18,19 @@ defineProps({ content: { type: Object, required: true } })
   <div class="site site--desktop">
     <div class="desktop-flow">
       <BackgroundVideo
-        :media="content.sections.game.media.desktop"
+        :media="content.sections.hero.media.desktop"
         video-id="desktop-hero-video"
         class="background-media background-media--desktop-hero"
       >
         <SectionHeading
-          :heading="content.sections.game.heading"
+          :heading="content.sections.hero.heading"
           wrapper-class="display-heading--desktop-hero"
           title-class="heading-title--desktop-hero"
           accent-class="heading-accent--desktop-hero"
         />
         <div class="text-cta text-cta--desktop-hero">
           <ResponsiveImage :image="content.shared.texture" class="text-cta__texture" loading="lazy" />
-          <AppLink :link="content.sections.game.cta" class="text-cta__label" />
+          <AppLink :link="content.sections.hero.cta" class="text-cta__label" />
         </div>
         <ResponsiveImage :image="content.shared.arrow" class="text-cta__arrow" loading="lazy" />
         <SocialLinks :links="content.social_links" />

@@ -57,7 +57,7 @@ social_links:
         - { src: /assets/reference/social-youtube-icon-500w.png, width: 500 }
         - { src: /assets/reference/social-youtube-icon.png, width: 512 }
 sections:
-  game:
+  hero:
     heading: { title: OG BLACMAN, accent: play me }
     cta: { label: CLIMB DOWN, url: null, title: null }
     media:

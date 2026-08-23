@@ -25,21 +25,21 @@ defineProps({ content: { type: Object, required: true } })
   >
     <div class="mobile-slide mobile-slide--hero" v-bind="slideAttributes(0)">
       <BackgroundVideo
-        :media="content.sections.game.media.mobile"
+        :media="content.sections.hero.media.mobile"
         video-id="mobile-hero-video"
         class="background-media background-media--mobile-hero"
       >
         <div class="mobile-slide__overlay">
           <div class="mobile-slide__inner">
             <SectionHeading
-              :heading="content.sections.game.heading"
+              :heading="content.sections.hero.heading"
               wrapper-class="display-heading--mobile-hero"
               title-class="heading-title--mobile-hero"
               accent-class="heading-accent--mobile-hero"
             />
             <div class="text-cta text-cta--mobile-hero">
               <ResponsiveImage :image="content.shared.arrow" class="text-cta__arrow" loading="lazy" />
-              <AppLink :link="content.sections.game.cta" class="text-cta__label" />
+              <AppLink :link="content.sections.hero.cta" class="text-cta__label" />
               <ResponsiveImage :image="content.shared.texture" class="text-cta__texture" loading="lazy" />
             </div>
           </div>

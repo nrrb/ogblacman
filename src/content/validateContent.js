@@ -111,13 +111,13 @@ export function validateContent(content) {
   })
 
   const sections = object(content.sections, 'sections')
-  for (const name of ['game', 'top_pick', 'upcoming_shows', 'booking', 'merch', 'newsletter']) {
+  for (const name of ['hero', 'top_pick', 'upcoming_shows', 'booking', 'merch', 'newsletter']) {
     const section = object(sections[name], `sections.${name}`)
     heading(section.heading, `sections.${name}.heading`)
   }
-  video(sections.game.media.desktop, 'sections.game.media.desktop')
-  video(sections.game.media.mobile, 'sections.game.media.mobile')
-  link(sections.game.cta, 'sections.game.cta')
+  video(sections.hero.media.desktop, 'sections.hero.media.desktop')
+  video(sections.hero.media.mobile, 'sections.hero.media.mobile')
+  link(sections.hero.cta, 'sections.hero.cta')
   object(sections.top_pick.player, 'sections.top_pick.player')
   string(sections.top_pick.player.title, 'sections.top_pick.player.title')
   string(sections.top_pick.player.artist, 'sections.top_pick.player.artist')
