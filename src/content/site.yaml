@@ -79,10 +79,10 @@ sections:
       track_src: "/music/OG Blacman -- Time Not Real [Official Video].m4a"
       duration: 134.554875
     mobile_media: &standard_mobile_media
-      poster: /assets/reference/mobile-standard-background-poster.jpg
+      poster: "/assets/reference/mobile-standard-background-poster.jpg?v=montage-v1"
       sources:
-        - { src: /assets/reference/mobile-standard-background.mp4, type: video/mp4 }
-        - { src: /assets/reference/mobile-standard-background.webm, type: video/webm }
+        - { src: "/assets/reference/mobile-standard-background.mp4?v=montage-v1", type: video/mp4 }
+        - { src: "/assets/reference/mobile-standard-background.webm?v=montage-v1", type: video/webm }
   upcoming_shows:
     heading: { title: UPCOMING SHOWS, accent: GET THE LOVE }
     copy: Catch OG Blacman live. New dates and ticket links will be added as shows are announced.
