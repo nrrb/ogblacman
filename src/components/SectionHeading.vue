@@ -26,9 +26,14 @@ const mobileHeroHeadingPreset = {
 
 const glitchOnEnter = {
   threshold: 0.1,
-  duration: 300,
-  cooldown: 1400,
+  duration: 900,
+  cooldown: 500,
   strength: 1,
+}
+const glitchOnMobileVisibility = {
+  ...glitchOnEnter,
+  threshold: 0,
+  cooldown: 0,
 }
 const fastShine = { cycleSeconds: 8 }
 
@@ -37,6 +42,11 @@ const activeHeadingPreset = computed(() => {
   if (props.titleClass === 'heading-title--mobile-hero') return mobileHeroHeadingPreset
   return headingPreset
 })
+const activeGlitch = computed(() => (
+  props.titleClass.startsWith('heading-title--mobile-')
+    ? glitchOnMobileVisibility
+    : glitchOnEnter
+))
 
 const titleLines = computed(() => {
   const title = props.heading.title.trim()
@@ -69,7 +79,7 @@ const titleLines = computed(() => {
       <GoldenText
         :preset="activeHeadingPreset"
         :lines="titleLines"
-        :glitch="glitchOnEnter"
+        :glitch="activeGlitch"
         :shine="fastShine"
       />
     </div>
