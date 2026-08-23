@@ -25,27 +25,22 @@ body,
   paint-order: stroke fill;
 }
 
-.metallic-text {
+.golden-heading {
+  position: relative;
   display: inline-block;
-  font-size: 120px;
-  font-weight: 900;
-  font-variant-ligatures: none;
-  font-feature-settings: "liga" 0;
-  color: #9a6b0f;
-  background: linear-gradient(
-    180deg,
-    #9a6b0f 0%,
-    #f7d560 18%,
-    #fff6c4 34%,
-    #e8b226 50%,
-    #8a5e0c 58%,
-    #e2ae2a 74%,
-    #ffe680 92%,
-    #fff6c4 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
+  isolation: isolate;
+  background: none;
   -webkit-text-fill-color: transparent;
+}
+
+.golden-heading__label {
+  opacity: 0;
+}
+
+.golden-heading > .golden-text {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
 }
 
 .site--desktop .display-heading:not(.display-heading--desktop-hero),
@@ -301,6 +296,29 @@ video {
   .mobile-slide__content--top-pick .heading-title--mobile-about {
     font-size: 96px;
     line-height: 76px;
+  }
+
+  .site--mobile .display-heading--mobile-how {
+    width: 100%;
+    align-items: center;
+  }
+
+  .site--mobile .heading-title--mobile-hero.golden-heading,
+  .site--mobile .heading-title--mobile-how.golden-heading,
+  .site--mobile .heading-title--mobile-studios.golden-heading,
+  .site--mobile .heading-title--mobile-clients.golden-heading {
+    min-height: 170px;
+    font-size: 180px;
+    line-height: 170px;
+  }
+
+  .site--mobile .heading-title--mobile-how.golden-heading {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin: 0;
+    font-family: Respective, Arial, sans-serif;
+    text-align: center;
   }
 
   .site--mobile .top-pick-release {
