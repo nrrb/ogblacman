@@ -58,7 +58,7 @@ social_links:
         - { src: /assets/reference/social-youtube-icon.png, width: 512 }
 sections:
   hero:
-    heading: { title: OG BLACMAN, accent: play me }
+    heading: { title: OG BLACMAN }
     cta: { label: CLIMB DOWN, url: null, title: null }
     media:
       desktop:
@@ -72,7 +72,7 @@ sections:
           - { src: /assets/hero/hero-montage-mobile.mp4, type: video/mp4 }
           - { src: /assets/hero/hero-montage-mobile.webm, type: video/webm }
   top_pick:
-    heading: { title: POPCORN PLAYER, accent: TOP PICK }
+    heading: { title: POPCORN PLAYER }
     player:
       artist: OG Blacman
       title: Time Not Real
@@ -84,7 +84,7 @@ sections:
         - { src: "/assets/reference/mobile-standard-background.mp4?v=montage-v1", type: video/mp4 }
         - { src: "/assets/reference/mobile-standard-background.webm?v=montage-v1", type: video/webm }
   upcoming_shows:
-    heading: { title: SHOWS, accent: _ }
+    heading: { title: SHOWS }
     copy: Catch OG Blacman live. New dates and ticket links will be added as shows are announced.
     items:
       - { id: show-01, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
@@ -92,7 +92,7 @@ sections:
       - { id: show-03, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
     mobile_media: *standard_mobile_media
   booking:
-    heading: { title: BOOKING, accent: MGR }
+    heading: { title: BOOKING }
     manager:
       role: MANAGEMENT
       name: BOOKING & BUSINESS INQUIRIES
@@ -100,7 +100,7 @@ sections:
       phone: DETAILS AVAILABLE UPON REQUEST
     mobile_media: *standard_mobile_media
   merch:
-    heading: { title: MERCH, accent: WEAR THE MOVEMENT }
+    heading: { title: MERCH }
     copy: Rep OG Blacman with official apparel and limited drops. Tap a product to shop the collection on Fourthwall.
     cta: { label: SECTION 6 CTA, url: /respectivestudios, title: Explore Respective Studios }
     items: []
@@ -110,7 +110,7 @@ sections:
         - { src: "/assets/reference/mobile-studios-background.mp4?v=montage-v1", type: video/mp4 }
         - { src: "/assets/reference/mobile-studios-background.webm?v=montage-v1", type: video/webm }
   newsletter:
-    heading: { title: GET UPDATES, accent: JOIN THE LIST }
+    heading: { title: GET UPDATES }
     form:
       required_marker: "*"
       fields:

@@ -17,14 +17,6 @@ body,
   color: var(--color-body-text);
 }
 
-.display-heading__accent {
-  color: var(--color-accent-text);
-  -webkit-text-fill-color: currentColor;
-  -webkit-text-stroke: 2px #000;
-  background-image: none;
-  paint-order: stroke fill;
-}
-
 .golden-heading {
   position: relative;
   display: inline-block;
@@ -41,37 +33,6 @@ body,
   position: absolute;
   z-index: 0;
   inset: 0;
-}
-
-.site--desktop .display-heading:not(.display-heading--desktop-hero),
-.site--mobile .display-heading:not(.display-heading--mobile-hero) {
-  position: relative;
-}
-
-.site--desktop
-  .display-heading:not(.display-heading--desktop-hero)
-  .display-heading__accent,
-.site--mobile
-  .display-heading:not(.display-heading--mobile-hero)
-  .display-heading__accent {
-  position: absolute;
-  z-index: 1;
-  top: 50%;
-  left: 50%;
-  width: max-content;
-  margin: 0;
-  font-size: 40px;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
-.site--mobile
-  .display-heading:not(.display-heading--mobile-hero)
-  .display-heading__accent {
-  font-size: 18px;
 }
 
 video {

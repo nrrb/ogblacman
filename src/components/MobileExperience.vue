@@ -34,7 +34,6 @@ defineProps({ content: { type: Object, required: true } })
               :heading="content.sections.hero.heading"
               wrapper-class="display-heading--mobile-hero"
               title-class="heading-title--mobile-hero"
-              accent-class="heading-accent--mobile-hero"
             />
             <div class="text-cta text-cta--mobile-hero">
               <ResponsiveImage :image="content.shared.arrow" class="text-cta__arrow" loading="lazy" />
@@ -53,8 +52,6 @@ defineProps({ content: { type: Object, required: true } })
           :heading="content.sections.top_pick.heading"
           wrapper-class="display-heading--stacked"
           title-class="heading-title--mobile-about"
-          accent-class="heading-accent--mobile"
-          accent-first
         />
         <TopPickRelease :release="content.sections.top_pick" variant="mobile" />
       </div>
@@ -71,7 +68,6 @@ defineProps({ content: { type: Object, required: true } })
           :heading="content.sections.upcoming_shows.heading"
           wrapper-class="display-heading--mobile-why"
           title-class="heading-title--mobile-why"
-          accent-class="heading-accent--mobile"
         />
         <p class="body-copy body-copy--mobile-why">{{ content.sections.upcoming_shows.copy }}</p>
         <div class="scroll-panel">
@@ -91,7 +87,6 @@ defineProps({ content: { type: Object, required: true } })
           :heading="content.sections.booking.heading"
           wrapper-class="display-heading--mobile-how"
           title-class="heading-title--mobile-how"
-          accent-class="heading-accent--mobile-how"
         />
         <div class="booking-manager booking-manager--mobile">
           <div class="booking-manager__role">{{ content.sections.booking.manager.role }}</div>
@@ -113,7 +108,6 @@ defineProps({ content: { type: Object, required: true } })
           :heading="content.sections.merch.heading"
           wrapper-class="display-heading--mobile-studios"
           title-class="heading-title--mobile-studios"
-          accent-class="heading-accent--mobile-studios"
         />
         <p class="body-copy body-copy--mobile-studios">{{ content.sections.merch.copy }}</p>
         <LogoCarousel :items="content.sections.merch.items" />
@@ -137,7 +131,6 @@ defineProps({ content: { type: Object, required: true } })
             :heading="content.sections.newsletter.heading"
             wrapper-class="display-heading--mobile-clients"
             title-class="heading-title--mobile-clients"
-            accent-class="heading-accent--contact"
           />
           <NewsletterForm :content="content.sections.newsletter.form" id-prefix="mobile-newsletter" />
         </div>

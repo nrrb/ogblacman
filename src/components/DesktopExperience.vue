@@ -25,7 +25,6 @@ defineProps({ content: { type: Object, required: true } })
           :heading="content.sections.hero.heading"
           wrapper-class="display-heading--desktop-hero"
           title-class="heading-title--desktop-hero"
-          accent-class="heading-accent--desktop-hero"
         />
         <div class="text-cta text-cta--desktop-hero">
           <ResponsiveImage :image="content.shared.texture" class="text-cta__texture" loading="lazy" />
@@ -40,8 +39,6 @@ defineProps({ content: { type: Object, required: true } })
           :heading="content.sections.top_pick.heading"
           wrapper-class="display-heading--about"
           title-class="heading-title--about"
-          accent-class="heading-accent--desktop"
-          accent-first
         />
         <TopPickRelease :release="content.sections.top_pick" variant="desktop" />
 
@@ -51,7 +48,6 @@ defineProps({ content: { type: Object, required: true } })
               :heading="content.sections.upcoming_shows.heading"
               wrapper-class="display-heading--feature"
               title-class="heading-title--why"
-              accent-class="heading-accent--desktop"
             />
             <p class="body-copy body-copy--why">{{ content.sections.upcoming_shows.copy }}</p>
             <ClientList :items="content.sections.upcoming_shows.items" variant="desktop" />
@@ -62,7 +58,6 @@ defineProps({ content: { type: Object, required: true } })
           :heading="content.sections.booking.heading"
           wrapper-class="display-heading--feature"
           title-class="heading-title--feature"
-          accent-class="heading-accent--desktop"
         />
         <div class="booking-manager">
           <div class="booking-manager__role">{{ content.sections.booking.manager.role }}</div>
@@ -80,7 +75,6 @@ defineProps({ content: { type: Object, required: true } })
                 :heading="content.sections.merch.heading"
                 wrapper-class="display-heading--feature"
                 title-class="heading-title--feature"
-                accent-class="heading-accent--studios"
               />
             </div>
             <p class="body-copy body-copy--studios">{{ content.sections.merch.copy }}</p>
@@ -100,7 +94,6 @@ defineProps({ content: { type: Object, required: true } })
             :heading="content.sections.newsletter.heading"
             wrapper-class="display-heading--section"
             title-class="heading-title--clients"
-            accent-class="heading-accent--clients"
           />
           <NewsletterForm :content="content.sections.newsletter.form" id-prefix="desktop-newsletter" />
           <div class="newsletter-footer">{{ content.footer.copyright }}</div>

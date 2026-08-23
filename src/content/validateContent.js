@@ -54,7 +54,6 @@ function video(value, path) {
 function heading(value, path) {
   object(value, path)
   string(value.title, `${path}.title`)
-  string(value.accent, `${path}.accent`)
 }
 
 function link(value, path, { optional = false } = {}) {
