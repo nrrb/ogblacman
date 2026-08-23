@@ -218,7 +218,7 @@ video {
   font-size: 13px;
 }
 
-@media screen and (max-width: 479px) {
+@media screen and (max-width: 767px) {
   #app,
   #app > main {
     width: 100%;

@@ -2,7 +2,7 @@ import { chromium } from 'playwright'
 
 const url = process.env.TEST_URL || 'http://127.0.0.1:4173/'
 const browser = await chromium.launch({ headless: true })
-const page = await browser.newPage({ viewport: { width: 390, height: 844 } })
+const page = await browser.newPage({ viewport: { width: 600, height: 844 } })
 const errors = []
 page.on('console', message => {
   if (message.type() === 'error') errors.push(message.text())
@@ -10,6 +10,15 @@ page.on('console', message => {
 page.on('pageerror', error => errors.push(error.message))
 
 await page.goto(url, { waitUntil: 'load' })
+if (!(await page.locator('.site--mobile').isVisible())) {
+  throw new Error('Mobile experience is hidden in the 480–767px breakpoint range')
+}
+if (await page.locator('.site--desktop').count() !== 0) {
+  throw new Error('Desktop experience should not mount below the mobile breakpoint')
+}
+
+await page.setViewportSize({ width: 390, height: 844 })
+await page.reload({ waitUntil: 'load' })
 await page.waitForTimeout(1000)
 
 const dots = page.locator('.slider-dot')

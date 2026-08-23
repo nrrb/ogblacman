@@ -1603,7 +1603,7 @@ body {
   }
 }
 
-@media screen and (max-width: 479px) {
+@media screen and (max-width: 767px) {
 
   .site--mobile {
     height: auto;

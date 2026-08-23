@@ -55,7 +55,7 @@ function wheel(event) {
 }
 
 function keydown(event) {
-  if (window.innerWidth > 479) return
+  if (window.innerWidth > 767) return
   if (event.key === 'ArrowRight' || event.key === 'ArrowDown') show(active.value + 1)
   if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') show(active.value - 1)
 }
