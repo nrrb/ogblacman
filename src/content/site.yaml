@@ -84,7 +84,7 @@ sections:
         - { src: "/assets/reference/mobile-standard-background.mp4?v=montage-v1", type: video/mp4 }
         - { src: "/assets/reference/mobile-standard-background.webm?v=montage-v1", type: video/webm }
   upcoming_shows:
-    heading: { title: UPCOMING SHOWS, accent: GET THE LOVE }
+    heading: { title: SHOWS, accent: _ }
     copy: Catch OG Blacman live. New dates and ticket links will be added as shows are announced.
     items:
       - { id: show-01, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
@@ -92,7 +92,7 @@ sections:
       - { id: show-03, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
     mobile_media: *standard_mobile_media
   booking:
-    heading: { title: BOOKING, accent: LET'S MAKE IT HAPPEN }
+    heading: { title: BOOKING, accent: MGR }
     manager:
       role: MANAGEMENT
       name: BOOKING & BUSINESS INQUIRIES
@@ -100,7 +100,7 @@ sections:
       phone: DETAILS AVAILABLE UPON REQUEST
     mobile_media: *standard_mobile_media
   merch:
-    heading: { title: OFFICIAL MERCH, accent: WEAR THE MOVEMENT }
+    heading: { title: MERCH, accent: WEAR THE MOVEMENT }
     copy: Rep OG Blacman with official apparel and limited drops. Tap a product to shop the collection on Fourthwall.
     cta: { label: SECTION 6 CTA, url: /respectivestudios, title: Explore Respective Studios }
     items: []
@@ -110,7 +110,7 @@ sections:
         - { src: "/assets/reference/mobile-studios-background.mp4?v=montage-v1", type: video/mp4 }
         - { src: "/assets/reference/mobile-studios-background.webm?v=montage-v1", type: video/webm }
   newsletter:
-    heading: { title: STAY IN THE LOOP, accent: JOIN THE LIST }
+    heading: { title: GET UPDATES, accent: JOIN THE LIST }
     form:
       required_marker: "*"
       fields:
