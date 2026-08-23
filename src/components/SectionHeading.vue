@@ -1,5 +1,6 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { subscribeToScroll } from '@beautifullife/golden-text'
 import { GoldenText } from '@beautifullife/golden-text/vue'
 import { PRESETS } from '@beautifullife/golden-text/presets'
 
@@ -24,29 +25,73 @@ const mobileHeroHeadingPreset = {
   },
 }
 
-const glitchOnEnter = {
-  threshold: 0.1,
-  duration: 900,
-  cooldown: 500,
-  strength: 1,
-}
-const glitchOnMobileVisibility = {
-  ...glitchOnEnter,
-  threshold: 0,
-  cooldown: 0,
-}
+const JIGGLE_THRESHOLD = 0.1
+const JIGGLE_COOLDOWN = 500
+const JIGGLE_DURATION = 600
 const fastShine = { cycleSeconds: 8 }
+const headingRef = ref(null)
+const isJiggling = ref(false)
+let isVisible = false
+let currentScrollVelocity = 0
+let lastJiggleAt = -Infinity
+let jiggleTimer
+let restartFrame
+let visibilityObserver
+let unsubscribeScroll
 
 const activeHeadingPreset = computed(() => {
   if (props.titleClass === 'heading-title--desktop-hero') return desktopHeroHeadingPreset
   if (props.titleClass === 'heading-title--mobile-hero') return mobileHeroHeadingPreset
   return headingPreset
 })
-const activeGlitch = computed(() => (
-  props.titleClass.startsWith('heading-title--mobile-')
-    ? glitchOnMobileVisibility
-    : glitchOnEnter
-))
+const isMobileHeading = computed(() => props.titleClass.startsWith('heading-title--mobile-'))
+
+function jiggle() {
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+
+  const now = performance.now()
+  if (now - lastJiggleAt < JIGGLE_COOLDOWN) return
+  lastJiggleAt = now
+
+  window.clearTimeout(jiggleTimer)
+  window.cancelAnimationFrame(restartFrame)
+  isJiggling.value = false
+  restartFrame = window.requestAnimationFrame(() => {
+    isJiggling.value = true
+    jiggleTimer = window.setTimeout(() => { isJiggling.value = false }, JIGGLE_DURATION)
+  })
+}
+
+onMounted(() => {
+  const observeVisibility = ([entry]) => {
+    const becameVisible = !isVisible && entry.isIntersecting
+    isVisible = entry.isIntersecting
+    if (becameVisible && isMobileHeading.value) jiggle()
+    if (becameVisible && !isMobileHeading.value && currentScrollVelocity >= JIGGLE_THRESHOLD) jiggle()
+  }
+
+  if (typeof IntersectionObserver === 'undefined') {
+    isVisible = true
+    if (isMobileHeading.value) jiggle()
+  } else {
+    visibilityObserver = new IntersectionObserver(observeVisibility, { rootMargin: '150px' })
+    visibilityObserver.observe(headingRef.value)
+  }
+
+  if (!isMobileHeading.value) {
+    unsubscribeScroll = subscribeToScroll((velocity) => {
+      currentScrollVelocity = velocity
+      if (isVisible && velocity >= JIGGLE_THRESHOLD) jiggle()
+    })
+  }
+})
+
+onBeforeUnmount(() => {
+  visibilityObserver?.disconnect()
+  unsubscribeScroll?.()
+  window.clearTimeout(jiggleTimer)
+  window.cancelAnimationFrame(restartFrame)
+})
 
 const titleLines = computed(() => {
   const title = props.heading.title.trim()
@@ -74,12 +119,15 @@ const titleLines = computed(() => {
 
 <template>
   <div :class="['display-heading', wrapperClass]">
-    <div :id="titleId" :class="['display-heading__title', titleClass, 'golden-heading']">
+    <div
+      :id="titleId"
+      ref="headingRef"
+      :class="['display-heading__title', titleClass, 'golden-heading', { 'is-jiggling': isJiggling }]"
+    >
       <span class="golden-heading__label">{{ heading.title }}</span>
       <GoldenText
         :preset="activeHeadingPreset"
         :lines="titleLines"
-        :glitch="activeGlitch"
         :shine="fastShine"
       />
     </div>

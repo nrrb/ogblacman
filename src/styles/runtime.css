@@ -33,6 +33,26 @@ body,
   position: absolute;
   z-index: 0;
   inset: 0;
+  transform-origin: 50% 55%;
+}
+
+.golden-heading.is-jiggling > .golden-text {
+  animation: golden-heading-jiggle 600ms ease-out;
+}
+
+@keyframes golden-heading-jiggle {
+  0%, 100% { transform: translate3d(0, 0, 0) rotateX(0) rotateY(0) rotateZ(0); }
+  18% { transform: translate3d(-3px, 1px, 0) rotateX(0.45deg) rotateY(-0.8deg) rotateZ(-0.25deg); }
+  36% { transform: translate3d(3px, -1px, 0) rotateX(-0.35deg) rotateY(0.7deg) rotateZ(0.3deg); }
+  55% { transform: translate3d(-2px, 0, 0) rotateX(0.25deg) rotateY(-0.45deg) rotateZ(-0.18deg); }
+  72% { transform: translate3d(1px, 0, 0) rotateX(-0.15deg) rotateY(0.25deg) rotateZ(0.1deg); }
+  86% { transform: translate3d(-0.5px, 0, 0) rotateY(-0.1deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .golden-heading.is-jiggling > .golden-text {
+    animation: none;
+  }
 }
 
 video {
