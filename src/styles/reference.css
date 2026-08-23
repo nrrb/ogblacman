@@ -935,82 +935,12 @@ body {
   display: flex;
 }
 
-.section--cases {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 150px 30px;
-}
-
-.case-list--desktop {
-  justify-content: center;
-  align-items: center;
-  display: flex;
-}
-
-.case-item__title {
-  color: #fff;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  font-family: Neuehaasdisplayroman, Arial, sans-serif;
-  font-size: 50px;
-  line-height: 40px;
-}
-
-.case-item__row {
-  justify-content: center;
-  align-items: center;
-  display: flex;
-}
-
-.case-item__meta {
-  color: #fff;
-  margin-left: 10px;
-  font-family: Neuehaasdisplayroman, Arial, sans-serif;
-  font-size: 18px;
-}
-
 .display-heading--section {
   flex-flow: column;
   justify-content: center;
   align-items: center;
   margin-bottom: 60px;
   display: flex;
-}
-
-.heading-title--cases {
-  -webkit-text-fill-color: transparent;
-  background-image: var(--image-gradient-primary);
-  background-position: 0 0;
-  background-size: auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  margin-top: 10px;
-  margin-bottom: 40px;
-  font-family: Respective, Arial, sans-serif;
-  font-size: 300px;
-  line-height: 230px;
-}
-
-.heading-accent--cases {
-  color: #fff;
-  z-index: 1;
-  font-family: "Tajamuka Script", Arial, sans-serif;
-  font-size: 90px;
-}
-
-.case-item {
-  text-decoration: none;
-  transition: opacity .2s;
-}
-
-.case-item:hover {
-  -webkit-text-fill-color: transparent;
-  background-image: var(--image-gradient-primary);
-  background-position: 50%;
-  background-size: cover;
-  -webkit-background-clip: text;
-  background-clip: text;
-  font-style: italic;
 }
 
 .grain-overlay {
@@ -1466,14 +1396,6 @@ body {
     font-size: 21px;
   }
 
-  .case-item__title {
-    padding-right: 10px;
-  }
-
-  .case-item__meta {
-    padding-right: 3px;
-  }
-
   .split-layout--studios {
     grid-template-columns: 1fr;
   }
@@ -1793,21 +1715,6 @@ body {
     position: absolute;
   }
 
-  .case-item__title {
-    color: #fff;
-    text-transform: uppercase;
-    font-family: Neuehaasdisplayroman, Arial, sans-serif;
-    font-size: 26px;
-    font-weight: 400;
-  }
-
-  .case-item__meta {
-    color: #fff;
-    margin-left: 7px;
-    font-family: Neuehaasdisplayroman, Arial, sans-serif;
-    font-size: 10px;
-  }
-
   .mobile-slide__content--middle {
     flex-flow: column;
     justify-content: center;
@@ -1914,19 +1821,6 @@ body {
     line-height: 110px;
   }
 
-  .case-list__item {
-    margin-bottom: 20px;
-    display: flex;
-  }
-
-  .case-list--mobile {
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    padding-left: 0;
-    display: flex;
-  }
-
   .form-submit {
     color: #fff;
     background-color: #fff0;
@@ -1935,12 +1829,6 @@ body {
     padding-top: 7px;
     padding-bottom: 7px;
     font-family: Neuehaasdisplayroman, Arial, sans-serif;
-  }
-
-  .case-item {
-    color: #fff;
-    text-decoration: none;
-    display: flex;
   }
 
   .mobile-slide__overlay {
@@ -2284,45 +2172,6 @@ body {
     display: flex;
     position: fixed;
     inset: 0%;
-  }
-
-  .heading-accent--mobile-cases {
-    color: #fff;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-right: 0;
-    font-family: "Tajamuka Script", Arial, sans-serif;
-    font-size: 44px;
-    line-height: 0;
-    display: block;
-    position: absolute;
-  }
-
-  .heading-title--mobile-cases {
-    text-align: center;
-    -webkit-text-fill-color: transparent;
-    background-image: var(--image-gradient-secondary);
-    background-position: 50%;
-    background-size: cover;
-    -webkit-background-clip: text;
-    background-clip: text;
-    width: auto;
-    height: 100px;
-    margin-top: -5px;
-    margin-bottom: 20px;
-    font-family: Respective, Arial, sans-serif;
-    font-size: 130px;
-    line-height: 115px;
-  }
-
-  .display-heading--mobile-cases {
-    justify-content: center;
-    align-items: flex-start;
-    margin-bottom: 0;
-    padding-top: 0;
-    display: flex;
   }
 
   .heading-title--mobile-studios {

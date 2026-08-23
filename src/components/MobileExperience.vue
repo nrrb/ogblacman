@@ -1,7 +1,6 @@
 <script setup>
 import AppLink from './AppLink.vue'
 import BackgroundVideo from './BackgroundVideo.vue'
-import CaseStudyList from './CaseStudyList.vue'
 import ClientList from './ClientList.vue'
 import LogoCarousel from './LogoCarousel.vue'
 import MobileSlider from './MobileSlider.vue'
@@ -18,7 +17,7 @@ defineProps({ content: { type: Object, required: true } })
 <template>
   <MobileSlider
     v-slot="{ slideAttributes }"
-    :slide-count="7"
+    :slide-count="6"
     :dot-label="content.accessibility.slider_dot_label"
     :previous-label="content.accessibility.previous_slide_label"
     :next-label="content.accessibility.next_slide_label"
@@ -109,26 +108,6 @@ defineProps({ content: { type: Object, required: true } })
     </div>
 
     <div class="mobile-slide" v-bind="slideAttributes(4)">
-      <div class="mobile-slide__content mobile-slide__content--top">
-        <div>
-          <SectionHeading
-            :heading="content.case_studies.heading"
-            wrapper-class="display-heading--mobile-cases"
-            title-class="heading-title--mobile-cases"
-            accent-class="heading-accent--mobile-cases"
-            accent-first
-          />
-          <CaseStudyList :items="content.case_studies.items" variant="mobile" />
-        </div>
-      </div>
-      <BackgroundVideo
-        :media="content.case_studies.mobile_media"
-        video-id="mobile-cases-video"
-        class="background-media background-media--slide"
-      />
-    </div>
-
-    <div class="mobile-slide" v-bind="slideAttributes(5)">
       <div class="mobile-slide__content mobile-slide__content--middle mobile-slide__content--merch">
         <SectionHeading
           :heading="content.sections.merch.heading"
@@ -151,7 +130,7 @@ defineProps({ content: { type: Object, required: true } })
       />
     </div>
 
-    <div class="mobile-slide" v-bind="slideAttributes(6)">
+    <div class="mobile-slide" v-bind="slideAttributes(5)">
       <div class="mobile-slide__content mobile-slide__content--newsletter">
         <div>
           <SectionHeading

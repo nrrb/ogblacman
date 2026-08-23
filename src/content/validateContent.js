@@ -161,18 +161,6 @@ export function validateContent(content) {
     video(sections[name].mobile_media, `sections.${name}.mobile_media`)
   }
 
-  object(content.case_studies, 'case_studies')
-  heading(content.case_studies.heading, 'case_studies.heading')
-  video(content.case_studies.mobile_media, 'case_studies.mobile_media')
-  const caseStudies = array(content.case_studies.items, 'case_studies.items')
-  uniqueIds(caseStudies, 'case_studies.items')
-  caseStudies.forEach((item, index) => {
-    string(item.title, `case_studies.items[${index}].title`)
-    string(item.year, `case_studies.items[${index}].year`)
-    string(item.url, `case_studies.items[${index}].url`)
-    string(item.link_title, `case_studies.items[${index}].link_title`)
-  })
-
   object(content.footer, 'footer')
   string(content.footer.copyright, 'footer.copyright')
   return content

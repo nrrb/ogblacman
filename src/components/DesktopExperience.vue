@@ -1,7 +1,6 @@
 <script setup>
 import AppLink from './AppLink.vue'
 import BackgroundVideo from './BackgroundVideo.vue'
-import CaseStudyList from './CaseStudyList.vue'
 import ClientList from './ClientList.vue'
 import LogoCarousel from './LogoCarousel.vue'
 import NewsletterForm from './NewsletterForm.vue'
@@ -71,18 +70,6 @@ defineProps({ content: { type: Object, required: true } })
           <div>{{ content.sections.booking.manager.email }}</div>
           <div>{{ content.sections.booking.manager.phone }}</div>
         </div>
-      </div>
-
-      <div class="section section--cases">
-        <SectionHeading
-          :heading="content.case_studies.heading"
-          wrapper-class="display-heading--section"
-          title-class="heading-title--cases"
-          accent-class="heading-accent--cases"
-          title-id="case"
-          accent-first
-        />
-        <CaseStudyList :items="content.case_studies.items" variant="desktop" />
       </div>
 
       <div class="section section--content">

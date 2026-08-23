@@ -126,26 +126,5 @@ sections:
         - { src: "/assets/reference/mobile-clients-background.mp4?v=montage-v1", type: video/mp4 }
         - { src: "/assets/reference/mobile-clients-background.webm?v=montage-v1", type: video/webm }
 
-case_studies:
-  heading: { title: MORE TO COME, accent: STAY TUNED }
-  mobile_media:
-    poster: "/assets/reference/mobile-case-studies-background-poster.jpg?v=montage-v1"
-    sources:
-      - { src: "/assets/reference/mobile-case-studies-background.mp4?v=montage-v1", type: video/mp4 }
-      - { src: "/assets/reference/mobile-case-studies-background.webm?v=montage-v1", type: video/webm }
-  items:
-    - { id: harry-styles, title: SECTION 5 CASE 1 TEXT, year: SECTION 5 CASE 1 YEAR, url: /case-studies/harry-styles, link_title: View case study 1 }
-    - { id: grammy-awards, title: SECTION 5 CASE 2 TEXT, year: SECTION 5 CASE 2 YEAR, url: /case-studies/the-68th-grammy-awards, link_title: View case study 2 }
-    - { id: lollapalooza-2025, title: SECTION 5 CASE 3 TEXT, year: SECTION 5 CASE 3 YEAR, url: /case-studies/lollapalooza-2025, link_title: View case study 3 }
-    - { id: spotify, title: SECTION 5 CASE 4 TEXT, year: SECTION 5 CASE 4 YEAR, url: /case-studies/spotify, link_title: View case study 4 }
-    - { id: tyler-rollout, title: SECTION 5 CASE 5 TEXT, year: SECTION 5 CASE 5 YEAR, url: /case-studies/tyler-the-creator-rollout, link_title: View case study 5 }
-    - { id: don-lemon, title: SECTION 5 CASE 6 TEXT, year: SECTION 5 CASE 6 YEAR, url: /case-studies/don-lemon, link_title: View case study 6 }
-    - { id: all-things-go, title: SECTION 5 CASE 7 TEXT, year: SECTION 5 CASE 7 YEAR, url: /case-studies/all-things-go, link_title: View case study 7 }
-    - { id: burna-boy, title: SECTION 5 CASE 8 TEXT, year: SECTION 5 CASE 8 YEAR, url: /case-studies/burna-boy-album-rollout, link_title: View case study 8 }
-    - { id: raising-canes, title: SECTION 5 CASE 9 TEXT, year: SECTION 5 CASE 9 YEAR, url: /case-studies/raising-canes, link_title: View case study 9 }
-    - { id: rolling-loud, title: SECTION 5 CASE 10 TEXT, year: SECTION 5 CASE 10 YEAR, url: /case-studies/rolling-loud, link_title: View case study 10 }
-    - { id: snap-nation, title: SECTION 5 CASE 11 TEXT, year: SECTION 5 CASE 11 YEAR, url: /case-studies/snap-nation-x-acl, link_title: View case study 11 }
-    - { id: lollapalooza, title: SECTION 5 CASE 12 TEXT, year: SECTION 5 CASE 12 YEAR, url: /case-studies/lollapalooza, link_title: View case study 12 }
-
 footer:
   copyright: © COPYRIGHT 2026 OG BLACMAN. ALL RIGHTS RESERVED.
