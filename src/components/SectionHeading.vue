@@ -20,6 +20,13 @@ const heroHeadingPreset = {
   },
 }
 
+const glitchOnEnter = {
+  threshold: 0.1,
+  duration: 300,
+  cooldown: 1400,
+  strength: 1,
+}
+
 const activeHeadingPreset = computed(() => (
   ['heading-title--desktop-hero', 'heading-title--mobile-hero'].includes(props.titleClass)
     ? heroHeadingPreset
@@ -54,7 +61,7 @@ const titleLines = computed(() => {
   <div :class="['display-heading', wrapperClass]">
     <div :id="titleId" :class="['display-heading__title', titleClass, 'golden-heading']">
       <span class="golden-heading__label">{{ heading.title }}</span>
-      <GoldenText :preset="activeHeadingPreset" :lines="titleLines" />
+      <GoldenText :preset="activeHeadingPreset" :lines="titleLines" :glitch="glitchOnEnter" />
     </div>
   </div>
 </template>
