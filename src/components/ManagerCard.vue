@@ -5,28 +5,25 @@ defineProps({
 </script>
 
 <template>
-  <address class="manager-card">
-    <span class="manager-card__rail" aria-hidden="true" />
-
-    <div class="manager-card__header">
-      <div>
-        <div class="manager-card__eyebrow">{{ manager.role }}</div>
-        <div class="manager-card__name">{{ manager.name }}</div>
-      </div>
-      <div class="manager-card__mark" aria-hidden="true">OGB // MGMT</div>
+  <address class="manager-contact">
+    <div class="manager-contact__heading">
+      <div class="manager-contact__eyebrow">{{ manager.role }}</div>
+      <div class="manager-contact__name">{{ manager.name }}</div>
     </div>
 
-    <div class="manager-card__contacts">
-      <div class="manager-card__contact">
-        <div class="manager-card__label">Email</div>
-        <a :href="`mailto:${manager.email}`" class="manager-card__link">
+    <span class="manager-contact__rule" aria-hidden="true" />
+
+    <div class="manager-contact__details">
+      <div class="manager-contact__detail">
+        <div class="manager-contact__label">Email</div>
+        <a :href="`mailto:${manager.email}`" class="manager-contact__link">
           {{ manager.email }}
         </a>
       </div>
 
-      <div class="manager-card__contact">
-        <div class="manager-card__label">Phone</div>
-        <a :href="`tel:${manager.phone.replace(/[^+\d]/g, '')}`" class="manager-card__link">
+      <div class="manager-contact__detail">
+        <div class="manager-contact__label">Phone</div>
+        <a :href="`tel:${manager.phone.replace(/[^+\d]/g, '')}`" class="manager-contact__link">
           {{ manager.phone }}
         </a>
       </div>
@@ -35,165 +32,130 @@ defineProps({
 </template>
 
 <style scoped>
-.manager-card {
-  position: relative;
-  isolation: isolate;
+.manager-contact {
   width: min(100%, 820px);
-  margin: 54px auto 0;
-  padding: 28px 28px 30px 34px;
-  overflow: hidden;
+  margin: 48px auto 0;
   color: var(--color-white);
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--color-gold-1) 10%, transparent), transparent 48%),
-    color-mix(in srgb, var(--color-black-1) 94%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-white) 24%, transparent);
-  box-shadow: 0 22px 60px rgb(0 0 0 / 28%);
   font-family: NeueHaasDisplayLight, Arial, sans-serif;
-  font-size: 16px;
   font-style: normal;
-  line-height: 1.4;
 }
 
-.manager-card::before,
-.manager-card::after,
-.manager-card__header::before,
-.manager-card__header::after,
-.manager-card__contacts::before,
-.manager-card__contacts::after {
+.manager-contact::before,
+.manager-contact::after,
+.manager-contact__details::before,
+.manager-contact__details::after {
   content: none;
   display: none;
 }
 
-.manager-card__rail {
-  position: absolute;
-  z-index: -1;
-  inset: -1px auto -1px -1px;
-  width: 7px;
-  background: linear-gradient(180deg, var(--color-gold-1), var(--color-gold-2));
-  box-shadow: 8px 0 32px color-mix(in srgb, var(--color-gold-1) 20%, transparent);
+.manager-contact__heading {
+  text-align: center;
 }
 
-.manager-card__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-white) 20%, transparent);
-}
-
-.manager-card__eyebrow,
-.manager-card__label,
-.manager-card__mark {
+.manager-contact__eyebrow,
+.manager-contact__label {
   font-family: Neuehaasdisplaymediu, Arial, sans-serif;
-  font-style: normal;
   font-weight: 400;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.manager-card__eyebrow {
-  margin-bottom: 7px;
+.manager-contact__eyebrow {
+  margin-bottom: 4px;
   color: var(--color-gold-1);
   font-size: 11px;
 }
 
-.manager-card__name {
+.manager-contact__name {
   color: var(--color-white);
-  font-family: Neuehaasdisplayroman, Arial, sans-serif;
-  font-size: clamp(25px, 3vw, 38px);
-  line-height: 1.05;
+  font-family: "Tajamuka Script", Arial, sans-serif;
+  font-size: clamp(54px, 7vw, 92px);
+  font-weight: 400;
+  line-height: 0.9;
 }
 
-.manager-card__mark {
-  color: color-mix(in srgb, var(--color-white) 38%, transparent);
-  font-size: 9px;
-  white-space: nowrap;
+.manager-contact__rule {
+  display: block;
+  width: min(100%, 620px);
+  height: 1px;
+  margin: 28px auto;
+  background: var(--color-gold-1);
 }
 
-.manager-card__contacts {
+.manager-contact__details {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
-  gap: 24px 44px;
-  padding-top: 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px;
+  width: min(100%, 620px);
+  margin: 0 auto;
 }
 
-.manager-card__contact {
+.manager-contact__detail {
   min-width: 0;
 }
 
-.manager-card__label {
-  margin-bottom: 7px;
-  color: color-mix(in srgb, var(--color-white) 52%, transparent);
+.manager-contact__label {
+  margin-bottom: 6px;
+  color: color-mix(in srgb, var(--color-white) 48%, transparent);
   font-size: 9px;
 }
 
-.manager-card__link {
+.manager-contact__link {
   color: var(--color-white);
+  font-family: Neuehaasdisplayroman, Arial, sans-serif;
   font-size: 17px;
   font-style: normal;
   overflow-wrap: anywhere;
-  text-decoration-color: color-mix(in srgb, var(--color-gold-1) 55%, transparent);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
-  transition: color 160ms ease, text-decoration-color 160ms ease;
+  text-decoration: none;
+  transition: color 160ms ease;
 }
 
-.manager-card__link:hover,
-.manager-card__link:focus-visible {
+.manager-contact__link:hover,
+.manager-contact__link:focus-visible {
   color: var(--color-gold-1);
-  text-decoration-color: var(--color-gold-1);
 }
 
-.manager-card__link:focus-visible {
+.manager-contact__link:focus-visible {
   outline: 2px solid var(--color-gold-1);
   outline-offset: 4px;
 }
 
 @media screen and (max-width: 767px) {
-  .manager-card {
+  .manager-contact {
     width: 100%;
-    margin-top: 16px;
-    padding: 18px 16px 18px 22px;
-    font-size: 12px;
+    margin-top: 14px;
   }
 
-  .manager-card__header {
-    gap: 12px;
-    padding-bottom: 15px;
-  }
-
-  .manager-card__eyebrow {
-    margin-bottom: 4px;
+  .manager-contact__eyebrow {
     font-size: 8px;
   }
 
-  .manager-card__name {
-    font-size: 21px;
+  .manager-contact__name {
+    font-size: clamp(40px, 16vw, 58px);
   }
 
-  .manager-card__mark {
-    font-size: 7px;
+  .manager-contact__rule {
+    margin: 15px auto;
   }
 
-  .manager-card__contacts {
+  .manager-contact__details {
     grid-template-columns: minmax(0, 1fr);
-    gap: 13px;
-    padding-top: 15px;
+    gap: 10px;
+    text-align: center;
   }
 
-  .manager-card__label {
-    margin-bottom: 3px;
+  .manager-contact__label {
+    margin-bottom: 1px;
     font-size: 7px;
   }
 
-  .manager-card__link {
+  .manager-contact__link {
     font-size: 12px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .manager-card__link {
+  .manager-contact__link {
     transition: none;
   }
 }
