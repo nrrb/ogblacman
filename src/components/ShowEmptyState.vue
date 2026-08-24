@@ -1,0 +1,226 @@
+<script setup>
+defineProps({
+  copy: { type: String, required: true },
+})
+</script>
+
+<template>
+  <section class="show-empty" aria-label="Show announcements">
+    <div class="show-empty__status">
+      <span class="show-empty__status-label">
+        <span class="show-empty__dot" aria-hidden="true" />
+        Live transmission
+      </span>
+      <span class="show-empty__availability">No dates posted — yet</span>
+    </div>
+
+    <span class="show-empty__rule" aria-hidden="true" />
+
+    <h3 class="show-empty__headline">
+      <span class="show-empty__headline-main">The next show</span>
+      <span class="show-empty__headline-accent">is loading.</span>
+    </h3>
+
+    <p class="show-empty__copy">{{ copy }}</p>
+
+    <a class="show-empty__cta" href="#mailing-list">
+      <span>Get show alerts</span>
+      <span class="show-empty__arrow" aria-hidden="true">→</span>
+    </a>
+  </section>
+</template>
+
+<style scoped>
+.show-empty {
+  width: min(100%, 880px);
+  margin: 34px auto 0;
+  color: var(--color-white);
+  text-align: center;
+}
+
+.show-empty::before,
+.show-empty::after,
+.show-empty__status::before,
+.show-empty__status::after,
+.show-empty__status-label::before,
+.show-empty__status-label::after,
+.show-empty__cta::before,
+.show-empty__cta::after {
+  content: none;
+  display: none;
+}
+
+.show-empty__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: min(100%, 680px);
+  margin: 0 auto;
+  font-family: Neuehaasdisplaymediu, Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.show-empty__status-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--color-gold-1);
+}
+
+.show-empty__dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-gold-1);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-gold-1) 45%, transparent);
+  animation: show-status-pulse 2s ease-out infinite;
+}
+
+.show-empty__availability {
+  color: color-mix(in srgb, var(--color-white) 48%, transparent);
+}
+
+.show-empty__rule {
+  display: block;
+  width: min(100%, 680px);
+  height: 1px;
+  margin: 18px auto 30px;
+  background: var(--color-gold-1);
+}
+
+.show-empty__headline {
+  margin: 0;
+  font-weight: 400;
+}
+
+.show-empty__headline-main {
+  display: block;
+  color: var(--color-white);
+  font-family: Neuehaasdisplayroman, Arial, sans-serif;
+  font-size: clamp(32px, 4.8vw, 60px);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.show-empty__headline-accent {
+  display: block;
+  margin-top: -2px;
+  color: var(--color-gold-1);
+  font-family: "Tajamuka Script", Arial, sans-serif;
+  font-size: clamp(68px, 9vw, 118px);
+  font-weight: 400;
+  line-height: 0.8;
+}
+
+.show-empty__copy {
+  max-width: 560px;
+  margin: 25px auto 0;
+  color: color-mix(in srgb, var(--color-white) 68%, transparent);
+  font-family: NeueHaasDisplayLight, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.show-empty__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 27px;
+  padding: 5px 0;
+  color: var(--color-white);
+  border-bottom: 1px solid var(--color-gold-1);
+  font-family: Neuehaasdisplaymediu, Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 160ms ease, gap 160ms ease;
+}
+
+.show-empty__cta:hover {
+  gap: 20px;
+  color: var(--color-gold-1);
+}
+
+.show-empty__cta:focus-visible {
+  outline: 2px solid var(--color-gold-1);
+  outline-offset: 4px;
+}
+
+.show-empty__arrow {
+  color: var(--color-gold-1);
+  font-size: 18px;
+  line-height: 0.5;
+}
+
+@keyframes show-status-pulse {
+  70%, 100% {
+    box-shadow: 0 0 0 9px transparent;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .show-empty {
+    width: 100%;
+    margin-top: 11px;
+  }
+
+  .show-empty__status {
+    gap: 8px;
+    font-size: 7px;
+  }
+
+  .show-empty__status-label {
+    gap: 6px;
+  }
+
+  .show-empty__dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .show-empty__availability {
+    max-width: 105px;
+    text-align: right;
+  }
+
+  .show-empty__rule {
+    margin: 10px auto 15px;
+  }
+
+  .show-empty__headline-main {
+    font-size: clamp(21px, 7vw, 30px);
+  }
+
+  .show-empty__headline-accent {
+    font-size: clamp(48px, 17vw, 72px);
+  }
+
+  .show-empty__copy {
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .show-empty__cta {
+    margin-top: 13px;
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .show-empty__dot {
+    animation: none;
+  }
+
+  .show-empty__cta {
+    transition: none;
+  }
+}
+</style>

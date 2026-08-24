@@ -8,6 +8,7 @@ import ManagerCard from './ManagerCard.vue'
 import MobileSlider from './MobileSlider.vue'
 import ResponsiveImage from './ResponsiveImage.vue'
 import SectionHeading from './SectionHeading.vue'
+import ShowEmptyState from './ShowEmptyState.vue'
 import SocialLinks from './SocialLinks.vue'
 import TextCta from './TextCta.vue'
 import TopPickRelease from './TopPickRelease.vue'
@@ -71,10 +72,16 @@ defineProps({ content: { type: Object, required: true } })
           wrapper-class="display-heading--mobile-why"
           title-class="heading-title--mobile-why"
         />
-        <p class="body-copy body-copy--mobile-why">{{ content.sections.upcoming_shows.copy }}</p>
-        <div class="scroll-panel">
-          <ClientList :items="content.sections.upcoming_shows.items" variant="mobile" />
-        </div>
+        <ShowEmptyState
+          v-if="content.sections.upcoming_shows.items.length === 0"
+          :copy="content.sections.upcoming_shows.copy"
+        />
+        <template v-else>
+          <p class="body-copy body-copy--mobile-why">{{ content.sections.upcoming_shows.copy }}</p>
+          <div class="scroll-panel">
+            <ClientList :items="content.sections.upcoming_shows.items" variant="mobile" />
+          </div>
+        </template>
       </div>
       <BackgroundVideo
         :media="content.sections.upcoming_shows.mobile_media"
@@ -121,7 +128,7 @@ defineProps({ content: { type: Object, required: true } })
       />
     </div>
 
-    <div class="mobile-slide" v-bind="slideAttributes(5)">
+    <div id="mailing-list" class="mobile-slide" v-bind="slideAttributes(5)">
       <div class="mobile-slide__content mobile-slide__content--newsletter">
         <div>
           <SectionHeading

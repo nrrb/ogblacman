@@ -7,6 +7,7 @@ import LogoCarousel from './LogoCarousel.vue'
 import ManagerCard from './ManagerCard.vue'
 import ResponsiveImage from './ResponsiveImage.vue'
 import SectionHeading from './SectionHeading.vue'
+import ShowEmptyState from './ShowEmptyState.vue'
 import SocialLinks from './SocialLinks.vue'
 import TextCta from './TextCta.vue'
 import TopPickRelease from './TopPickRelease.vue'
@@ -50,8 +51,14 @@ defineProps({ content: { type: Object, required: true } })
               wrapper-class="display-heading--feature"
               title-class="heading-title--why"
             />
-            <p class="body-copy body-copy--why">{{ content.sections.upcoming_shows.copy }}</p>
-            <ClientList :items="content.sections.upcoming_shows.items" variant="desktop" />
+            <ShowEmptyState
+              v-if="content.sections.upcoming_shows.items.length === 0"
+              :copy="content.sections.upcoming_shows.copy"
+            />
+            <template v-else>
+              <p class="body-copy body-copy--why">{{ content.sections.upcoming_shows.copy }}</p>
+              <ClientList :items="content.sections.upcoming_shows.items" variant="desktop" />
+            </template>
           </div>
         </div>
 
@@ -84,7 +91,7 @@ defineProps({ content: { type: Object, required: true } })
         <LogoCarousel :items="content.sections.merch.items" />
       </div>
 
-      <div class="section section--clients">
+      <div id="mailing-list" class="section section--clients">
         <div class="section__inner">
           <SectionHeading
             :heading="content.sections.newsletter.heading"
