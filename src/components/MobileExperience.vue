@@ -18,6 +18,7 @@ defineProps({ content: { type: Object, required: true } })
   <MobileSlider
     v-slot="{ slideAttributes }"
     :slide-count="6"
+    :continuous="content.mobile.continuous_scroll"
     :dot-label="content.accessibility.slider_dot_label"
     :previous-label="content.accessibility.previous_slide_label"
     :next-label="content.accessibility.next_slide_label"

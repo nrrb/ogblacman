@@ -5,6 +5,7 @@ import { validateContent } from '../src/content/validateContent.js'
 const source = fs.readFileSync(new URL('../src/content/site.yaml', import.meta.url), 'utf8')
 const content = validateContent(parse(source))
 
+if (content.mobile.continuous_scroll !== true) throw new Error('Continuous mobile scrolling should be enabled by default')
 if (content.sections.upcoming_shows.items.length !== 3) throw new Error('Expected three seeded show placeholders')
 if (!Array.isArray(content.sections.merch.items)) throw new Error('Merch items must be expandable')
 if (content.sections.newsletter.form.fields.find(field => field.id === 'name').required) throw new Error('Newsletter name must be optional')
@@ -22,6 +23,22 @@ expanded.sections.merch.items.push({
 })
 validateContent(expanded)
 if (expanded.sections.merch.items.length !== content.sections.merch.items.length + 1) throw new Error('Merch carousel did not accept an additional item')
+
+const discreteMobile = structuredClone(content)
+discreteMobile.mobile.continuous_scroll = false
+validateContent(discreteMobile)
+
+for (const invalidValue of [undefined, 'true', 1]) {
+  const invalidMobile = structuredClone(content)
+  invalidMobile.mobile.continuous_scroll = invalidValue
+  let invalidMobileRejected = false
+  try {
+    validateContent(invalidMobile)
+  } catch (error) {
+    invalidMobileRejected = error.message.includes('mobile.continuous_scroll')
+  }
+  if (!invalidMobileRejected) throw new Error(`Invalid mobile scrolling value was accepted: ${String(invalidValue)}`)
+}
 
 const duplicate = structuredClone(content)
 duplicate.sections.upcoming_shows.items.push(structuredClone(duplicate.sections.upcoming_shows.items[0]))

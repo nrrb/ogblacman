@@ -3,6 +3,9 @@ accessibility:
   previous_slide_label: Previous slide
   next_slide_label: Next slide
 
+mobile:
+  continuous_scroll: true
+
 shared:
   style_images:
     secondary_gradient: /assets/reference/text-gradient-secondary.jpg

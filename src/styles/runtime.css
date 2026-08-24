@@ -262,13 +262,14 @@ video {
     overflow: hidden;
   }
 
-  .site--mobile .mobile-slider__track {
+  .mobile-slider--discrete .mobile-slider__track {
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
   }
 
-  .site--mobile .mobile-slide {
+  .mobile-slider--discrete .mobile-slide {
     flex: 0 0 100%;
     width: 100%;
     height: 100%;
@@ -276,9 +277,69 @@ video {
     will-change: transform;
   }
 
-  .site--mobile .mobile-slide[aria-hidden="true"] {
+  .mobile-slider--discrete .mobile-slide[aria-hidden="true"] {
     visibility: hidden;
     pointer-events: none;
+  }
+
+  html.mobile-continuous-scroll,
+  html.mobile-continuous-scroll body {
+    height: auto;
+    min-height: 100%;
+  }
+
+  html.mobile-continuous-scroll body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  html.mobile-continuous-scroll #app,
+  html.mobile-continuous-scroll #app > main {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .mobile-slider--continuous.site--mobile {
+    position: relative;
+    inset: auto;
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .mobile-slider--continuous .mobile-slider__track {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  .mobile-slider--continuous .mobile-slide {
+    display: block;
+    isolation: isolate;
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .mobile-slider--continuous .background-media--mobile-hero {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+  }
+
+  .mobile-slider--continuous .mobile-slide__overlay,
+  .mobile-slider--continuous .mobile-slide__content--top,
+  .mobile-slider--continuous .mobile-slide__content--middle,
+  .mobile-slider--continuous .mobile-slide__content--contact,
+  .mobile-slider--continuous .mobile-slide__content--why,
+  .mobile-slider--continuous .mobile-slide__content--how,
+  .mobile-slider--continuous .mobile-slide__content--newsletter {
+    position: absolute;
   }
 
   .site--mobile .background-media > video {
@@ -396,7 +457,7 @@ video {
     animation-play-state: paused;
   }
 
-  .site--mobile .mobile-slider__track {
+  .mobile-slider--discrete .mobile-slide {
     transition: none;
   }
 }

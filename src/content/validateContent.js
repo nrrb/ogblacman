@@ -92,6 +92,11 @@ export function validateContent(content) {
   string(content.accessibility.previous_slide_label, 'accessibility.previous_slide_label')
   string(content.accessibility.next_slide_label, 'accessibility.next_slide_label')
 
+  object(content.mobile, 'mobile')
+  if (typeof content.mobile.continuous_scroll !== 'boolean') {
+    fail('mobile.continuous_scroll', 'expected a boolean')
+  }
+
   object(content.shared, 'shared')
   object(content.shared.style_images, 'shared.style_images')
   for (const key of ['secondary_gradient', 'grain_overlay', 'grain_background']) {
