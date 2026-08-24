@@ -19,15 +19,52 @@ body,
 
 .display-heading__title.outlined-heading {
   position: relative;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   background-image: none;
   color: #fff;
   -webkit-text-fill-color: #fff;
-  -webkit-text-stroke: 6px var(--color-heading-outline, #FFC300);
   font-family: "Tajamuka Script", Arial, sans-serif;
-  font-weight: 700;
+  font-weight: 400;
+}
+
+.display-heading__svg {
+  display: block;
+  flex: 0 1 auto;
+  max-width: 100%;
+  height: auto;
+  overflow: visible;
+  opacity: 0;
+}
+
+.display-heading__svg.is-measured {
+  opacity: 1;
+}
+
+.display-heading__svg-text {
+  fill: #fff;
+  stroke: var(--color-heading-outline, #FFC300);
+  stroke-width: var(--heading-outline-width, 6);
+  stroke-linecap: round;
+  stroke-linejoin: round;
   paint-order: stroke fill;
+  -webkit-text-fill-color: #fff;
+  font-family: "Tajamuka Script", Arial, sans-serif;
+  font-size: inherit;
+  font-weight: 400;
+}
+
+.display-heading__accessible-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 video {
@@ -79,12 +116,6 @@ video {
 .site--desktop .heading-title--clients.outlined-heading {
   font-size: 165px;
   line-height: 135px;
-}
-
-@media screen and (min-width: 768px) {
-  .display-heading__title.outlined-heading {
-    -webkit-text-stroke-width: 10px;
-  }
 }
 
 .form-status--success {
@@ -374,7 +405,7 @@ video {
 
   .site--mobile .heading-title--mobile-how.outlined-heading {
     position: relative;
-    display: inline-block;
+    display: flex;
     width: 100%;
     margin: 0;
     font-family: "Tajamuka Script", Arial, sans-serif;

@@ -8,6 +8,7 @@ mobile:
 
 theme:
   heading_outline_color: "#EFBF04"
+  heading_outline_width: 6
 
 shared:
   style_images:

@@ -104,6 +104,9 @@ export function validateContent(content) {
 
   object(content.theme, 'theme')
   hexColor(content.theme.heading_outline_color, 'theme.heading_outline_color')
+  if (!Number.isFinite(content.theme.heading_outline_width) || content.theme.heading_outline_width <= 0) {
+    fail('theme.heading_outline_width', 'expected a positive number')
+  }
 
   object(content.shared, 'shared')
   object(content.shared.style_images, 'shared.style_images')
