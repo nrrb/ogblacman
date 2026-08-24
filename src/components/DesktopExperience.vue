@@ -4,6 +4,7 @@ import BackgroundVideo from './BackgroundVideo.vue'
 import ClientList from './ClientList.vue'
 import KitSignup from './KitSignup.vue'
 import LogoCarousel from './LogoCarousel.vue'
+import ManagerCard from './ManagerCard.vue'
 import ResponsiveImage from './ResponsiveImage.vue'
 import SectionHeading from './SectionHeading.vue'
 import SocialLinks from './SocialLinks.vue'
@@ -59,12 +60,7 @@ defineProps({ content: { type: Object, required: true } })
           wrapper-class="display-heading--feature"
           title-class="heading-title--feature"
         />
-        <div class="booking-manager">
-          <div class="booking-manager__role">{{ content.sections.booking.manager.role }}</div>
-          <div class="booking-manager__name">{{ content.sections.booking.manager.name }}</div>
-          <div>{{ content.sections.booking.manager.email }}</div>
-          <div>{{ content.sections.booking.manager.phone }}</div>
-        </div>
+        <ManagerCard :manager="content.sections.booking.manager" />
       </div>
 
       <div class="section section--content">

@@ -97,10 +97,10 @@ sections:
   booking:
     heading: { title: BOOKING }
     manager:
-      role: MANAGEMENT
-      name: BOOKING & BUSINESS INQUIRIES
-      email: CONTACT @OGBLACMAN ON INSTAGRAM
-      phone: DETAILS AVAILABLE UPON REQUEST
+      role: Manager
+      name: Gabrielle Labolito
+      email: glabolito@gmail.com
+      phone: 215-680-0240
     mobile_media: *standard_mobile_media
   merch:
     heading: { title: MERCH }
