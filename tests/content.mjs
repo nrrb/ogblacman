@@ -7,7 +7,7 @@ const content = validateContent(parse(source))
 
 if (content.mobile.continuous_scroll !== true) throw new Error('Continuous mobile scrolling should be enabled by default')
 if (!/^#[0-9a-f]{6}$/i.test(content.theme.heading_outline_color)) throw new Error('Heading outline color must come from site.yaml')
-if (content.sections.upcoming_shows.items.length !== 3) throw new Error('Expected three seeded show placeholders')
+if (content.sections.upcoming_shows.items.length !== 0) throw new Error('Shows should not include placeholder events')
 if (!Array.isArray(content.sections.merch.items)) throw new Error('Merch items must be expandable')
 if (content.sections.newsletter.form.fields.find(field => field.id === 'name').required) throw new Error('Newsletter name must be optional')
 if (!content.sections.newsletter.form.fields.find(field => field.id === 'email').required) throw new Error('Newsletter email must be required')
@@ -54,7 +54,15 @@ for (const invalidValue of [undefined, 'gold', '#FC30']) {
 }
 
 const duplicate = structuredClone(content)
-duplicate.sections.upcoming_shows.items.push(structuredClone(duplicate.sections.upcoming_shows.items[0]))
+const duplicateShow = {
+  id: 'duplicate-show',
+  meta: 'SHOW DATE',
+  label: 'SHOW LOCATION',
+  action_label: 'TICKETS',
+  url: null,
+  link_title: null,
+}
+duplicate.sections.upcoming_shows.items.push(duplicateShow, structuredClone(duplicateShow))
 let duplicateRejected = false
 try {
   validateContent(duplicate)

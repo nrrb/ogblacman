@@ -91,11 +91,8 @@ sections:
         - { src: "/assets/reference/mobile-standard-background.webm?v=montage-v1", type: video/webm }
   upcoming_shows:
     heading: { title: SHOWS }
-    copy: Catch OG Blacman live. New dates and ticket links will be added as shows are announced.
-    items:
-      - { id: show-01, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
-      - { id: show-02, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
-      - { id: show-03, meta: SHOW DATE, label: SHOW LOCATION // VENUE, action_label: TICKETS COMING SOON, url: null, link_title: null }
+    copy: Events coming soon, sign up for the mailing list to stay informed!
+    items: []
     mobile_media: *standard_mobile_media
   booking:
     heading: { title: BOOKING }
