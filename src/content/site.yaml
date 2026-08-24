@@ -6,6 +6,9 @@ accessibility:
 mobile:
   continuous_scroll: true
 
+theme:
+  heading_outline_color: "#EFBF04"
+
 shared:
   style_images:
     secondary_gradient: /assets/reference/text-gradient-secondary.jpg

@@ -6,6 +6,7 @@ const source = fs.readFileSync(new URL('../src/content/site.yaml', import.meta.u
 const content = validateContent(parse(source))
 
 if (content.mobile.continuous_scroll !== true) throw new Error('Continuous mobile scrolling should be enabled by default')
+if (!/^#[0-9a-f]{6}$/i.test(content.theme.heading_outline_color)) throw new Error('Heading outline color must come from site.yaml')
 if (content.sections.upcoming_shows.items.length !== 3) throw new Error('Expected three seeded show placeholders')
 if (!Array.isArray(content.sections.merch.items)) throw new Error('Merch items must be expandable')
 if (content.sections.newsletter.form.fields.find(field => field.id === 'name').required) throw new Error('Newsletter name must be optional')
@@ -38,6 +39,18 @@ for (const invalidValue of [undefined, 'true', 1]) {
     invalidMobileRejected = error.message.includes('mobile.continuous_scroll')
   }
   if (!invalidMobileRejected) throw new Error(`Invalid mobile scrolling value was accepted: ${String(invalidValue)}`)
+}
+
+for (const invalidValue of [undefined, 'gold', '#FC30']) {
+  const invalidTheme = structuredClone(content)
+  invalidTheme.theme.heading_outline_color = invalidValue
+  let invalidThemeRejected = false
+  try {
+    validateContent(invalidTheme)
+  } catch (error) {
+    invalidThemeRejected = error.message.includes('theme.heading_outline_color')
+  }
+  if (!invalidThemeRejected) throw new Error(`Invalid heading outline color was accepted: ${String(invalidValue)}`)
 }
 
 const duplicate = structuredClone(content)

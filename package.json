@@ -15,8 +15,6 @@
     "test:visual": "node tests/visual/compare.mjs"
   },
   "dependencies": {
-    "@beautifullife/golden-text": "^0.2.0",
-    "three": "^0.185.1",
     "vue": "latest",
     "webamp": "^2.3.1",
     "yaml": "^2.8.1"

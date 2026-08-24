@@ -12,6 +12,7 @@ let viewportQuery
 const styleVariables = computed(() => ({
   '--image-grain-overlay': `url("${siteContent.shared.style_images.grain_overlay}")`,
   '--image-grain-background': `url("${siteContent.shared.style_images.grain_background}")`,
+  '--color-heading-outline': siteContent.theme.heading_outline_color,
 }))
 
 function updateExperience(event) {

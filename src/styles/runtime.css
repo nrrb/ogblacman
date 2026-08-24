@@ -17,42 +17,17 @@ body,
   color: var(--color-body-text);
 }
 
-.golden-heading {
+.display-heading__title.outlined-heading {
   position: relative;
   display: inline-block;
-  isolation: isolate;
   background: none;
-  -webkit-text-fill-color: transparent;
-}
-
-.golden-heading__label {
-  opacity: 0;
-}
-
-.golden-heading > .golden-text {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  transform-origin: 50% 55%;
-}
-
-.golden-heading.is-jiggling > .golden-text {
-  animation: golden-heading-jiggle 600ms ease-out;
-}
-
-@keyframes golden-heading-jiggle {
-  0%, 100% { transform: translate3d(0, 0, 0) rotateX(0) rotateY(0) rotateZ(0); }
-  18% { transform: translate3d(-3px, 1px, 0) rotateX(0.45deg) rotateY(-0.8deg) rotateZ(-0.25deg); }
-  36% { transform: translate3d(3px, -1px, 0) rotateX(-0.35deg) rotateY(0.7deg) rotateZ(0.3deg); }
-  55% { transform: translate3d(-2px, 0, 0) rotateX(0.25deg) rotateY(-0.45deg) rotateZ(-0.18deg); }
-  72% { transform: translate3d(1px, 0, 0) rotateX(-0.15deg) rotateY(0.25deg) rotateZ(0.1deg); }
-  86% { transform: translate3d(-0.5px, 0, 0) rotateY(-0.1deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .golden-heading.is-jiggling > .golden-text {
-    animation: none;
-  }
+  background-image: none;
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+  -webkit-text-stroke: 6px var(--color-heading-outline, #FFC300);
+  font-family: "Tajamuka Script", Arial, sans-serif;
+  font-weight: 700;
+  paint-order: stroke fill;
 }
 
 video {
@@ -77,17 +52,39 @@ video {
   text-align: center;
 }
 
-.site--desktop .heading-title--desktop-hero.golden-heading {
+.site--desktop .heading-title--about {
+  font-size: 165px;
+  line-height: 135px;
+}
+
+.site--desktop .heading-title--why {
+  font-size: 165px;
+  line-height: 135px;
+}
+
+.site--desktop .heading-title--feature {
+  font-size: 165px;
+  line-height: 135px;
+}
+
+.site--desktop .heading-title--desktop-hero.outlined-heading {
   width: 100vw;
-  min-height: 380px;
-  font-size: 380px;
-  line-height: 380px;
+  min-height: 135px;
+  font-size: 165px;
+  line-height: 135px;
+  text-align: center;
   white-space: nowrap;
 }
 
-.site--desktop .heading-title--clients.golden-heading {
-  font-size: 220px;
-  line-height: 180px;
+.site--desktop .heading-title--clients.outlined-heading {
+  font-size: 165px;
+  line-height: 135px;
+}
+
+@media screen and (min-width: 768px) {
+  .display-heading__title.outlined-heading {
+    -webkit-text-stroke-width: 10px;
+  }
 }
 
 .form-status--success {
@@ -357,8 +354,8 @@ video {
   }
 
   .mobile-slide__content--top-pick .heading-title--mobile-about {
-    font-size: 96px;
-    line-height: 76px;
+    font-size: 93.75px;
+    line-height: 82.5px;
   }
 
   .site--mobile .display-heading--mobile-how {
@@ -366,26 +363,37 @@ video {
     align-items: center;
   }
 
-  .site--mobile .heading-title--mobile-hero.golden-heading,
-  .site--mobile .heading-title--mobile-how.golden-heading,
-  .site--mobile .heading-title--mobile-studios.golden-heading {
-    min-height: 170px;
-    font-size: 180px;
-    line-height: 170px;
+  .site--mobile .heading-title--mobile-hero.outlined-heading,
+  .site--mobile .heading-title--mobile-how.outlined-heading,
+  .site--mobile .heading-title--mobile-studios.outlined-heading {
+    min-height: 90px;
+    font-size: 93.75px;
+    line-height: 82.5px;
   }
 
-  .site--mobile .heading-title--mobile-clients.golden-heading {
-    min-height: 120px;
-    font-size: 125px;
-    line-height: 110px;
+  .site--mobile .heading-title--mobile-hero.outlined-heading {
+    width: 100%;
+    text-align: center;
   }
 
-  .site--mobile .heading-title--mobile-how.golden-heading {
+  .site--mobile .heading-title--mobile-clients.outlined-heading {
+    min-height: 90px;
+    font-size: 93.75px;
+    line-height: 82.5px;
+  }
+
+  .site--mobile .heading-title--mobile-why.outlined-heading {
+    min-height: 90px;
+    font-size: 93.75px;
+    line-height: 82.5px;
+  }
+
+  .site--mobile .heading-title--mobile-how.outlined-heading {
     position: relative;
     display: inline-block;
     width: 100%;
     margin: 0;
-    font-family: Respective, Arial, sans-serif;
+    font-family: "Tajamuka Script", Arial, sans-serif;
     text-align: center;
   }
 

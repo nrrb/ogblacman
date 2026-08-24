@@ -17,6 +17,11 @@ function string(value, path, { empty = false } = {}) {
   return value
 }
 
+function hexColor(value, path) {
+  if (!/^#[0-9a-f]{6}$/i.test(value)) fail(path, 'expected a six-digit hex color')
+  return value
+}
+
 function uniqueIds(items, path) {
   const ids = new Set()
   items.forEach((item, index) => {
@@ -96,6 +101,9 @@ export function validateContent(content) {
   if (typeof content.mobile.continuous_scroll !== 'boolean') {
     fail('mobile.continuous_scroll', 'expected a boolean')
   }
+
+  object(content.theme, 'theme')
+  hexColor(content.theme.heading_outline_color, 'theme.heading_outline_color')
 
   object(content.shared, 'shared')
   object(content.shared.style_images, 'shared.style_images')
