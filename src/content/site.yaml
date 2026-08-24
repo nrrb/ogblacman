@@ -81,9 +81,9 @@ sections:
     heading: { title: POPCORN PLAYER }
     player:
       artist: OG Blacman
-      title: Time Not Real
-      track_src: "/music/OG Blacman -- Time Not Real [Official Video].m4a"
-      duration: 134.554875
+      title: Telephone
+      track_src: "/music/telephone.mp3"
+      duration: 143.9447
     mobile_media: &standard_mobile_media
       poster: "/assets/reference/mobile-standard-background-poster.jpg?v=montage-v1"
       sources:

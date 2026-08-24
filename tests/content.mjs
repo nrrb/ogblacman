@@ -11,8 +11,8 @@ if (content.sections.upcoming_shows.items.length !== 3) throw new Error('Expecte
 if (!Array.isArray(content.sections.merch.items)) throw new Error('Merch items must be expandable')
 if (content.sections.newsletter.form.fields.find(field => field.id === 'name').required) throw new Error('Newsletter name must be optional')
 if (!content.sections.newsletter.form.fields.find(field => field.id === 'email').required) throw new Error('Newsletter email must be required')
-if (content.sections.top_pick.player.track_src !== '/music/OG Blacman -- Time Not Real [Official Video].m4a') {
-  throw new Error('Top pick must use the local Time Not Real track')
+if (content.sections.top_pick.player.track_src !== '/music/telephone.mp3') {
+  throw new Error('Top pick must use the local Telephone track')
 }
 if (content.sections.top_pick.streaming_links !== undefined) throw new Error('Top pick external streaming links must be removed')
 
