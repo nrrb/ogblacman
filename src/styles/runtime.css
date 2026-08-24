@@ -238,7 +238,8 @@ video {
   font-size: 26px;
 }
 
-.newsletter-form {
+.newsletter-form,
+.kit-signup {
   width: min(100%, 640px);
   color: var(--color-body-text);
 }

@@ -2,8 +2,8 @@
 import AppLink from './AppLink.vue'
 import BackgroundVideo from './BackgroundVideo.vue'
 import ClientList from './ClientList.vue'
+import KitSignup from './KitSignup.vue'
 import LogoCarousel from './LogoCarousel.vue'
-import NewsletterForm from './NewsletterForm.vue'
 import ResponsiveImage from './ResponsiveImage.vue'
 import SectionHeading from './SectionHeading.vue'
 import SocialLinks from './SocialLinks.vue'
@@ -95,7 +95,7 @@ defineProps({ content: { type: Object, required: true } })
             wrapper-class="display-heading--section"
             title-class="heading-title--clients"
           />
-          <NewsletterForm :content="content.sections.newsletter.form" id-prefix="desktop-newsletter" />
+          <KitSignup id-prefix="desktop-newsletter" />
           <div class="newsletter-footer">{{ content.footer.copyright }}</div>
         </div>
       </div>

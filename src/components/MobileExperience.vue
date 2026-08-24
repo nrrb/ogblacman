@@ -2,9 +2,9 @@
 import AppLink from './AppLink.vue'
 import BackgroundVideo from './BackgroundVideo.vue'
 import ClientList from './ClientList.vue'
+import KitSignup from './KitSignup.vue'
 import LogoCarousel from './LogoCarousel.vue'
 import MobileSlider from './MobileSlider.vue'
-import NewsletterForm from './NewsletterForm.vue'
 import ResponsiveImage from './ResponsiveImage.vue'
 import SectionHeading from './SectionHeading.vue'
 import SocialLinks from './SocialLinks.vue'
@@ -133,7 +133,7 @@ defineProps({ content: { type: Object, required: true } })
             wrapper-class="display-heading--mobile-clients"
             title-class="heading-title--mobile-clients"
           />
-          <NewsletterForm :content="content.sections.newsletter.form" id-prefix="mobile-newsletter" />
+          <KitSignup id-prefix="mobile-newsletter" />
         </div>
         <div class="newsletter-footer">{{ content.footer.copyright }}</div>
       </div>

@@ -4,6 +4,13 @@ const url = process.env.TEST_URL || 'http://127.0.0.1:4173/'
 const browser = await chromium.launch({ headless: true })
 const page = await browser.newPage({ viewport: { width: 600, height: 844 } })
 const errors = []
+await page.route('**/subscriptions', async route => {
+  await route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ status: 'success' }),
+  })
+})
 page.on('console', message => {
   if (message.type() === 'error') errors.push(message.text())
 })
@@ -85,12 +92,37 @@ if (continuous) await newsletterSlide.scrollIntoViewIfNeeded()
 else await dots.nth(5).click()
 await page.waitForTimeout(350)
 const form = newsletterSlide.locator('form')
-if (await form.locator('input[name="Name"]').getAttribute('required') !== null) throw new Error('Newsletter name field should be optional')
-if (await form.locator('input[name="Email"]').getAttribute('required') === null) throw new Error('Newsletter email field should be required')
-await form.locator('input[name="Email"]').fill('local@example.test')
-await form.locator('input[type="submit"]').click()
-if (!(await newsletterSlide.locator('.form-status--success').isVisible())) throw new Error('Local success state did not appear')
-if (page.url() !== url) throw new Error('Local form unexpectedly navigated')
+await form.waitFor({ state: 'visible', timeout: 15_000 })
+if (await form.getAttribute('data-uid') !== 'bb5435c1d3') throw new Error('Official Kit form embed did not initialize')
+if (await form.locator('input[name="fields[first_name]"]').getAttribute('required') !== null) throw new Error('Newsletter first name field should be optional')
+if (await form.locator('input[name="email_address"]').getAttribute('required') === null) throw new Error('Newsletter email field should be required')
+if (await form.locator('[data-element="submit"] span').innerText() !== 'STAY IN THE LOOP') throw new Error('Newsletter CTA label is incorrect')
+await form.locator('input[name="email_address"]').fill('local@example.test')
+await form.locator('[data-element="submit"]').click()
+await newsletterSlide.locator('.formkit-alert-success').waitFor({ state: 'visible' })
+if (new URL(page.url()).origin !== new URL(url).origin) throw new Error('Kit form unexpectedly navigated')
+
+await page.setViewportSize({ width: 900, height: 844 })
+const desktopForm = page.locator('.site--desktop form[data-uid="bb5435c1d3"]')
+await desktopForm.waitFor({ state: 'attached' })
+const desktopEmailBox = await desktopForm.locator('input[name="email_address"]').boundingBox()
+const desktopFirstNameBox = await desktopForm.locator('input[name="fields[first_name]"]').boundingBox()
+const desktopSubmitBox = await desktopForm.locator('[data-element="submit"]').boundingBox()
+if (!desktopFirstNameBox || !desktopEmailBox || !desktopSubmitBox) throw new Error('Desktop Kit form controls are not measurable')
+if (desktopEmailBox.y <= desktopFirstNameBox.y + desktopFirstNameBox.height) throw new Error('Desktop Kit email field should sit below the first name field')
+if (desktopSubmitBox.y <= desktopEmailBox.y + desktopEmailBox.height) throw new Error('Desktop Kit CTA should sit below the email field')
+await page.setViewportSize({ width: 390, height: 844 })
+const remountedForm = page.locator('.site--mobile form[data-uid="bb5435c1d3"]')
+await remountedForm.waitFor({ state: 'attached' })
+if (await remountedForm.locator('input[name="email_address"]').count() !== 1) throw new Error('Kit form fields were duplicated or lost after remount')
+const kitInstances = await page.evaluate(() => ({
+  connectedForms: document.querySelectorAll('form[data-uid="bb5435c1d3"]').length,
+  connectedRegistryEntries: (window.__sv_forms || []).filter(entry => entry.element?.isConnected).length,
+  runtimeScripts: [...document.scripts].filter(script => script.src.startsWith('https://f.convertkit.com/ckjs/ck.')).length,
+}))
+if (kitInstances.connectedForms !== 1) throw new Error('Duplicate Kit forms remained after remount')
+if (kitInstances.connectedRegistryEntries !== 1) throw new Error('Duplicate Kit registry entries remained after remount')
+if (kitInstances.runtimeScripts !== 1) throw new Error('Kit runtime loaded more than once after remount')
 
 if (errors.length) throw new Error(`Browser console errors: ${errors.join('; ')}`)
 await browser.close()
