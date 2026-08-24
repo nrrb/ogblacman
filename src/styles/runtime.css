@@ -129,6 +129,10 @@ video {
   width: 100%;
 }
 
+.site--desktop .top-pick-release {
+  margin-bottom: 96px;
+}
+
 .webamp-player {
   width: min(100%, 550px);
 }
