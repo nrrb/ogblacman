@@ -5,6 +5,7 @@ import ClientList from './ClientList.vue'
 import KitSignup from './KitSignup.vue'
 import LogoCarousel from './LogoCarousel.vue'
 import ManagerCard from './ManagerCard.vue'
+import MerchEmptyState from './MerchEmptyState.vue'
 import ResponsiveImage from './ResponsiveImage.vue'
 import SectionHeading from './SectionHeading.vue'
 import ShowEmptyState from './ShowEmptyState.vue'
@@ -79,16 +80,23 @@ defineProps({ content: { type: Object, required: true } })
                 wrapper-class="display-heading--feature"
                 title-class="heading-title--feature"
               />
+              <MerchEmptyState
+                v-if="content.sections.merch.items.length === 0"
+                :copy="content.sections.merch.copy"
+                :cta="content.sections.merch.cta"
+              />
+              <template v-else>
+                <p class="body-copy body-copy--studios">{{ content.sections.merch.copy }}</p>
+                <TextCta
+                  :cta="content.sections.merch.cta"
+                  :arrow="content.shared.arrow"
+                  wrapper-class="text-cta--inline"
+                />
+              </template>
             </div>
-            <p class="body-copy body-copy--studios">{{ content.sections.merch.copy }}</p>
-            <TextCta
-              :cta="content.sections.merch.cta"
-              :arrow="content.shared.arrow"
-              wrapper-class="text-cta--inline"
-            />
           </div>
         </div>
-        <LogoCarousel :items="content.sections.merch.items" />
+        <LogoCarousel v-if="content.sections.merch.items.length > 0" :items="content.sections.merch.items" />
       </div>
 
       <div id="mailing-list" class="section section--clients">

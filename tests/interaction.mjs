@@ -89,6 +89,14 @@ if (await showsSlide.locator('.show-link').count() !== 0) throw new Error('Place
 if (!(await showsSlide.locator('.show-empty').isVisible())) throw new Error('Shows coming-soon treatment is missing')
 if (await showsSlide.locator('.show-empty__cta').getAttribute('href') !== '#mailing-list') throw new Error('Show alerts CTA should link to the mailing list')
 
+const merchSlide = slides.nth(4)
+if (continuous) await merchSlide.scrollIntoViewIfNeeded()
+else await dots.nth(4).click()
+await page.waitForTimeout(350)
+if (await merchSlide.locator('.logo-marquee').count() !== 0) throw new Error('An empty merch carousel should not render')
+if (!(await merchSlide.locator('.merch-empty').isVisible())) throw new Error('Merch coming-soon treatment is missing')
+if (await merchSlide.locator('.merch-empty__cta').getAttribute('href') !== '#mailing-list') throw new Error('Merch alerts CTA should link to the mailing list')
+
 const newsletterSlide = slides.nth(5)
 if (continuous) await newsletterSlide.scrollIntoViewIfNeeded()
 else await dots.nth(5).click()

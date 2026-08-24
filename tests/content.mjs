@@ -10,6 +10,8 @@ if (!/^#[0-9a-f]{6}$/i.test(content.theme.heading_outline_color)) throw new Erro
 if (content.theme.heading_outline_width !== 6) throw new Error('Heading outline width must come from site.yaml')
 if (content.sections.upcoming_shows.items.length !== 0) throw new Error('Shows should not include placeholder events')
 if (!Array.isArray(content.sections.merch.items)) throw new Error('Merch items must be expandable')
+if (content.sections.merch.items.length !== 0) throw new Error('Merch should not include placeholder products')
+if (content.sections.merch.cta.url !== '#mailing-list') throw new Error('Merch alerts must link to the mailing list')
 if (content.sections.newsletter.form.fields.find(field => field.id === 'name').required) throw new Error('Newsletter name must be optional')
 if (!content.sections.newsletter.form.fields.find(field => field.id === 'email').required) throw new Error('Newsletter email must be required')
 if (content.sections.top_pick.player.track_src !== '/music/telephone.mp3') {

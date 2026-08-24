@@ -5,6 +5,7 @@ import ClientList from './ClientList.vue'
 import KitSignup from './KitSignup.vue'
 import LogoCarousel from './LogoCarousel.vue'
 import ManagerCard from './ManagerCard.vue'
+import MerchEmptyState from './MerchEmptyState.vue'
 import MobileSlider from './MobileSlider.vue'
 import ResponsiveImage from './ResponsiveImage.vue'
 import SectionHeading from './SectionHeading.vue'
@@ -113,13 +114,20 @@ defineProps({ content: { type: Object, required: true } })
           wrapper-class="display-heading--mobile-studios"
           title-class="heading-title--mobile-studios"
         />
-        <p class="body-copy body-copy--mobile-studios">{{ content.sections.merch.copy }}</p>
-        <LogoCarousel :items="content.sections.merch.items" />
-        <TextCta
+        <MerchEmptyState
+          v-if="content.sections.merch.items.length === 0"
+          :copy="content.sections.merch.copy"
           :cta="content.sections.merch.cta"
-          :arrow="content.shared.arrow"
-          wrapper-class="text-cta--mobile"
         />
+        <template v-else>
+          <p class="body-copy body-copy--mobile-studios">{{ content.sections.merch.copy }}</p>
+          <LogoCarousel :items="content.sections.merch.items" />
+          <TextCta
+            :cta="content.sections.merch.cta"
+            :arrow="content.shared.arrow"
+            wrapper-class="text-cta--mobile"
+          />
+        </template>
       </div>
       <BackgroundVideo
         :media="content.sections.merch.mobile_media"

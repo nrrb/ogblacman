@@ -105,8 +105,8 @@ sections:
     mobile_media: *standard_mobile_media
   merch:
     heading: { title: MERCH }
-    copy: Rep OG Blacman with official apparel and limited drops. Tap a product to shop the collection on Fourthwall.
-    cta: { label: SECTION 6 CTA, url: /respectivestudios, title: Explore Respective Studios }
+    copy: Official OG Blacman merch is in the works. Sign up for the mailing list and be first in line when the drop lands.
+    cta: { label: GET DROP ALERTS, url: "#mailing-list", title: Sign up for OG Blacman merch drop alerts }
     items: []
     mobile_media:
       poster: "/assets/reference/mobile-studios-background-poster.jpg?v=montage-v1"

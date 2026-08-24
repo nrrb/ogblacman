@@ -1,0 +1,226 @@
+<script setup>
+import AppLink from './AppLink.vue'
+
+defineProps({
+  copy: { type: String, required: true },
+  cta: { type: Object, required: true },
+})
+</script>
+
+<template>
+  <section class="merch-empty" aria-label="Merchandise announcements">
+    <div class="merch-empty__status">
+      <span class="merch-empty__label">
+        <span class="merch-empty__mark" aria-hidden="true">✦</span>
+        OG Blacman goods
+      </span>
+      <span class="merch-empty__availability">Drop 001 — in development</span>
+    </div>
+
+    <span class="merch-empty__rule" aria-hidden="true" />
+
+    <h3 class="merch-empty__headline">
+      <span class="merch-empty__headline-main">The first drop</span>
+      <span class="merch-empty__headline-accent">is taking shape.</span>
+    </h3>
+
+    <p class="merch-empty__copy">{{ copy }}</p>
+
+    <AppLink :link="cta" class="merch-empty__cta">
+      <span>{{ cta.label }}</span>
+      <span class="merch-empty__arrow" aria-hidden="true">→</span>
+    </AppLink>
+  </section>
+</template>
+
+<style scoped>
+.merch-empty {
+  width: min(100%, 880px);
+  margin: -24px auto 0;
+  color: var(--color-white);
+  text-align: center;
+}
+
+.merch-empty::before,
+.merch-empty::after,
+.merch-empty__status::before,
+.merch-empty__status::after,
+.merch-empty__label::before,
+.merch-empty__label::after,
+.merch-empty__cta::before,
+.merch-empty__cta::after {
+  content: none;
+  display: none;
+}
+
+.merch-empty__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: min(100%, 680px);
+  margin: 0 auto;
+  font-family: Neuehaasdisplaymediu, Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.merch-empty__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--color-gold-1);
+}
+
+.merch-empty__mark {
+  display: inline-block;
+  font-size: 15px;
+  line-height: 1;
+  animation: merch-mark-turn 9s linear infinite;
+}
+
+.merch-empty__availability {
+  color: color-mix(in srgb, var(--color-white) 48%, transparent);
+}
+
+.merch-empty__rule {
+  display: block;
+  width: min(100%, 680px);
+  height: 1px;
+  margin: 18px auto 30px;
+  background: var(--color-gold-1);
+}
+
+.merch-empty__headline {
+  margin: 0;
+  font-weight: 400;
+}
+
+.merch-empty__headline-main {
+  display: block;
+  color: var(--color-white);
+  font-family: Neuehaasdisplayroman, Arial, sans-serif;
+  font-size: clamp(32px, 4.8vw, 60px);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.merch-empty__headline-accent {
+  display: block;
+  margin-top: -2px;
+  color: var(--color-gold-1);
+  font-family: "Tajamuka Script", Arial, sans-serif;
+  font-size: clamp(68px, 9vw, 118px);
+  font-weight: 400;
+  line-height: 0.8;
+}
+
+.merch-empty__copy {
+  max-width: 560px;
+  margin: 25px auto 0;
+  color: color-mix(in srgb, var(--color-white) 68%, transparent);
+  font-family: NeueHaasDisplayLight, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.merch-empty__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  margin-top: 27px;
+  padding: 5px 0;
+  color: var(--color-white);
+  border-bottom: 1px solid var(--color-gold-1);
+  font-family: Neuehaasdisplaymediu, Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 160ms ease, gap 160ms ease;
+}
+
+.merch-empty__cta:hover {
+  gap: 20px;
+  color: var(--color-gold-1);
+}
+
+.merch-empty__cta:focus-visible {
+  outline: 2px solid var(--color-gold-1);
+  outline-offset: 4px;
+}
+
+.merch-empty__arrow {
+  color: var(--color-gold-1);
+  font-size: 18px;
+  line-height: 0.5;
+}
+
+@keyframes merch-mark-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .merch-empty {
+    width: 100%;
+    margin-top: -25px;
+  }
+
+  .merch-empty__status {
+    gap: 8px;
+    font-size: 7px;
+  }
+
+  .merch-empty__label {
+    gap: 6px;
+  }
+
+  .merch-empty__mark {
+    font-size: 11px;
+  }
+
+  .merch-empty__availability {
+    max-width: 118px;
+    text-align: right;
+  }
+
+  .merch-empty__rule {
+    margin: 10px auto 15px;
+  }
+
+  .merch-empty__headline-main {
+    font-size: clamp(21px, 7vw, 30px);
+  }
+
+  .merch-empty__headline-accent {
+    font-size: clamp(48px, 17vw, 72px);
+  }
+
+  .merch-empty__copy {
+    margin-top: 12px;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .merch-empty__cta {
+    margin-top: 13px;
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .merch-empty__mark {
+    animation: none;
+  }
+
+  .merch-empty__cta {
+    transition: none;
+  }
+}
+</style>
