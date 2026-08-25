@@ -193,7 +193,9 @@ video {
 .release-spotlight__content::before,
 .release-spotlight__content::after,
 .release-spotlight__intro::before,
-.release-spotlight__intro::after {
+.release-spotlight__intro::after,
+.telephone-player::before,
+.telephone-player::after {
   content: none;
   display: none;
 }
@@ -309,7 +311,7 @@ video {
   display: grid;
   place-items: center;
   width: min(100%, 280px);
-  height: 290px;
+  height: 230px;
   padding: 0;
   color: inherit;
   background: transparent;
@@ -655,7 +657,7 @@ video {
   }
 
   .site--mobile .telephone-player__button {
-    height: 218px;
+    height: 178px;
   }
 
   .site--mobile .telephone-player__phone--idle {

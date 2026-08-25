@@ -114,6 +114,12 @@ if (!new URL(await telephoneImage.evaluate(element => element.currentSrc)).pathn
 }
 const idleButtonBox = await telephoneButton.boundingBox()
 const idlePhoneBox = await telephonePlayer.locator('.telephone-player__phone--idle').boundingBox()
+const releaseCtaBox = await releaseCta.boundingBox()
+if (!idleButtonBox || !idlePhoneBox || !releaseCtaBox) throw new Error('Idle telephone spacing is not measurable')
+if (Math.abs(idleButtonBox.height - idlePhoneBox.height) > 1) throw new Error('Telephone button should not add empty space above the phone')
+const copyToCtaGap = releaseCtaBox.y - (releaseCopyBox.y + releaseCopyBox.height)
+const ctaToPhoneGap = idlePhoneBox.y - (releaseCtaBox.y + releaseCtaBox.height)
+if (ctaToPhoneGap > copyToCtaGap + 6) throw new Error('CTA-to-phone spacing should match the paragraph-to-CTA rhythm')
 await telephoneButton.click()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'playing')
 if (await telephoneButton.getAttribute('aria-label') !== 'Stop and rewind Telephone') throw new Error('Off-hook phone should stop Telephone')
