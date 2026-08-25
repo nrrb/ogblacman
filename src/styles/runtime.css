@@ -20,17 +20,66 @@ body,
 .display-heading__title.outlined-heading {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  isolation: isolate;
   background: none;
   background-image: none;
   color: #fff;
   -webkit-text-fill-color: #fff;
   font-family: "Tajamuka Script", Arial, sans-serif;
   font-weight: 400;
+  font-size: clamp(64px, 15vw, 210px);
+  line-height: 1;
+  letter-spacing: .005em;
+  white-space: pre-line;
+}
+
+/* A low pool of reflected gold keeps the headings grounded in the dark frame. */
+.headline-wrap::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  bottom: -68%;
+  width: 130%;
+  height: 115%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    60% 100% at 50% 100%,
+    rgb(176 124 32 / 16%) 0%,
+    rgb(120 84 20 / 5%) 44%,
+    rgb(0 0 0 / 0%) 74%
+  );
+  filter: blur(34px);
+  pointer-events: none;
+}
+
+.headline-halo {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: #8a6318;
+  -webkit-text-fill-color: #8a6318;
+  filter: blur(90px);
+  opacity: 0;
+  transform: translateY(30px) scaleY(1.04);
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.headline-halo.is-measured {
+  opacity: .1;
 }
 
 .display-heading__svg {
+  position: relative;
+  z-index: 2;
   display: block;
   flex: 0 1 auto;
   max-width: 100%;
@@ -45,8 +94,8 @@ body,
 
 .display-heading__svg-text {
   fill: #fff;
-  stroke: var(--color-heading-outline, #FFC300);
-  stroke-width: var(--heading-outline-width, 6);
+  stroke: #d8ab45;
+  stroke-width: clamp(1.5px, .26vw, 3.5px);
   stroke-linecap: round;
   stroke-linejoin: round;
   paint-order: stroke fill;
@@ -89,33 +138,11 @@ video {
   text-align: center;
 }
 
-.site--desktop .heading-title--about {
-  font-size: 165px;
-  line-height: 135px;
-}
-
-.site--desktop .heading-title--why {
-  font-size: 165px;
-  line-height: 135px;
-}
-
-.site--desktop .heading-title--feature {
-  font-size: 165px;
-  line-height: 135px;
-}
-
 .site--desktop .heading-title--desktop-hero.outlined-heading {
   width: 100vw;
   min-height: 135px;
-  font-size: 165px;
-  line-height: 135px;
   text-align: center;
   white-space: nowrap;
-}
-
-.site--desktop .heading-title--clients.outlined-heading {
-  font-size: 165px;
-  line-height: 135px;
 }
 
 .form-status--success {
@@ -368,11 +395,6 @@ video {
     margin-bottom: 0;
   }
 
-  .mobile-slide__content--top-pick .heading-title--mobile-about {
-    font-size: 93.75px;
-    line-height: 82.5px;
-  }
-
   .site--mobile .display-heading--mobile-how {
     width: 100%;
     align-items: center;
@@ -382,8 +404,6 @@ video {
   .site--mobile .heading-title--mobile-how.outlined-heading,
   .site--mobile .heading-title--mobile-studios.outlined-heading {
     min-height: 90px;
-    font-size: 93.75px;
-    line-height: 82.5px;
   }
 
   .site--mobile .heading-title--mobile-hero.outlined-heading {
@@ -393,14 +413,21 @@ video {
 
   .site--mobile .heading-title--mobile-clients.outlined-heading {
     min-height: 90px;
-    font-size: 93.75px;
-    line-height: 82.5px;
   }
 
   .site--mobile .heading-title--mobile-why.outlined-heading {
     min-height: 90px;
-    font-size: 93.75px;
-    line-height: 82.5px;
+  }
+
+  .headline-halo {
+    filter: blur(54px);
+    transform: translateY(18px) scaleY(1.04);
+  }
+
+  .headline-wrap::after {
+    bottom: -48%;
+    height: 95%;
+    filter: blur(24px);
   }
 
   .site--mobile .heading-title--mobile-how.outlined-heading {
@@ -460,6 +487,10 @@ video {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .headline-halo {
+    transition: none;
+  }
+
   .logo-marquee__track {
     animation-play-state: paused;
   }

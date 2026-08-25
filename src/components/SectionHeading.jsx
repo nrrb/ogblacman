@@ -59,12 +59,18 @@ export default function SectionHeading({ heading, wrapperClass, titleClass, titl
     <div className={`display-heading ${wrapperClass}`}>
       <div
         id={titleId}
-        className={`display-heading__title ${titleClass} outlined-heading`}
+        className={`display-heading__title ${titleClass} outlined-heading headline-wrap`}
         role="heading"
         aria-level="2"
       >
+        <span
+          className={`headline-halo${measurement.isMeasured ? ' is-measured' : ''}`}
+          aria-hidden="true"
+        >
+          {heading.title}
+        </span>
         <svg
-          className={`display-heading__svg${measurement.isMeasured ? ' is-measured' : ''}`}
+          className={`display-heading__svg headline${measurement.isMeasured ? ' is-measured' : ''}`}
           viewBox={measurement.viewBox}
           width={measurement.width}
           height={measurement.height}
