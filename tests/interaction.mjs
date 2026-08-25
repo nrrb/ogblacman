@@ -82,28 +82,61 @@ if (await releaseCta.getAttribute('href') !== 'https://distrokid.com/hyperfollow
   throw new Error('Telephone DistroKid link is incorrect')
 }
 if (await releaseCta.getAttribute('target') !== '_blank') throw new Error('Telephone DistroKid link should open in a new tab')
-const webamp = secondSlide.locator('.webamp-player--mobile')
-await webamp.locator('#main-window').waitFor({ state: 'visible', timeout: 15_000 })
-const marqueeFontSize = await webamp.locator('#marquee .character').first().evaluate(element => getComputedStyle(element).fontSize)
-if (marqueeFontSize !== '0px') throw new Error('Webamp marquee text fallback should remain hidden behind its bitmap glyphs')
-if (await webamp.locator('#equalizer-window').count() !== 0) throw new Error('Webamp equalizer should be disabled')
-if (await webamp.locator('#playlist-window').count() !== 0) throw new Error('Webamp playlist should be disabled')
-if (await webamp.locator('#equalizer-button').getAttribute('aria-disabled') !== 'true') throw new Error('Webamp equalizer toggle should be disabled')
-if (await webamp.locator('#playlist-button').getAttribute('aria-disabled') !== 'true') throw new Error('Webamp playlist toggle should be disabled')
+const telephonePlayer = secondSlide.locator('.telephone-player--mobile')
+const telephoneButton = telephonePlayer.locator('.telephone-player__button')
+const telephoneImage = telephonePlayer.locator('.telephone-player__image')
+const audio = telephonePlayer.locator('audio')
+if (await telephoneButton.getAttribute('aria-label') !== 'Play Telephone') throw new Error('On-hook phone should start Telephone')
+if (await telephoneImage.getAttribute('src') !== '/assets/phone_on_hook.png') throw new Error('Idle player should show the on-hook phone')
+await telephoneButton.click()
+await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'playing')
+if (await telephoneButton.getAttribute('aria-label') !== 'Stop and rewind Telephone') throw new Error('Off-hook phone should stop Telephone')
+if (await telephoneImage.getAttribute('src') !== '/assets/phone_off_hook.png') throw new Error('Playing state should show the off-hook phone')
+const analyzer = telephonePlayer.locator('.telephone-player__analyzer')
+if (!(await analyzer.isVisible())) throw new Error('Telephone spectrum analyzer is missing during playback')
+if (await analyzer.getAttribute('width') !== '20' || await analyzer.getAttribute('height') !== '20') {
+  throw new Error('Telephone spectrum analyzer must use a 20x20 canvas')
+}
+const activePhoneBox = await telephonePlayer.locator('.telephone-player__phone--active').boundingBox()
+const analyzerBox = await analyzer.boundingBox()
+if (!activePhoneBox || !analyzerBox) throw new Error('Telephone analyzer placement is not measurable')
+if (analyzerBox.width !== 20 || analyzerBox.height !== 20) throw new Error('Telephone analyzer must render at 20x20 CSS pixels')
+const analyzerCenterX = analyzerBox.x + analyzerBox.width / 2
+const analyzerCenterY = analyzerBox.y + analyzerBox.height / 2
+const phoneCenterX = activePhoneBox.x + activePhoneBox.width / 2
+const phoneCenterY = activePhoneBox.y + activePhoneBox.height / 2
+if (Math.abs(analyzerCenterX - phoneCenterX) > 1 || Math.abs(analyzerCenterY - phoneCenterY) > 1) {
+  throw new Error('Telephone spectrum analyzer must remain centered on the off-hook phone')
+}
+await page.waitForTimeout(300)
+const analyzerDrewBars = await analyzer.evaluate(element => {
+  const pixels = element.getContext('2d').getImageData(0, 0, element.width, element.height).data
+  for (let index = 0; index < pixels.length; index += 4) {
+    if (pixels[index + 1] > 80 && pixels[index + 3] > 0) return true
+  }
+  return false
+})
+if (!analyzerDrewBars) throw new Error('Telephone spectrum analyzer did not draw frequency bars')
 if (await secondSlide.locator('.streaming-link').count() !== 0) throw new Error('Top pick streaming links should be removed')
 
 if (continuous) {
-  const volume = webamp.locator('#volume input')
-  const volumeBeforeWheel = await volume.inputValue()
+  const volumeBeforeWheel = await audio.evaluate(element => element.volume)
   const scrollBeforeWheel = await page.evaluate(() => window.scrollY)
-  await webamp.locator('#main-window').hover()
+  await telephoneButton.hover()
   await page.mouse.wheel(0, 240)
   await page.waitForTimeout(200)
-  const volumeAfterWheel = await volume.inputValue()
+  const volumeAfterWheel = await audio.evaluate(element => element.volume)
   const scrollAfterWheel = await page.evaluate(() => window.scrollY)
-  if (volumeAfterWheel !== volumeBeforeWheel) throw new Error('Scrolling over Webamp changed its volume')
-  if (scrollAfterWheel <= scrollBeforeWheel) throw new Error('Scrolling over Webamp did not scroll the page')
+  if (volumeAfterWheel !== volumeBeforeWheel) throw new Error('Scrolling over the telephone player changed its volume')
+  if (scrollAfterWheel <= scrollBeforeWheel) throw new Error('Scrolling over the telephone player did not scroll the page')
 }
+
+await telephoneButton.click()
+await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'idle')
+const stoppedAudio = await audio.evaluate(element => ({ paused: element.paused, currentTime: element.currentTime }))
+if (!stoppedAudio.paused || stoppedAudio.currentTime !== 0) throw new Error('Hanging up should stop and rewind Telephone')
+if (await telephoneImage.getAttribute('src') !== '/assets/phone_on_hook.png') throw new Error('Stopped player should return to the on-hook phone')
+if (await analyzer.count() !== 0) throw new Error('Spectrum analyzer should close when Telephone stops')
 
 const showsSlide = slides.nth(2)
 if (continuous) await showsSlide.scrollIntoViewIfNeeded()

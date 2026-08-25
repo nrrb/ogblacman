@@ -14,7 +14,8 @@ layer that this project never exercises, and it would change the Vercel
 deployment shape. Staying on Vite keeps the build, the deploy, and `vite.config.js`
 essentially as they are, and keeps the diff limited to the component layer.
 
-Swap `@vitejs/plugin-vue` for `@vitejs/plugin-react`. Keep `yaml` and `webamp`.
+Swap `@vitejs/plugin-vue` for `@vitejs/plugin-react`. Keep `yaml`. The music
+player uses the native media and Web Audio APIs, so it adds no player dependency.
 
 ## Do not change
 
@@ -31,7 +32,8 @@ These are framework-agnostic and must survive the migration untouched:
 - `src/styles/palette.js`
 - `public/assets/**`, `public/music/**`
 - `tools/**` — montage and hero processing scripts, unrelated to the frontend.
-- `popcorn-player.wsz` — imported via `?url`, which works identically in React.
+- `public/assets/phone_on_hook.png`, `public/assets/phone_off_hook.png`, and
+  `public/music/telephone.mp3` — the custom Telephone player media.
 
 Vue SFC `<style scoped>` blocks (e.g. in `MerchEmptyState.vue`) must be preserved.
 Move each into a colocated plain `.css` file imported by its component, and
@@ -65,22 +67,11 @@ onto the root `<main>` style. Becomes
 `useState` + `useEffect` with the same listener add/remove lifecycle. Note the
 `typeof window !== 'undefined'` guard is already present; keep it.
 
-**`TopPickRelease.vue`** — The most intricate file, but it ports cleanly because
-Webamp is not a Vue component. It:
-- dynamically imports `webamp` and mounts it into a ref'd DOM node
-- uses a `generation` counter to guard against async races when the variant
-  changes mid-load — **this pattern must survive**, it is the fix for a real bug
-- disposes the instance (`stop()` then `dispose()`) on unmount and on variant change
-- runs a `ResizeObserver` that scales the 550x232 native player via a CSS
-  transform and sets the frame height to match
-- blocks the Webamp context menu with a capture-phase `contextmenu` handler
-- renders desktop and mobile variants, with `isActiveVariant()` deciding which
-  instance actually mounts so two Webamps never run at once
-
-Map to a single `useEffect` with a cleanup function; keep the generation guard as
-a `useRef` counter. Under React 18 StrictMode the effect runs twice in dev — the
-dispose path must be correct or you will get two players. Consider leaving
-StrictMode off initially, then enabling it to shake out lifecycle bugs.
+**`TopPickRelease.vue`** — Owns the custom Telephone player. Preserve native
+audio playback, the on-hook/off-hook image state, the 20x20 Web Audio spectrum
+canvas, and cleanup for the animation frame, media source, analyser, and audio
+context. The phone must remain a semantic button with distinct play and stop
+labels, and stopping must rewind the track.
 
 **`MobileSlider.vue`** — Owns active slide state, dots, arrows, keyboard nav,
 throttled wheel handling, touch gestures, and per-slide `aria-hidden` + `inert`.

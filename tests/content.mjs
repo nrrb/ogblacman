@@ -21,6 +21,12 @@ if (!content.sections.newsletter.form.fields.find(field => field.id === 'email')
 if (content.sections.top_pick.player.track_src !== '/music/telephone.mp3') {
   throw new Error('Top pick must use the local Telephone track')
 }
+if (content.sections.top_pick.player.idle_image.src !== '/assets/phone_on_hook.png') {
+  throw new Error('Telephone player must use the on-hook phone while idle')
+}
+if (content.sections.top_pick.player.active_image.src !== '/assets/phone_off_hook.png') {
+  throw new Error('Telephone player must use the off-hook phone during playback')
+}
 if (content.sections.top_pick.heading.title !== 'HOT RELEASE') {
   throw new Error('Telephone section heading must identify the hot release')
 }

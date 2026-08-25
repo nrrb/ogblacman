@@ -143,6 +143,10 @@ export function validateContent(content) {
   string(sections.top_pick.player.title, 'sections.top_pick.player.title')
   string(sections.top_pick.player.artist, 'sections.top_pick.player.artist')
   string(sections.top_pick.player.track_src, 'sections.top_pick.player.track_src')
+  string(sections.top_pick.player.start_label, 'sections.top_pick.player.start_label')
+  string(sections.top_pick.player.stop_label, 'sections.top_pick.player.stop_label')
+  image(sections.top_pick.player.idle_image, 'sections.top_pick.player.idle_image')
+  image(sections.top_pick.player.active_image, 'sections.top_pick.player.active_image')
   if (!Number.isFinite(sections.top_pick.player.duration) || sections.top_pick.player.duration <= 0) {
     fail('sections.top_pick.player.duration', 'expected a positive number')
   }
