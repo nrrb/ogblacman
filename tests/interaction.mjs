@@ -100,14 +100,16 @@ if (await analyzer.getAttribute('width') !== '20' || await analyzer.getAttribute
 const activePhoneBox = await telephonePlayer.locator('.telephone-player__phone--active').boundingBox()
 const analyzerBox = await analyzer.boundingBox()
 if (!activePhoneBox || !analyzerBox) throw new Error('Telephone analyzer placement is not measurable')
-if (analyzerBox.width !== 20 || analyzerBox.height !== 20) throw new Error('Telephone analyzer must render at 20x20 CSS pixels')
+if (analyzerBox.width !== 200 || analyzerBox.height !== 60) throw new Error('Telephone analyzer pixels must render as 10x3 blocks')
 const analyzerCenterX = analyzerBox.x + analyzerBox.width / 2
-const analyzerCenterY = analyzerBox.y + analyzerBox.height / 2
 const phoneCenterX = activePhoneBox.x + activePhoneBox.width / 2
-const phoneCenterY = activePhoneBox.y + activePhoneBox.height / 2
-if (Math.abs(analyzerCenterX - phoneCenterX) > 1 || Math.abs(analyzerCenterY - phoneCenterY) > 1) {
-  throw new Error('Telephone spectrum analyzer must remain centered on the off-hook phone')
-}
+if (Math.abs(analyzerCenterX - phoneCenterX) > 1) throw new Error('Telephone spectrum analyzer must remain horizontally centered')
+const analyzerBottom = analyzerBox.y + analyzerBox.height
+const expectedAnalyzerBottom = activePhoneBox.y + activePhoneBox.height / 2 + 10
+if (Math.abs(analyzerBottom - expectedAnalyzerBottom) > 1) throw new Error('Telephone spectrum analyzer must keep its bottom anchor')
+const analyzerZIndex = await analyzer.evaluate(element => getComputedStyle(element).zIndex)
+const phoneZIndex = await telephoneImage.evaluate(element => getComputedStyle(element).zIndex)
+if (Number(analyzerZIndex) >= Number(phoneZIndex)) throw new Error('Telephone spectrum analyzer must sit behind the phone')
 await page.waitForTimeout(300)
 const analyzerDrewBars = await analyzer.evaluate(element => {
   const pixels = element.getContext('2d').getImageData(0, 0, element.width, element.height).data
@@ -117,6 +119,15 @@ const analyzerDrewBars = await analyzer.evaluate(element => {
   return false
 })
 if (!analyzerDrewBars) throw new Error('Telephone spectrum analyzer did not draw frequency bars')
+const analyzerGrowsUp = await analyzer.evaluate(element => {
+  const context = element.getContext('2d')
+  const bottomRow = context.getImageData(0, element.height - 1, element.width, 1).data
+  for (let index = 0; index < bottomRow.length; index += 4) {
+    if (bottomRow[index + 3] > 0) return true
+  }
+  return false
+})
+if (!analyzerGrowsUp) throw new Error('Telephone spectrum bars must anchor at the bottom and grow upward')
 if (await secondSlide.locator('.streaming-link').count() !== 0) throw new Error('Top pick streaming links should be removed')
 
 if (continuous) {

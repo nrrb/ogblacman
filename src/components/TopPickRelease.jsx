@@ -44,8 +44,7 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
     frequencyData.current = values
     analyzerNode.getByteFrequencyData(values)
 
-    context.fillStyle = '#050505'
-    context.fillRect(0, 0, analyzerSize, analyzerSize)
+    context.clearRect(0, 0, analyzerSize, analyzerSize)
 
     for (let bar = 0; bar < analyzerBars; bar += 1) {
       const start = Math.floor((bar * values.length) / analyzerBars)
