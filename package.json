@@ -15,12 +15,14 @@
     "test:visual": "node tests/visual/compare.mjs"
   },
   "dependencies": {
-    "vue": "latest",
+    "@vercel/analytics": "^2.0.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "webamp": "^2.3.1",
     "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "latest",
+    "@vitejs/plugin-react": "^6.1.0",
     "pixelmatch": "^7.1.0",
     "playwright": "1.55.0",
     "pngjs": "^7.0.0",

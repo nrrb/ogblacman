@@ -1,0 +1,225 @@
+.kit-signup {
+  width: min(100%, 760px);
+  margin-inline: auto;
+  color: var(--color-white);
+  font-family: Neuehaasdisplayroman, Arial, sans-serif;
+}
+.kit-signup__embed {
+  min-height: 222px;
+}
+
+.kit-signup .formkit-form[data-uid] {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  color: var(--color-white) !important;
+  background: transparent !important;
+  font-family: inherit !important;
+}
+
+.kit-signup .formkit-form[data-uid] [data-style="clean"] {
+  width: 100% !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-fields {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 20px !important;
+  margin: 0 !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-field,
+.kit-signup .formkit-form[data-uid] .formkit-submit {
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.kit-signup .kit-signup__label {
+  display: block;
+  margin: 0 0 8px;
+  color: var(--color-white);
+  font-family: Neuehaasdisplaymediu, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.kit-signup .kit-signup__optional {
+  color: color-mix(in srgb, var(--color-white) 55%, transparent);
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.kit-signup .kit-signup__required {
+  color: var(--color-gold-1);
+}
+
+.kit-signup .kit-signup__sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-input {
+  width: 100% !important;
+  height: 48px !important;
+  margin: 0 !important;
+  padding: 10px 0 !important;
+  color: var(--color-white) !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-white) 72%, transparent) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font: inherit !important;
+  font-size: 17px !important;
+  line-height: 1.4 !important;
+  transition: border-color 160ms ease, box-shadow 160ms ease !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-input::placeholder {
+  color: color-mix(in srgb, var(--color-white) 48%, transparent) !important;
+  opacity: 1 !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-input:hover {
+  border-bottom-color: var(--color-white) !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-input:focus-visible {
+  border-bottom-color: var(--color-gold-1) !important;
+  outline: 2px solid var(--color-gold-1) !important;
+  outline-offset: 4px !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-submit {
+  width: 100% !important;
+  min-height: 50px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  color: var(--color-black-2) !important;
+  background: var(--color-gold-1) !important;
+  border: 1px solid var(--color-gold-1) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-family: Neuehaasdisplaymediu, Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.13em !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+  transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-submit > span {
+  padding: 16px 20px !important;
+  background: transparent !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-submit:hover:not(:disabled) {
+  color: var(--color-gold-1) !important;
+  background: var(--color-black-2) !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-submit:focus-visible {
+  outline: 2px solid var(--color-white) !important;
+  outline-offset: 4px !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-submit:disabled {
+  cursor: wait !important;
+  opacity: 0.65 !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-alert {
+  width: 100% !important;
+  margin: 0 0 20px !important;
+  padding: 14px 16px !important;
+  color: var(--color-white) !important;
+  background: var(--color-black-1) !important;
+  border: 1px solid var(--color-gold-1) !important;
+  border-radius: 0 !important;
+  font: inherit !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  text-align: left !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-alert-error {
+  border-color: #ef7d63 !important;
+}
+
+.kit-signup .formkit-form[data-uid] .formkit-alert-success {
+  min-height: 82px;
+  display: flex !important;
+  align-items: center;
+  margin: 0 !important;
+  color: var(--color-black-2) !important;
+  background: var(--color-gold-1) !important;
+  border-color: var(--color-gold-1) !important;
+  font-size: 16px !important;
+}
+
+.kit-signup .formkit-powered-by-convertkit-container {
+  margin: 12px 0 0 !important;
+}
+
+.kit-signup .formkit-powered-by-convertkit {
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 2px 0 !important;
+  color: color-mix(in srgb, var(--color-white) 45%, transparent) !important;
+  background: none !important;
+  border-radius: 0 !important;
+  font-family: Neuehaasdisplayroman, Arial, sans-serif !important;
+  font-size: 10px !important;
+  letter-spacing: 0.08em !important;
+  line-height: 1.4 !important;
+  text-indent: 0 !important;
+  text-transform: uppercase !important;
+}
+
+.kit-signup .formkit-powered-by-convertkit:hover,
+.kit-signup .formkit-powered-by-convertkit:focus-visible {
+  color: var(--color-gold-1) !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.kit-signup .formkit-powered-by-convertkit:focus-visible {
+  outline: 2px solid var(--color-gold-1) !important;
+  outline-offset: 3px !important;
+}
+
+.kit-signup__load-error {
+  margin: 0;
+  padding: 14px 16px;
+  color: var(--color-white);
+  background: var(--color-black-1);
+  border: 1px solid #ef7d63;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+@media screen and (min-width: 768px) {
+  .kit-signup__embed {
+    min-height: 280px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kit-signup .formkit-form[data-uid] .formkit-input,
+  .kit-signup .formkit-form[data-uid] .formkit-submit {
+    transition: none !important;
+  }
+}
