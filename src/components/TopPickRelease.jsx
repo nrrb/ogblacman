@@ -4,6 +4,20 @@ import ResponsiveImage from './ResponsiveImage.jsx'
 
 const analyzerSize = 20
 const analyzerBars = 10
+const analyzerFrameInterval = 1000 / 30
+const analyzerColorBands = [
+  { start: 0, end: 7, color: '#62c96b' },
+  { start: 7, end: 13, color: '#efbf04' },
+  { start: 13, end: analyzerSize - 2, color: '#ff3b30' },
+]
+
+function createFrequencyRanges(binCount) {
+  return Array.from({ length: analyzerBars }, (_, bar) => {
+    const start = Math.floor((bar * binCount) / analyzerBars)
+    const end = Math.max(start + 1, Math.floor(((bar + 1) * binCount) / analyzerBars))
+    return { start, end }
+  })
+}
 
 function formatTime(seconds) {
   if (!Number.isFinite(seconds) || seconds < 0) return '0:00'
@@ -15,12 +29,19 @@ function formatTime(seconds) {
 export default function TopPickRelease({ release, variant = 'desktop' }) {
   const audio = useRef(null)
   const canvas = useRef(null)
+  const canvasContext = useRef(null)
+  const canvasContextElement = useRef(null)
+  const player = useRef(null)
   const audioContext = useRef(null)
   const analyzer = useRef(null)
   const source = useRef(null)
   const animationFrame = useRef(null)
+  const lastAnalyzerFrame = useRef(null)
   const frequencyData = useRef(null)
+  const frequencyRanges = useRef(null)
+  const barHeights = useRef(null)
   const [playbackState, setPlaybackState] = useState('idle')
+  const [isPlayerVisible, setIsPlayerVisible] = useState(true)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(release.player.duration)
   const [errorMessage, setErrorMessage] = useState('')
@@ -31,38 +52,64 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
       window.cancelAnimationFrame(animationFrame.current)
       animationFrame.current = null
     }
+    lastAnalyzerFrame.current = null
   }
 
-  function drawAnalyzer() {
+  function drawAnalyzer(timestamp) {
     const canvasElement = canvas.current
     const analyzerNode = analyzer.current
     if (!canvasElement || !analyzerNode) return
 
-    const context = canvasElement.getContext('2d')
+    animationFrame.current = window.requestAnimationFrame(drawAnalyzer)
+
+    const previousFrame = lastAnalyzerFrame.current
+    if (previousFrame !== null && timestamp - previousFrame < analyzerFrameInterval) return
+    lastAnalyzerFrame.current = previousFrame === null
+      ? timestamp
+      : timestamp - ((timestamp - previousFrame) % analyzerFrameInterval)
+
+    if (canvasContextElement.current !== canvasElement) {
+      canvasContext.current = canvasElement.getContext('2d')
+      canvasContextElement.current = canvasElement
+    }
+
+    const context = canvasContext.current
     const values = frequencyData.current
-      || new Uint8Array(analyzerNode.frequencyBinCount)
-    frequencyData.current = values
+    const ranges = frequencyRanges.current
+    const heights = barHeights.current
+    if (!context || !values || !ranges || !heights) return
+
     analyzerNode.getByteFrequencyData(values)
 
     context.clearRect(0, 0, analyzerSize, analyzerSize)
 
     for (let bar = 0; bar < analyzerBars; bar += 1) {
-      const start = Math.floor((bar * values.length) / analyzerBars)
-      const end = Math.max(start + 1, Math.floor(((bar + 1) * values.length) / analyzerBars))
+      const { start, end } = ranges[bar]
       let total = 0
       for (let index = start; index < end; index += 1) total += values[index]
       const average = total / (end - start)
-      const barHeight = Math.max(1, Math.round((average / 255) * (analyzerSize - 2)))
-
-      for (let pixel = 0; pixel < barHeight; pixel += 1) {
-        if (pixel >= 13) context.fillStyle = '#ff3b30'
-        else if (pixel >= 7) context.fillStyle = '#efbf04'
-        else context.fillStyle = '#62c96b'
-        context.fillRect(bar * 2, analyzerSize - 1 - pixel, 1, 1)
-      }
+      heights[bar] = Math.max(1, Math.round((average / 255) * (analyzerSize - 2)))
     }
 
-    animationFrame.current = window.requestAnimationFrame(drawAnalyzer)
+    for (const band of analyzerColorBands) {
+      context.fillStyle = band.color
+      for (let bar = 0; bar < analyzerBars; bar += 1) {
+        const segmentTop = Math.min(heights[bar], band.end)
+        if (segmentTop > band.start) {
+          context.fillRect(
+            bar * 2,
+            analyzerSize - segmentTop,
+            1,
+            segmentTop - band.start,
+          )
+        }
+      }
+    }
+  }
+
+  function suspendAudioContext() {
+    const activeContext = audioContext.current
+    if (activeContext?.state === 'running') void activeContext.suspend().catch(() => {})
   }
 
   async function prepareAnalyzer() {
@@ -81,6 +128,9 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
       audioContext.current = nextContext
       analyzer.current = nextAnalyzer
       source.current = nextSource
+      frequencyData.current = new Uint8Array(nextAnalyzer.frequencyBinCount)
+      frequencyRanges.current = createFrequencyRanges(nextAnalyzer.frequencyBinCount)
+      barHeights.current = new Uint8Array(analyzerBars)
     }
 
     if (audioContext.current.state === 'suspended') await audioContext.current.resume()
@@ -96,6 +146,7 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
       await prepareAnalyzer()
       await audioElement.play()
     } catch (error) {
+      suspendAudioContext()
       setPlaybackState('error')
       setErrorMessage(error instanceof Error ? error.message : 'Telephone could not be played.')
     }
@@ -109,6 +160,7 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
     setCurrentTime(0)
     setPlaybackState('idle')
     stopAnalyzer()
+    suspendAudioContext()
   }
 
   function togglePlayback() {
@@ -117,14 +169,25 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
   }
 
   useEffect(() => {
-    if (!isPlaying) {
+    if (!isPlaying || !isPlayerVisible) {
       stopAnalyzer()
       return undefined
     }
 
     animationFrame.current = window.requestAnimationFrame(drawAnalyzer)
     return stopAnalyzer
-  }, [isPlaying])
+  }, [isPlaying, isPlayerVisible])
+
+  useEffect(() => {
+    const playerElement = player.current
+    if (!playerElement || !('IntersectionObserver' in window)) return undefined
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsPlayerVisible(entry.isIntersecting)
+    })
+    observer.observe(playerElement)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => () => {
     stopAnalyzer()
@@ -163,8 +226,10 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
         </div>
 
         <div
+          ref={player}
           className={`telephone-player telephone-player--${variant}`}
           data-state={playbackState}
+          data-analyzer-active={isPlaying && isPlayerVisible}
           aria-busy={playbackState === 'loading'}
         >
           <audio
@@ -177,6 +242,7 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
             onDurationChange={(event) => setDuration(event.currentTarget.duration)}
             onEnded={stopPlayback}
             onError={() => {
+              suspendAudioContext()
               setPlaybackState('error')
               setErrorMessage('Telephone could not be played.')
             }}

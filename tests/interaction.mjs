@@ -4,6 +4,44 @@ const url = process.env.TEST_URL || 'http://127.0.0.1:4173/'
 const browser = await chromium.launch({ headless: true })
 const page = await browser.newPage({ viewport: { width: 600, height: 844 } })
 const errors = []
+await page.addInitScript(() => {
+  window.__telephoneAnalyzerMetrics = {
+    frames: 0,
+    fills: 0,
+    suspends: 0,
+    resumes: 0,
+  }
+
+  const originalClearRect = CanvasRenderingContext2D.prototype.clearRect
+  CanvasRenderingContext2D.prototype.clearRect = function patchedClearRect(...args) {
+    if (this.canvas?.classList.contains('telephone-player__analyzer')) {
+      window.__telephoneAnalyzerMetrics.frames += 1
+    }
+    return originalClearRect.apply(this, args)
+  }
+
+  const originalFillRect = CanvasRenderingContext2D.prototype.fillRect
+  CanvasRenderingContext2D.prototype.fillRect = function patchedFillRect(...args) {
+    if (this.canvas?.classList.contains('telephone-player__analyzer')) {
+      window.__telephoneAnalyzerMetrics.fills += 1
+    }
+    return originalFillRect.apply(this, args)
+  }
+
+  const AudioContextConstructor = window.AudioContext || window.webkitAudioContext
+  if (AudioContextConstructor) {
+    const originalSuspend = AudioContextConstructor.prototype.suspend
+    AudioContextConstructor.prototype.suspend = function patchedSuspend(...args) {
+      window.__telephoneAnalyzerMetrics.suspends += 1
+      return originalSuspend.apply(this, args)
+    }
+    const originalResume = AudioContextConstructor.prototype.resume
+    AudioContextConstructor.prototype.resume = function patchedResume(...args) {
+      window.__telephoneAnalyzerMetrics.resumes += 1
+      return originalResume.apply(this, args)
+    }
+  }
+})
 await page.route('**/subscriptions', async route => {
   await route.fulfill({
     status: 200,
@@ -129,6 +167,7 @@ if (!new URL(await telephoneImage.evaluate(element => element.currentSrc)).pathn
 }
 const analyzer = telephonePlayer.locator('.telephone-player__analyzer')
 if (!(await analyzer.isVisible())) throw new Error('Telephone spectrum analyzer is missing during playback')
+if (await telephonePlayer.getAttribute('data-analyzer-active') !== 'true') throw new Error('Visible Telephone analyzer should be active during playback')
 if (await analyzer.getAttribute('width') !== '20' || await analyzer.getAttribute('height') !== '20') {
   throw new Error('Telephone spectrum analyzer must use a 20x20 canvas')
 }
@@ -170,6 +209,18 @@ const analyzerGrowsUp = await analyzer.evaluate(element => {
   return false
 })
 if (!analyzerGrowsUp) throw new Error('Telephone spectrum bars must anchor at the bottom and grow upward')
+await page.evaluate(() => {
+  window.__telephoneAnalyzerMetrics.frames = 0
+  window.__telephoneAnalyzerMetrics.fills = 0
+})
+await page.waitForTimeout(600)
+const analyzerMetrics = await page.evaluate(() => ({ ...window.__telephoneAnalyzerMetrics }))
+if (analyzerMetrics.frames < 8 || analyzerMetrics.frames > 22) {
+  throw new Error(`Telephone analyzer should render near 30fps; observed ${analyzerMetrics.frames} frames in 600ms`)
+}
+if (analyzerMetrics.fills > analyzerMetrics.frames * 30) {
+  throw new Error('Telephone analyzer should batch pixels into no more than three color segments per bar')
+}
 if (await secondSlide.locator('.streaming-link').count() !== 0) throw new Error('Top pick streaming links should be removed')
 
 if (continuous) {
@@ -184,12 +235,39 @@ if (continuous) {
   if (scrollAfterWheel <= scrollBeforeWheel) throw new Error('Scrolling over the telephone player did not scroll the page')
 }
 
+if (continuous) await slides.nth(2).scrollIntoViewIfNeeded()
+else await dots.nth(2).click()
+await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.analyzerActive === 'false')
+const visualFramesAfterLeaving = await page.evaluate(() => window.__telephoneAnalyzerMetrics.frames)
+await page.waitForTimeout(250)
+const offscreenState = await page.evaluate(() => ({
+  frames: window.__telephoneAnalyzerMetrics.frames,
+  paused: document.querySelector('.telephone-player--mobile audio')?.paused,
+}))
+if (offscreenState.frames > visualFramesAfterLeaving + 1) throw new Error('Offscreen Telephone analyzer continued rendering')
+if (offscreenState.paused) throw new Error('Moving the Telephone analyzer offscreen should not pause audio')
+if (continuous) await secondSlide.scrollIntoViewIfNeeded()
+else await dots.nth(1).click()
+await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.analyzerActive === 'true')
+await page.waitForTimeout(150)
+if (await page.evaluate(() => window.__telephoneAnalyzerMetrics.frames) <= offscreenState.frames) {
+  throw new Error('Telephone analyzer did not resume after returning onscreen')
+}
+
+const suspendsBeforeStop = await page.evaluate(() => window.__telephoneAnalyzerMetrics.suspends)
 await telephoneButton.click()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'idle')
 const stoppedAudio = await audio.evaluate(element => ({ paused: element.paused, currentTime: element.currentTime }))
 if (!stoppedAudio.paused || stoppedAudio.currentTime !== 0) throw new Error('Hanging up should stop and rewind Telephone')
 if (await telephoneImage.getAttribute('src') !== '/assets/phone_on_hook.png') throw new Error('Stopped player should return to the on-hook phone')
 if (await analyzer.count() !== 0) throw new Error('Spectrum analyzer should close when Telephone stops')
+await page.waitForFunction(expected => window.__telephoneAnalyzerMetrics.suspends > expected, suspendsBeforeStop)
+const resumesBeforeRestart = await page.evaluate(() => window.__telephoneAnalyzerMetrics.resumes)
+await telephoneButton.click()
+await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'playing')
+await page.waitForFunction(expected => window.__telephoneAnalyzerMetrics.resumes > expected, resumesBeforeRestart)
+await telephoneButton.click()
+await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'idle')
 
 const showsSlide = slides.nth(2)
 if (continuous) await showsSlide.scrollIntoViewIfNeeded()
