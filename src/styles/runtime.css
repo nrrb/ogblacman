@@ -308,7 +308,6 @@ video {
   position: relative;
   display: block;
   isolation: isolate;
-  transition: filter 160ms ease, transform 160ms ease;
 }
 
 .telephone-player__phone--idle {
@@ -316,12 +315,11 @@ video {
 }
 
 .telephone-player__phone--active {
-  width: min(100%, 140px);
+  width: min(100%, 280px);
 }
 
-.telephone-player__button:hover .telephone-player__phone {
-  filter: drop-shadow(0 0 14px rgba(239, 191, 4, .24));
-  transform: translateY(-3px);
+.telephone-player[data-state="playing"] .telephone-player__button {
+  height: 570px;
 }
 
 .telephone-player__image {
@@ -640,8 +638,8 @@ video {
     width: min(100%, 178px);
   }
 
-  .site--mobile .telephone-player__phone--active {
-    width: min(100%, 106px);
+  .site--mobile .telephone-player[data-state="playing"] .telephone-player__button {
+    height: 570px;
   }
 
   .site--mobile .telephone-player__readout,
@@ -700,10 +698,6 @@ video {
   }
 
   .release-spotlight__cta {
-    transition: none;
-  }
-
-  .telephone-player__phone {
     transition: none;
   }
 
