@@ -104,7 +104,7 @@ sections:
       active_image:
         src: /assets/phone_off_hook.png
         alt: ""
-        sizes: "280px"
+        sizes: "(max-width: 767px) 89px, 115px"
         sources:
           - { src: /assets/phone_off_hook-160.png, width: 160 }
           - { src: /assets/phone_off_hook-320.png, width: 320 }

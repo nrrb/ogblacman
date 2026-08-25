@@ -337,11 +337,7 @@ video {
 }
 
 .telephone-player__phone--active {
-  width: min(100%, 280px);
-}
-
-.telephone-player[data-state="playing"] .telephone-player__button {
-  height: 570px;
+  width: min(100%, 115px);
 }
 
 .telephone-player__image {
@@ -357,9 +353,9 @@ video {
   position: absolute;
   z-index: 0;
   left: 50%;
-  top: calc(50% + 10px);
-  width: 200px;
-  height: 60px;
+  top: 51.785714%;
+  width: 71.428571%;
+  height: 10.714286%;
   transform: translate(-50%, -100%);
   image-rendering: pixelated;
   pointer-events: none;
@@ -666,8 +662,8 @@ video {
     width: min(100%, 178px);
   }
 
-  .site--mobile .telephone-player[data-state="playing"] .telephone-player__button {
-    height: 570px;
+  .site--mobile .telephone-player__phone--active {
+    width: min(100%, 89px);
   }
 
   .site--mobile .telephone-player__readout,

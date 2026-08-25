@@ -100,6 +100,7 @@ const audio = telephonePlayer.locator('audio')
 if (await telephoneButton.getAttribute('aria-label') !== 'Play Telephone') throw new Error('On-hook phone should start Telephone')
 if (await telephoneImage.getAttribute('src') !== '/assets/phone_on_hook.png') throw new Error('Idle player should show the on-hook phone')
 const idleButtonBox = await telephoneButton.boundingBox()
+const idlePhoneBox = await telephonePlayer.locator('.telephone-player__phone--idle').boundingBox()
 await telephoneButton.click()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'playing')
 if (await telephoneButton.getAttribute('aria-label') !== 'Stop and rewind Telephone') throw new Error('Off-hook phone should stop Telephone')
@@ -112,17 +113,19 @@ if (await analyzer.getAttribute('width') !== '20' || await analyzer.getAttribute
 const activePhoneBox = await telephonePlayer.locator('.telephone-player__phone--active').boundingBox()
 const activeButtonBox = await telephoneButton.boundingBox()
 const analyzerBox = await analyzer.boundingBox()
-if (!idleButtonBox || !activePhoneBox || !activeButtonBox || !analyzerBox) throw new Error('Telephone player layout is not measurable')
-if (Math.abs(activePhoneBox.width - activeButtonBox.width) > 1) throw new Error('Off-hook phone must use the full player width')
-if (activeButtonBox.height <= idleButtonBox.height || activeButtonBox.height < activePhoneBox.height) {
-  throw new Error('Off-hook phone container must grow to push following content down')
+if (!idleButtonBox || !idlePhoneBox || !activePhoneBox || !activeButtonBox || !analyzerBox) throw new Error('Telephone player layout is not measurable')
+if (Math.abs(activePhoneBox.height - idlePhoneBox.height) > 1) throw new Error('Off-hook phone must fit within the on-hook phone height')
+if (Math.abs(activeButtonBox.height - idleButtonBox.height) > 1) throw new Error('Telephone player height must remain stable between states')
+const expectedAnalyzerWidth = activePhoneBox.width * (5 / 7)
+const expectedAnalyzerHeight = activePhoneBox.height * (3 / 28)
+if (Math.abs(analyzerBox.width - expectedAnalyzerWidth) > 1 || Math.abs(analyzerBox.height - expectedAnalyzerHeight) > 1) {
+  throw new Error('Telephone analyzer must scale proportionally with the off-hook phone')
 }
-if (analyzerBox.width !== 200 || analyzerBox.height !== 60) throw new Error('Telephone analyzer pixels must render as 10x3 blocks')
 const analyzerCenterX = analyzerBox.x + analyzerBox.width / 2
 const phoneCenterX = activePhoneBox.x + activePhoneBox.width / 2
 if (Math.abs(analyzerCenterX - phoneCenterX) > 1) throw new Error('Telephone spectrum analyzer must remain horizontally centered')
 const analyzerBottom = analyzerBox.y + analyzerBox.height
-const expectedAnalyzerBottom = activePhoneBox.y + activePhoneBox.height / 2 + 10
+const expectedAnalyzerBottom = activePhoneBox.y + activePhoneBox.height * (29 / 56)
 if (Math.abs(analyzerBottom - expectedAnalyzerBottom) > 1) throw new Error('Telephone spectrum analyzer must keep its bottom anchor')
 const analyzerZIndex = await analyzer.evaluate(element => getComputedStyle(element).zIndex)
 const phoneZIndex = await telephoneImage.evaluate(element => getComputedStyle(element).zIndex)
