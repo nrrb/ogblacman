@@ -73,10 +73,21 @@ else await dots.nth(1).click()
 await page.waitForTimeout(350)
 if (!continuous && await secondSlide.getAttribute('aria-hidden') !== 'false') throw new Error('Second slide did not activate')
 if (!(await secondSlide.innerText()).includes('HOT RELEASE')) throw new Error('Hot release slide heading is missing')
-if (await secondSlide.locator('.release-spotlight__art').count() !== 0) throw new Error('Hot release artwork should not render')
 const releaseDetails = await secondSlide.locator('.release-spotlight__details').innerText()
 if (!releaseDetails.includes('Telephone')) throw new Error('Telephone release title is missing')
 if (!releaseDetails.includes('AUGUST 26, 2026')) throw new Error('Telephone release date is missing')
+const editorialArt = secondSlide.locator('.release-spotlight__initial')
+if (!(await editorialArt.isVisible())) throw new Error('Popcorn Player editorial artwork is missing')
+if (await editorialArt.getAttribute('src') !== '/assets/og-blacman-popcorn-player.png') {
+  throw new Error('Telephone release uses the wrong editorial artwork')
+}
+const editorialArtBox = await editorialArt.boundingBox()
+const releaseTitleBox = await secondSlide.locator('.release-spotlight__title').boundingBox()
+const releaseCopyBox = await secondSlide.locator('.release-spotlight__copy').boundingBox()
+if (!editorialArtBox || !releaseTitleBox || !releaseCopyBox) throw new Error('Telephone editorial layout is not measurable')
+if (editorialArtBox.x + editorialArtBox.width >= releaseTitleBox.x || editorialArtBox.x + editorialArtBox.width >= releaseCopyBox.x) {
+  throw new Error('Popcorn Player artwork must sit to the left of the Telephone title and copy')
+}
 const releaseCta = secondSlide.locator('.release-spotlight__cta')
 if (await releaseCta.getAttribute('href') !== 'https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release') {
   throw new Error('Telephone DistroKid link is incorrect')

@@ -191,7 +191,9 @@ video {
 .top-pick-release::before,
 .top-pick-release::after,
 .release-spotlight__content::before,
-.release-spotlight__content::after {
+.release-spotlight__content::after,
+.release-spotlight__intro::before,
+.release-spotlight__intro::after {
   content: none;
   display: none;
 }
@@ -225,8 +227,28 @@ video {
   text-transform: uppercase;
 }
 
+.release-spotlight__intro {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  align-items: start;
+  gap: 22px;
+  margin-top: 8px;
+}
+
+.release-spotlight__initial {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.release-spotlight__text {
+  min-width: 0;
+}
+
 .release-spotlight__title {
-  margin: 4px 0 0;
+  margin: 0;
   color: var(--color-body-text);
   font-family: "Tajamuka Script", Arial, sans-serif;
   font-size: clamp(72px, 8vw, 112px);
@@ -601,8 +623,14 @@ video {
     letter-spacing: .1em;
   }
 
+  .site--mobile .release-spotlight__intro {
+    grid-template-columns: clamp(76px, 22vw, 84px) minmax(0, 1fr);
+    gap: 10px;
+    margin-top: 5px;
+  }
+
   .site--mobile .release-spotlight__title {
-    font-size: clamp(44px, 13vw, 58px);
+    font-size: clamp(40px, 11vw, 50px);
   }
 
   .site--mobile .release-spotlight__copy {

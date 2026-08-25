@@ -143,12 +143,22 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
             <span aria-hidden="true">•</span>
             <time dateTime={release.release_date_iso}>{release.release_date}</time>
           </div>
-          <h3 className="release-spotlight__title">{release.player.title}</h3>
-          <p className="release-spotlight__copy">{release.copy}</p>
-          <AppLink link={release.cta} className="release-spotlight__cta">
-            <span>{release.cta.label}</span>
-            <span className="release-spotlight__arrow" aria-hidden="true">→</span>
-          </AppLink>
+          <div className="release-spotlight__intro">
+            <ResponsiveImage
+              image={release.editorial_image}
+              className="release-spotlight__initial"
+              loading="lazy"
+              decoding="async"
+            />
+            <div className="release-spotlight__text">
+              <h3 className="release-spotlight__title">{release.player.title}</h3>
+              <p className="release-spotlight__copy">{release.copy}</p>
+              <AppLink link={release.cta} className="release-spotlight__cta">
+                <span>{release.cta.label}</span>
+                <span className="release-spotlight__arrow" aria-hidden="true">→</span>
+              </AppLink>
+            </div>
+          </div>
         </div>
 
         <div
