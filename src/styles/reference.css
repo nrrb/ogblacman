@@ -756,14 +756,6 @@ textarea.form-control {
   font-display: swap;
 }
 
-@font-face {
-  font-family: Respective;
-  src: url("/assets/reference/font-respective-display.otf") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 .split-layout {
   grid-row-gap: 16px;
   grid-column-gap: 16px;
@@ -831,7 +823,7 @@ body {
   background-size: cover;
   -webkit-background-clip: text;
   background-clip: text;
-  font-family: Respective, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 200px;
   line-height: 160px;
 }
@@ -883,14 +875,6 @@ body {
   font-size: 20px;
 }
 
-.text-cta__texture {
-  z-index: -1;
-  width: 80px;
-  margin-right: -14px;
-  padding-left: 0;
-  position: absolute;
-}
-
 .section--content {
   margin-bottom: 40px;
   padding: 150px;
@@ -904,7 +888,7 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   margin-bottom: 0;
-  font-family: Respective, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 360px;
   line-height: 260px;
 }
@@ -941,19 +925,6 @@ body {
   align-items: center;
   margin-bottom: 60px;
   display: flex;
-}
-
-.grain-overlay {
-  opacity: .03;
-  pointer-events: none;
-  -webkit-text-fill-color: inherit;
-  z-index: 100;
-  background-image: var(--image-grain-overlay);
-  background-position: 0 0;
-  background-size: auto;
-  background-clip: border-box;
-  position: fixed;
-  inset: 0%;
 }
 
 .media-frame__image {
@@ -1094,7 +1065,7 @@ body {
   background-clip: text;
   margin-top: 10px;
   margin-bottom: -45px;
-  font-family: Respective, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 300px;
   line-height: 230px;
 }
@@ -1205,7 +1176,7 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   margin-bottom: -10px;
-  font-family: Respective, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 120px;
   line-height: 100px;
 }
@@ -1259,7 +1230,7 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   margin-bottom: -70px;
-  font-family: Respective, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 300px;
   line-height: 260px;
 }
@@ -1311,7 +1282,7 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   margin-bottom: -40px;
-  font-family: Respective, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   font-size: 260px;
   line-height: 230px;
 }
@@ -1383,7 +1354,7 @@ body {
     background-size: cover;
     -webkit-background-clip: text;
     background-clip: text;
-    font-family: Respective, Arial, sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 240px;
     line-height: 190px;
   }
@@ -1558,7 +1529,7 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     margin-bottom: -30px;
-    font-family: Respective, Arial, sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 80px;
     line-height: 60px;
   }
@@ -1575,10 +1546,6 @@ body {
   .heading-accent--mobile-hero {
     font-family: "Tajamuka Script", Arial, sans-serif;
     font-size: 18px;
-  }
-
-  .text-cta__texture {
-    width: 60px;
   }
 
   .text-cta__arrow {
@@ -1849,7 +1816,7 @@ body {
     -webkit-background-clip: text;
     background-clip: text;
     margin-bottom: 25px;
-    font-family: Respective, Arial, sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 90px;
     line-height: 75px;
   }
@@ -1886,15 +1853,6 @@ body {
     display: flex;
   }
 
-  .text-cta__texture {
-    width: 70px;
-    height: auto;
-    margin-left: 0;
-    margin-right: 5px;
-    padding-left: 0;
-    position: fixed;
-  }
-
   .text-cta__arrow {
     width: 25px;
     height: auto;
@@ -1920,17 +1878,6 @@ body {
     z-index: -1;
     height: 100%;
     position: absolute;
-    inset: 0%;
-  }
-
-  .grain-overlay {
-    opacity: .04;
-    z-index: 2;
-    pointer-events: none;
-    background-image: var(--image-grain-background);
-    background-position: 50%;
-    background-size: auto;
-    position: fixed;
     inset: 0%;
   }
 
@@ -2034,7 +1981,7 @@ body {
     background-clip: text;
     width: auto;
     height: auto;
-    font-family: Respective, Arial, sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 90px;
     line-height: 70px;
   }
@@ -2184,7 +2131,7 @@ body {
     background-clip: text;
     width: auto;
     height: auto;
-    font-family: Respective, Arial, sans-serif;
+    font-family: Arial, sans-serif;
     font-size: 90px;
     line-height: 70px;
   }

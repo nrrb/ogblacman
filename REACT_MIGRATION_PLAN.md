@@ -60,8 +60,8 @@ real behavior:
 
 **`App.vue`** — Holds a `matchMedia('(max-width: 767px)')` listener that swaps
 between `DesktopExperience` and `MobileExperience`, and computes CSS custom
-properties (`--image-grain-overlay`, `--color-heading-outline`,
-`--heading-outline-width`) from content onto the root `<main>` style. Becomes
+properties (`--color-heading-outline`, `--heading-outline-width`) from content
+onto the root `<main>` style. Becomes
 `useState` + `useEffect` with the same listener add/remove lifecycle. Note the
 `typeof window !== 'undefined'` guard is already present; keep it.
 

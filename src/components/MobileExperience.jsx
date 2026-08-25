@@ -43,7 +43,6 @@ export default function MobileExperience({ content }) {
                   <div className="text-cta text-cta--mobile-hero">
                     <ResponsiveImage image={content.shared.arrow} className="text-cta__arrow" loading="lazy" />
                     <AppLink link={content.sections.hero.cta} className="text-cta__label" />
-                    <ResponsiveImage image={content.shared.texture} className="text-cta__texture" loading="lazy" />
                   </div>
                 </div>
               </div>

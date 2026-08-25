@@ -13,20 +13,9 @@ theme:
 shared:
   style_images:
     secondary_gradient: /assets/reference/text-gradient-secondary.jpg
-    grain_overlay: /assets/reference/grain-overlay.gif
-    grain_background: /assets/reference/grain-background.webp
   arrow:
     src: /assets/reference/cta-arrow.png
     alt: ""
-  texture:
-    src: /assets/reference/cta-ink-texture.png
-    alt: ""
-    sizes: "(max-width: 1384px) 100vw, 1384px, 100vw"
-    sources:
-      - { src: /assets/reference/cta-ink-texture-500w.png, width: 500 }
-      - { src: /assets/reference/cta-ink-texture-800w.png, width: 800 }
-      - { src: /assets/reference/cta-ink-texture-1080w.png, width: 1080 }
-      - { src: /assets/reference/cta-ink-texture.png, width: 1384 }
 
 social_links:
   - id: instagram

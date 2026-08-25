@@ -110,11 +110,10 @@ export function validateContent(content) {
 
   object(content.shared, 'shared')
   object(content.shared.style_images, 'shared.style_images')
-  for (const key of ['secondary_gradient', 'grain_overlay', 'grain_background']) {
+  for (const key of ['secondary_gradient']) {
     string(content.shared.style_images[key], `shared.style_images.${key}`)
   }
   image(content.shared.arrow, 'shared.arrow')
-  image(content.shared.texture, 'shared.texture')
 
   const socialLinks = array(content.social_links, 'social_links')
   uniqueIds(socialLinks, 'social_links')

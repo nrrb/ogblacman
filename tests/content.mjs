@@ -8,6 +8,10 @@ const content = validateContent(parse(source))
 if (content.mobile.continuous_scroll !== true) throw new Error('Continuous mobile scrolling should be enabled by default')
 if (!/^#[0-9a-f]{6}$/i.test(content.theme.heading_outline_color)) throw new Error('Heading outline color must come from site.yaml')
 if (content.theme.heading_outline_width !== 6) throw new Error('Heading outline width must come from site.yaml')
+if (content.shared.texture !== undefined) throw new Error('Deleted CTA texture must not remain in content')
+if (content.shared.style_images.grain_overlay !== undefined || content.shared.style_images.grain_background !== undefined) {
+  throw new Error('Deleted grain assets must not remain in content')
+}
 if (content.sections.upcoming_shows.items.length !== 0) throw new Error('Shows should not include placeholder events')
 if (!Array.isArray(content.sections.merch.items)) throw new Error('Merch items must be expandable')
 if (content.sections.merch.items.length !== 0) throw new Error('Merch should not include placeholder products')

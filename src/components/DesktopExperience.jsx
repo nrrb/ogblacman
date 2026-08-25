@@ -30,7 +30,6 @@ export default function DesktopExperience({ content }) {
             titleClass="heading-title--desktop-hero"
           />
           <div className="text-cta text-cta--desktop-hero">
-            <ResponsiveImage image={content.shared.texture} className="text-cta__texture" loading="lazy" />
             <AppLink link={content.sections.hero.cta} className="text-cta__label" />
           </div>
           <ResponsiveImage image={content.shared.arrow} className="text-cta__arrow" loading="lazy" />

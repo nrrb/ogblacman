@@ -17,6 +17,8 @@ page.on('console', message => {
 page.on('pageerror', error => errors.push(error.message))
 
 await page.goto(url, { waitUntil: 'load' })
+if (await page.locator('.grain-overlay').count() !== 0) throw new Error('Deleted grain overlay should not render')
+if (await page.locator('.text-cta__texture').count() !== 0) throw new Error('Deleted CTA texture should not render')
 if (!(await page.locator('.site--mobile').isVisible())) {
   throw new Error('Mobile experience is hidden in the 480–767px breakpoint range')
 }

@@ -25,8 +25,6 @@ export default function App() {
   }, [])
 
   const styleVariables = {
-    '--image-grain-overlay': `url("${siteContent.shared.style_images.grain_overlay}")`,
-    '--image-grain-background': `url("${siteContent.shared.style_images.grain_background}")`,
     '--color-heading-outline': siteContent.theme.heading_outline_color,
     '--heading-outline-width': siteContent.theme.heading_outline_width,
   }
@@ -37,7 +35,6 @@ export default function App() {
   return (
     <>
       <main style={styleVariables}>
-        <div className="grain-overlay" />
         {isMobile ? <MobileExperience content={siteContent} /> : <DesktopExperience content={siteContent} />}
       </main>
       {shouldLoadAnalytics && <Analytics />}
