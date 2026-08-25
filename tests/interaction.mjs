@@ -81,6 +81,19 @@ if (await webamp.locator('#equalizer-button').getAttribute('aria-disabled') !== 
 if (await webamp.locator('#playlist-button').getAttribute('aria-disabled') !== 'true') throw new Error('Webamp playlist toggle should be disabled')
 if (await secondSlide.locator('.streaming-link').count() !== 0) throw new Error('Top pick streaming links should be removed')
 
+if (continuous) {
+  const volume = webamp.locator('#volume input')
+  const volumeBeforeWheel = await volume.inputValue()
+  const scrollBeforeWheel = await page.evaluate(() => window.scrollY)
+  await webamp.locator('#main-window').hover()
+  await page.mouse.wheel(0, 240)
+  await page.waitForTimeout(200)
+  const volumeAfterWheel = await volume.inputValue()
+  const scrollAfterWheel = await page.evaluate(() => window.scrollY)
+  if (volumeAfterWheel !== volumeBeforeWheel) throw new Error('Scrolling over Webamp changed its volume')
+  if (scrollAfterWheel <= scrollBeforeWheel) throw new Error('Scrolling over Webamp did not scroll the page')
+}
+
 const showsSlide = slides.nth(2)
 if (continuous) await showsSlide.scrollIntoViewIfNeeded()
 else await dots.nth(2).click()

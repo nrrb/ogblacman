@@ -34,6 +34,12 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
       event.stopImmediatePropagation()
     }
 
+    function releaseWebampWheel(event) {
+      // Webamp converts wheel movement into volume changes and cancels native scrolling.
+      // Stop the event before it reaches Webamp, but leave its default page-scroll action intact.
+      event.stopImmediatePropagation()
+    }
+
     function disposePlayer() {
       generation.current += 1
       if (webamp) {
@@ -105,6 +111,7 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
 
     mediaQuery.addEventListener('change', handleBreakpointChange)
     mountElement?.addEventListener('contextmenu', blockWebampMenu, { capture: true })
+    mountElement?.addEventListener('wheel', releaseWebampWheel, { capture: true, passive: true })
     const resizeObserver = new ResizeObserver(fitPlayer)
     if (frameElement) resizeObserver.observe(frameElement)
     renderPlayer()
@@ -112,6 +119,7 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
     return () => {
       mediaQuery.removeEventListener('change', handleBreakpointChange)
       mountElement?.removeEventListener('contextmenu', blockWebampMenu, { capture: true })
+      mountElement?.removeEventListener('wheel', releaseWebampWheel, { capture: true })
       resizeObserver.disconnect()
       disposePlayer()
     }
