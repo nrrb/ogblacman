@@ -147,7 +147,8 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
             <ResponsiveImage
               image={release.editorial_image}
               className="release-spotlight__initial"
-              loading="lazy"
+              loading="eager"
+              fetchPriority="high"
               decoding="async"
             />
             <div className="release-spotlight__text">
@@ -193,6 +194,8 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
               <ResponsiveImage
                 image={isPlaying ? release.player.active_image : release.player.idle_image}
                 className="telephone-player__image"
+                loading="eager"
+                fetchPriority="high"
                 decoding="async"
               />
               {isPlaying && (

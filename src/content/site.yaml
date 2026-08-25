@@ -78,6 +78,8 @@ sections:
       alt: OG Blacman Popcorn Player artwork
       sizes: "(max-width: 767px) 84px, 130px"
       sources:
+        - { src: /assets/og-blacman-popcorn-player-96.png, width: 96 }
+        - { src: /assets/og-blacman-popcorn-player-160.png, width: 160 }
         - { src: /assets/og-blacman-popcorn-player-320.png, width: 320 }
         - { src: /assets/og-blacman-popcorn-player-640.png, width: 640 }
         - { src: /assets/og-blacman-popcorn-player.png, width: 3000 }
@@ -98,6 +100,7 @@ sections:
         alt: ""
         sizes: "(max-width: 767px) 178px, 230px"
         sources:
+          - { src: /assets/phone_on_hook-180.png, width: 180 }
           - { src: /assets/phone_on_hook-240.png, width: 240 }
           - { src: /assets/phone_on_hook-480.png, width: 480 }
           - { src: /assets/phone_on_hook.png, width: 1254 }
@@ -106,7 +109,9 @@ sections:
         alt: ""
         sizes: "(max-width: 767px) 89px, 115px"
         sources:
+          - { src: /assets/phone_off_hook-120.png, width: 120 }
           - { src: /assets/phone_off_hook-160.png, width: 160 }
+          - { src: /assets/phone_off_hook-240.png, width: 240 }
           - { src: /assets/phone_off_hook-320.png, width: 320 }
           - { src: /assets/phone_off_hook.png, width: 887 }
     mobile_media: &standard_mobile_media

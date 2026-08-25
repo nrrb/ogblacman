@@ -17,6 +17,13 @@ page.on('console', message => {
 page.on('pageerror', error => errors.push(error.message))
 
 await page.goto(url, { waitUntil: 'load' })
+const imagePreloads = page.locator('link[rel="preload"][as="image"]')
+if (await imagePreloads.count() !== 3) throw new Error('Telephone player images should have responsive preload hints')
+for (const expectedAsset of ['phone_on_hook-180.png', 'phone_off_hook-120.png', 'og-blacman-popcorn-player-96.png']) {
+  const matchingPreload = page.locator(`link[rel="preload"][href*="${expectedAsset}"]`)
+  if (await matchingPreload.count() !== 1) throw new Error(`Missing image preload for ${expectedAsset}`)
+  if (!(await matchingPreload.getAttribute('imagesrcset'))) throw new Error(`Missing responsive preload sources for ${expectedAsset}`)
+}
 if (await page.locator('.grain-overlay').count() !== 0) throw new Error('Deleted grain overlay should not render')
 if (await page.locator('.text-cta__texture').count() !== 0) throw new Error('Deleted CTA texture should not render')
 if (!(await page.locator('.site--mobile').isVisible())) {
@@ -81,6 +88,9 @@ if (!(await editorialArt.isVisible())) throw new Error('Popcorn Player editorial
 if (await editorialArt.getAttribute('src') !== '/assets/og-blacman-popcorn-player.png') {
   throw new Error('Telephone release uses the wrong editorial artwork')
 }
+if (!new URL(await editorialArt.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/og-blacman-popcorn-player-96.png')) {
+  throw new Error('Mobile release artwork should use its smallest responsive image')
+}
 const editorialArtBox = await editorialArt.boundingBox()
 const releaseTitleBox = await secondSlide.locator('.release-spotlight__title').boundingBox()
 const releaseCopyBox = await secondSlide.locator('.release-spotlight__copy').boundingBox()
@@ -99,12 +109,18 @@ const telephoneImage = telephonePlayer.locator('.telephone-player__image')
 const audio = telephonePlayer.locator('audio')
 if (await telephoneButton.getAttribute('aria-label') !== 'Play Telephone') throw new Error('On-hook phone should start Telephone')
 if (await telephoneImage.getAttribute('src') !== '/assets/phone_on_hook.png') throw new Error('Idle player should show the on-hook phone')
+if (!new URL(await telephoneImage.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/phone_on_hook-180.png')) {
+  throw new Error('Mobile on-hook phone should use its smallest responsive image')
+}
 const idleButtonBox = await telephoneButton.boundingBox()
 const idlePhoneBox = await telephonePlayer.locator('.telephone-player__phone--idle').boundingBox()
 await telephoneButton.click()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'playing')
 if (await telephoneButton.getAttribute('aria-label') !== 'Stop and rewind Telephone') throw new Error('Off-hook phone should stop Telephone')
 if (await telephoneImage.getAttribute('src') !== '/assets/phone_off_hook.png') throw new Error('Playing state should show the off-hook phone')
+if (!new URL(await telephoneImage.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/phone_off_hook-120.png')) {
+  throw new Error('Mobile off-hook phone should use its smallest responsive image')
+}
 const analyzer = telephonePlayer.locator('.telephone-player__analyzer')
 if (!(await analyzer.isVisible())) throw new Error('Telephone spectrum analyzer is missing during playback')
 if (await analyzer.getAttribute('width') !== '20' || await analyzer.getAttribute('height') !== '20') {
