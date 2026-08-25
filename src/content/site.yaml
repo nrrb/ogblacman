@@ -84,14 +84,6 @@ sections:
     release_date: AUGUST 26, 2026
     release_date_iso: "2026-08-26"
     copy: Telephone lands August 26, 2026. Hear OG Blacman's hot release now in the Popcorn Player, then follow the release on DistroKid.
-    cover:
-      src: /assets/releases/telephone-cover.png
-      alt: Telephone cover art featuring OG Blacman as a baby Jesus figure holding popcorn
-      sizes: "(max-width: 767px) 24vw, (max-width: 1100px) 180px, 200px"
-      sources:
-        - { src: /assets/releases/telephone-cover-640.png, width: 640 }
-        - { src: /assets/releases/telephone-cover-1200.png, width: 1200 }
-        - { src: /assets/releases/telephone-cover.png, width: 3000 }
     cta:
       label: FOLLOW TELEPHONE ON DISTROKID
       url: https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release

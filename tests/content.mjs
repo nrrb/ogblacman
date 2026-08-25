@@ -23,9 +23,6 @@ if (content.sections.top_pick.heading.title !== 'HOT RELEASE') {
 if (content.sections.top_pick.release_date_iso !== '2026-08-26') {
   throw new Error('Telephone release date must be August 26, 2026')
 }
-if (content.sections.top_pick.cover.src !== '/assets/releases/telephone-cover.png') {
-  throw new Error('Top pick must use the Telephone cover art')
-}
 if (content.sections.top_pick.cta.url !== 'https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release') {
   throw new Error('Telephone must link to its DistroKid release page')
 }

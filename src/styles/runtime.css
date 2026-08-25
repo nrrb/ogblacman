@@ -182,11 +182,9 @@ video {
 
 .top-pick-release {
   display: grid;
-  grid-template-columns: clamp(160px, 18vw, 200px) minmax(0, 550px);
-  align-items: center;
+  grid-template-columns: minmax(0, 550px);
   justify-content: center;
-  gap: clamp(24px, 4vw, 56px);
-  width: min(100%, 840px);
+  width: min(100%, 550px);
   margin-inline: auto;
 }
 
@@ -200,34 +198,6 @@ video {
 
 .site--desktop .top-pick-release {
   margin-bottom: 96px;
-}
-
-.release-spotlight__art-link {
-  display: block;
-  width: 100%;
-  color: inherit;
-  border: 1px solid color-mix(in srgb, var(--color-gold-1) 58%, transparent);
-  text-decoration: none;
-  transition: border-color 160ms ease, transform 160ms ease;
-}
-
-.release-spotlight__art-link:hover {
-  border-color: var(--color-gold-1);
-  transform: translateY(-3px);
-}
-
-.release-spotlight__art-link:focus-visible {
-  border-color: var(--color-gold-1);
-  outline: 2px solid var(--color-gold-1);
-  outline-offset: 5px;
-}
-
-.release-spotlight__art {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
 }
 
 .release-spotlight__content {
@@ -304,13 +274,6 @@ video {
   color: var(--color-gold-1);
   font-size: 18px;
   line-height: .5;
-}
-
-@media screen and (min-width: 768px) and (max-width: 1100px) {
-  .site--desktop .top-pick-release {
-    grid-template-columns: clamp(140px, 22vw, 180px) minmax(0, 1fr);
-    width: min(100%, 720px);
-  }
 }
 
 .webamp-player {
@@ -562,10 +525,7 @@ video {
   }
 
   .site--mobile .top-pick-release {
-    grid-template-columns: clamp(80px, 24vw, 96px) minmax(0, 1fr);
-    align-items: center;
-    justify-items: stretch;
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .site--mobile .release-spotlight__details {
@@ -649,7 +609,6 @@ video {
     transition: none;
   }
 
-  .release-spotlight__art-link,
   .release-spotlight__cta {
     transition: none;
   }

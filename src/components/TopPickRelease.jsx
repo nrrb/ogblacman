@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import AppLink from './AppLink.jsx'
-import ResponsiveImage from './ResponsiveImage.jsx'
 import skinUrl from '../../popcorn-player.wsz?url'
 
 const nativeWidth = 550
@@ -129,15 +128,6 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
 
   return (
     <div className="top-pick-release">
-      <AppLink link={release.cta} className="release-spotlight__art-link">
-        <ResponsiveImage
-          image={release.cover}
-          className="release-spotlight__art"
-          loading="lazy"
-          decoding="async"
-        />
-      </AppLink>
-
       <div className="release-spotlight__content">
         <div className="release-spotlight__details">
           <div className="release-spotlight__meta">

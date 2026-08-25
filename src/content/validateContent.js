@@ -139,7 +139,6 @@ export function validateContent(content) {
     fail('sections.top_pick.release_date_iso', 'expected a YYYY-MM-DD date')
   }
   string(sections.top_pick.copy, 'sections.top_pick.copy')
-  image(sections.top_pick.cover, 'sections.top_pick.cover')
   link(sections.top_pick.cta, 'sections.top_pick.cta')
   object(sections.top_pick.player, 'sections.top_pick.player')
   string(sections.top_pick.player.title, 'sections.top_pick.player.title')
