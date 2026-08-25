@@ -11,8 +11,7 @@
     "process:hero": "node tools/process-hero.mjs",
     "test:montage": "node --test tests/montage.test.mjs",
     "test:interaction": "node tests/interaction.mjs",
-    "test:content": "node tests/content.mjs",
-    "test:visual": "node tests/visual/compare.mjs"
+    "test:content": "node tests/content.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -23,9 +22,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.1.0",
-    "pixelmatch": "^7.1.0",
     "playwright": "1.55.0",
-    "pngjs": "^7.0.0",
     "vite": "latest"
   }
 }
