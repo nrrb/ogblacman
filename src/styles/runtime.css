@@ -182,13 +182,135 @@ video {
 
 .top-pick-release {
   display: grid;
-  justify-items: center;
-  gap: 24px;
-  width: 100%;
+  grid-template-columns: clamp(160px, 18vw, 200px) minmax(0, 550px);
+  align-items: center;
+  justify-content: center;
+  gap: clamp(24px, 4vw, 56px);
+  width: min(100%, 840px);
+  margin-inline: auto;
+}
+
+.top-pick-release::before,
+.top-pick-release::after,
+.release-spotlight__content::before,
+.release-spotlight__content::after {
+  content: none;
+  display: none;
 }
 
 .site--desktop .top-pick-release {
   margin-bottom: 96px;
+}
+
+.release-spotlight__art-link {
+  display: block;
+  width: 100%;
+  color: inherit;
+  border: 1px solid color-mix(in srgb, var(--color-gold-1) 58%, transparent);
+  text-decoration: none;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.release-spotlight__art-link:hover {
+  border-color: var(--color-gold-1);
+  transform: translateY(-3px);
+}
+
+.release-spotlight__art-link:focus-visible {
+  border-color: var(--color-gold-1);
+  outline: 2px solid var(--color-gold-1);
+  outline-offset: 5px;
+}
+
+.release-spotlight__art {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.release-spotlight__content {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
+}
+
+.release-spotlight__details {
+  color: var(--color-body-text);
+  text-align: left;
+}
+
+.release-spotlight__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  color: var(--color-gold-1);
+  font-family: Neuehaasdisplaymediu, Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: .14em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.release-spotlight__title {
+  margin: 4px 0 0;
+  color: var(--color-body-text);
+  font-family: "Tajamuka Script", Arial, sans-serif;
+  font-size: clamp(72px, 8vw, 112px);
+  font-weight: 400;
+  line-height: .9;
+}
+
+.release-spotlight__copy {
+  max-width: 500px;
+  margin: 14px 0 0;
+  color: color-mix(in srgb, var(--color-body-text) 72%, transparent);
+  font-family: NeueHaasDisplayLight, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.release-spotlight__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 5px 0;
+  color: var(--color-body-text);
+  border-bottom: 1px solid var(--color-gold-1);
+  font-family: Neuehaasdisplaymediu, Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: .13em;
+  line-height: 1.3;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 160ms ease, gap 160ms ease;
+}
+
+.release-spotlight__cta:hover {
+  gap: 18px;
+  color: var(--color-gold-1);
+}
+
+.release-spotlight__cta:focus-visible {
+  outline: 2px solid var(--color-gold-1);
+  outline-offset: 4px;
+}
+
+.release-spotlight__arrow {
+  color: var(--color-gold-1);
+  font-size: 18px;
+  line-height: .5;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1100px) {
+  .site--desktop .top-pick-release {
+    grid-template-columns: clamp(140px, 22vw, 180px) minmax(0, 1fr);
+    width: min(100%, 720px);
+  }
 }
 
 .webamp-player {
@@ -440,9 +562,45 @@ video {
   }
 
   .site--mobile .top-pick-release {
-    grid-template-columns: minmax(0, 1fr);
-    justify-items: center;
+    grid-template-columns: clamp(80px, 24vw, 96px) minmax(0, 1fr);
+    align-items: center;
+    justify-items: stretch;
     gap: 12px;
+  }
+
+  .site--mobile .release-spotlight__details {
+    min-width: 0;
+  }
+
+  .site--mobile .release-spotlight__meta {
+    gap: 4px 6px;
+    font-size: 7px;
+    letter-spacing: .1em;
+  }
+
+  .site--mobile .release-spotlight__title {
+    font-size: clamp(44px, 13vw, 58px);
+  }
+
+  .site--mobile .release-spotlight__copy {
+    margin-top: 6px;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  .site--mobile .release-spotlight__cta {
+    gap: 7px;
+    margin-top: 7px;
+    font-size: 7px;
+    line-height: 1.25;
+  }
+
+  .site--mobile .release-spotlight__arrow {
+    font-size: 13px;
+  }
+
+  .site--mobile .release-spotlight__content {
+    gap: 10px;
   }
 
   .site--mobile .show-link {
@@ -488,6 +646,11 @@ video {
 
 @media (prefers-reduced-motion: reduce) {
   .headline-halo {
+    transition: none;
+  }
+
+  .release-spotlight__art-link,
+  .release-spotlight__cta {
     transition: none;
   }
 

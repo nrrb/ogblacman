@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import AppLink from './AppLink.jsx'
+import ResponsiveImage from './ResponsiveImage.jsx'
 import skinUrl from '../../popcorn-player.wsz?url'
 
 const nativeWidth = 550
@@ -127,15 +129,40 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
 
   return (
     <div className="top-pick-release">
-      <div
-        className={`webamp-player webamp-player--${variant}`}
-        aria-busy={status === 'loading'}
-        aria-label={`${release.player.title} by ${release.player.artist}`}
-      >
-        <div ref={frame} className="webamp-player__frame">
-          <div ref={mount} className="webamp-player__mount" />
+      <AppLink link={release.cta} className="release-spotlight__art-link">
+        <ResponsiveImage
+          image={release.cover}
+          className="release-spotlight__art"
+          loading="lazy"
+          decoding="async"
+        />
+      </AppLink>
+
+      <div className="release-spotlight__content">
+        <div className="release-spotlight__details">
+          <div className="release-spotlight__meta">
+            <span>{release.release_label}</span>
+            <span aria-hidden="true">•</span>
+            <time dateTime={release.release_date_iso}>{release.release_date}</time>
+          </div>
+          <h3 className="release-spotlight__title">{release.player.title}</h3>
+          <p className="release-spotlight__copy">{release.copy}</p>
+          <AppLink link={release.cta} className="release-spotlight__cta">
+            <span>{release.cta.label}</span>
+            <span className="release-spotlight__arrow" aria-hidden="true">→</span>
+          </AppLink>
         </div>
-        {status === 'error' && <p className="webamp-player__error" role="alert">{errorMessage}</p>}
+
+        <div
+          className={`webamp-player webamp-player--${variant}`}
+          aria-busy={status === 'loading'}
+          aria-label={`${release.player.title} by ${release.player.artist}`}
+        >
+          <div ref={frame} className="webamp-player__frame">
+            <div ref={mount} className="webamp-player__mount" />
+          </div>
+          {status === 'error' && <p className="webamp-player__error" role="alert">{errorMessage}</p>}
+        </div>
       </div>
     </div>
   )

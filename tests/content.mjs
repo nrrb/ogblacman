@@ -17,6 +17,18 @@ if (!content.sections.newsletter.form.fields.find(field => field.id === 'email')
 if (content.sections.top_pick.player.track_src !== '/music/telephone.mp3') {
   throw new Error('Top pick must use the local Telephone track')
 }
+if (content.sections.top_pick.heading.title !== 'HOT RELEASE') {
+  throw new Error('Telephone section heading must identify the hot release')
+}
+if (content.sections.top_pick.release_date_iso !== '2026-08-26') {
+  throw new Error('Telephone release date must be August 26, 2026')
+}
+if (content.sections.top_pick.cover.src !== '/assets/releases/telephone-cover.png') {
+  throw new Error('Top pick must use the Telephone cover art')
+}
+if (content.sections.top_pick.cta.url !== 'https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release') {
+  throw new Error('Telephone must link to its DistroKid release page')
+}
 if (content.sections.top_pick.streaming_links !== undefined) throw new Error('Top pick external streaming links must be removed')
 
 const expanded = structuredClone(content)
