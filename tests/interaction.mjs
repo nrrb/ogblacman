@@ -73,7 +73,7 @@ if (await page.locator('meta[name="twitter:image"]').getAttribute('content') !==
 }
 const imagePreloads = page.locator('link[rel="preload"][as="image"]')
 if (await imagePreloads.count() !== 3) throw new Error('Telephone player images should have responsive preload hints')
-for (const expectedAsset of ['phone_on_hook-180.png', 'phone_off_hook-120.png', 'telephone-cover-320.webp']) {
+for (const expectedAsset of ['phone_on_hook-180.png', 'phone_off_hook-120.png', 'telephone-cover-640.webp']) {
   const matchingPreload = page.locator(`link[rel="preload"][href*="${expectedAsset}"]`)
   if (await matchingPreload.count() !== 1) throw new Error(`Missing image preload for ${expectedAsset}`)
   if (!(await matchingPreload.getAttribute('imagesrcset'))) throw new Error(`Missing responsive preload sources for ${expectedAsset}`)
@@ -146,16 +146,26 @@ if (!new URL(await editorialArt.evaluate(element => element.currentSrc)).pathnam
   throw new Error('Mobile release artwork should use an appropriately sized responsive image')
 }
 const editorialArtBox = await editorialArt.boundingBox()
+const releaseTextBox = await secondSlide.locator('.release-spotlight__text').boundingBox()
 const releaseTitleBox = await secondSlide.locator('.release-spotlight__title').boundingBox()
 const releaseCopyBox = await secondSlide.locator('.release-spotlight__copy').boundingBox()
-if (!editorialArtBox || !releaseTitleBox || !releaseCopyBox) throw new Error('Telephone editorial layout is not measurable')
+const releaseCta = secondSlide.locator('.release-spotlight__cta')
+const releaseCtaBox = await releaseCta.boundingBox()
+if (!editorialArtBox || !releaseTextBox || !releaseTitleBox || !releaseCopyBox || !releaseCtaBox) throw new Error('Telephone editorial layout is not measurable')
 if (editorialArtBox.y <= releaseCopyBox.y + releaseCopyBox.height) {
   throw new Error('Telephone cover artwork must sit beneath the Telephone description')
 }
-if (editorialArtBox.width < releaseTitleBox.width * .75 || editorialArtBox.width > releaseTitleBox.width * 1.25) {
-  throw new Error('Telephone cover artwork width should remain close to the Telephone subtitle width')
+if (editorialArtBox.width < releaseTextBox.width * .9 || editorialArtBox.width > releaseTextBox.width * .95) {
+  throw new Error('Mobile Telephone cover artwork should fill 93% of the release column')
 }
-const releaseCta = secondSlide.locator('.release-spotlight__cta')
+if (Math.abs(editorialArtBox.x + editorialArtBox.width / 2 - (releaseTextBox.x + releaseTextBox.width / 2)) > 1) {
+  throw new Error('Mobile Telephone cover artwork must be centered')
+}
+for (const [elementName, box] of [['title', releaseTitleBox], ['description', releaseCopyBox], ['DistroKid CTA', releaseCtaBox]]) {
+  if (Math.abs(box.x + box.width / 2 - (releaseTextBox.x + releaseTextBox.width / 2)) > 1) {
+    throw new Error(`Mobile Telephone ${elementName} must be centered`)
+  }
+}
 if (await releaseCta.getAttribute('href') !== 'https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release') {
   throw new Error('Telephone DistroKid link is incorrect')
 }
@@ -171,12 +181,11 @@ if (!new URL(await telephoneImage.evaluate(element => element.currentSrc)).pathn
 }
 const idleButtonBox = await telephoneButton.boundingBox()
 const idlePhoneBox = await telephonePlayer.locator('.telephone-player__phone--idle').boundingBox()
-const releaseCtaBox = await releaseCta.boundingBox()
 if (!idleButtonBox || !idlePhoneBox || !releaseCtaBox) throw new Error('Idle telephone spacing is not measurable')
 if (Math.abs(idleButtonBox.height - idlePhoneBox.height) > 1) throw new Error('Telephone button should not add empty space above the phone')
-const copyToCtaGap = releaseCtaBox.y - (releaseCopyBox.y + releaseCopyBox.height)
+const artworkToCtaGap = releaseCtaBox.y - (editorialArtBox.y + editorialArtBox.height)
 const ctaToPhoneGap = idlePhoneBox.y - (releaseCtaBox.y + releaseCtaBox.height)
-if (ctaToPhoneGap > copyToCtaGap + 6) throw new Error('CTA-to-phone spacing should match the paragraph-to-CTA rhythm')
+if (ctaToPhoneGap > artworkToCtaGap + 6) throw new Error('CTA-to-phone spacing should match the artwork-to-CTA rhythm')
 await telephoneButton.click()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'playing')
 if (await telephoneButton.getAttribute('aria-label') !== 'Stop and rewind Telephone') throw new Error('Off-hook phone should stop Telephone')
@@ -323,14 +332,24 @@ await page.setViewportSize({ width: 900, height: 844 })
 const desktopRelease = page.locator('.site--desktop .top-pick-release')
 const desktopEditorialArt = desktopRelease.locator('.release-spotlight__initial')
 const desktopEditorialArtBox = await desktopEditorialArt.boundingBox()
+const desktopReleaseTextBox = await desktopRelease.locator('.release-spotlight__text').boundingBox()
 const desktopReleaseTitleBox = await desktopRelease.locator('.release-spotlight__title').boundingBox()
 const desktopReleaseCopyBox = await desktopRelease.locator('.release-spotlight__copy').boundingBox()
-if (!desktopEditorialArtBox || !desktopReleaseTitleBox || !desktopReleaseCopyBox) throw new Error('Desktop Telephone editorial layout is not measurable')
+const desktopReleaseCtaBox = await desktopRelease.locator('.release-spotlight__cta').boundingBox()
+if (!desktopEditorialArtBox || !desktopReleaseTextBox || !desktopReleaseTitleBox || !desktopReleaseCopyBox || !desktopReleaseCtaBox) throw new Error('Desktop Telephone editorial layout is not measurable')
 if (desktopEditorialArtBox.y <= desktopReleaseCopyBox.y + desktopReleaseCopyBox.height) {
   throw new Error('Desktop Telephone cover artwork must sit beneath the Telephone description')
 }
-if (desktopEditorialArtBox.width < desktopReleaseTitleBox.width * .75 || desktopEditorialArtBox.width > desktopReleaseTitleBox.width * 1.25) {
-  throw new Error('Desktop Telephone cover artwork width should remain close to the Telephone subtitle width')
+if (desktopEditorialArtBox.width < desktopReleaseTextBox.width * .9 || desktopEditorialArtBox.width > desktopReleaseTextBox.width * .95) {
+  throw new Error('Desktop Telephone cover artwork should fill 93% of the release column')
+}
+if (Math.abs(desktopEditorialArtBox.x + desktopEditorialArtBox.width / 2 - (desktopReleaseTextBox.x + desktopReleaseTextBox.width / 2)) > 1) {
+  throw new Error('Desktop Telephone cover artwork must be centered')
+}
+for (const [elementName, box] of [['title', desktopReleaseTitleBox], ['description', desktopReleaseCopyBox], ['DistroKid CTA', desktopReleaseCtaBox]]) {
+  if (Math.abs(box.x + box.width / 2 - (desktopReleaseTextBox.x + desktopReleaseTextBox.width / 2)) > 1) {
+    throw new Error(`Desktop Telephone ${elementName} must be centered`)
+  }
 }
 if (!new URL(await desktopEditorialArt.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/telephone-cover-640.webp')) {
   throw new Error('Desktop release artwork should use an appropriately sized responsive image')

@@ -76,7 +76,7 @@ sections:
     editorial_image:
       src: /assets/telephone-cover.png
       alt: OG Blacman Telephone cover artwork
-      sizes: "(max-width: 767px) 54vw, 341px"
+      sizes: "(max-width: 767px) 81vw, 512px"
       sources:
         - { src: /assets/telephone-cover-96.webp, width: 96 }
         - { src: /assets/telephone-cover-160.webp, width: 160 }

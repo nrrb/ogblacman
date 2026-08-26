@@ -235,20 +235,21 @@ video {
 
 .release-spotlight__initial {
   display: block;
-  width: min(62%, 360px);
+  width: min(93%, 540px);
   height: auto;
-  margin-top: 20px;
+  margin: 20px auto 0;
   aspect-ratio: 1;
   object-fit: cover;
 }
 
 .release-spotlight__text {
   min-width: 0;
+  text-align: center;
 }
 
 .release-spotlight__title {
   width: fit-content;
-  margin: 0;
+  margin: 0 auto;
   color: var(--color-body-text);
   font-family: "Tajamuka Script", Arial, sans-serif;
   font-size: clamp(72px, 8vw, 112px);
@@ -258,7 +259,7 @@ video {
 
 .release-spotlight__copy {
   max-width: 500px;
-  margin: 14px 0 0;
+  margin: 14px auto 0;
   color: color-mix(in srgb, var(--color-body-text) 72%, transparent);
   font-family: NeueHaasDisplayLight, Arial, sans-serif;
   font-size: 16px;
@@ -624,7 +625,7 @@ video {
   }
 
   .site--mobile .release-spotlight__initial {
-    width: 62%;
+    width: 93%;
     margin-top: 10px;
   }
 
