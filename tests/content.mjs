@@ -43,6 +43,9 @@ if (sections.featuredRelease.release.coverArt.asset !== 'telephoneCover') throw 
 if (sections.featuredRelease.release.primaryLink.url !== 'https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release') {
   throw new Error('Featured release must retain its DistroKid link')
 }
+if (sections.featuredRelease.playerCopy.interactionPrompt !== '<- pick up my line') {
+  throw new Error('Telephone interaction prompt must remain editable release copy')
+}
 
 if (sections.shows.items.length !== 0) throw new Error('Shows should not include placeholder events')
 if (sections.merch.items.length !== 0) throw new Error('Merch should not include placeholder products')

@@ -176,15 +176,22 @@ if (await releaseCta.getAttribute('target') !== '_blank') throw new Error('Telep
 const telephonePlayer = secondSlide.locator('.telephone-player--mobile')
 const telephoneButton = telephonePlayer.locator('.telephone-player__button')
 const telephoneImage = telephonePlayer.locator('.telephone-player__image')
+const interactionPrompt = telephonePlayer.locator('.telephone-player__interaction-prompt')
 const audio = telephonePlayer.locator('audio')
 if (await telephoneButton.getAttribute('aria-label') !== 'Play Telephone') throw new Error('On-hook phone should start Telephone')
 if (await telephoneImage.getAttribute('src') !== '/assets/phone_on_hook.png') throw new Error('Idle player should show the on-hook phone')
 if (!new URL(await telephoneImage.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/phone_on_hook-180.png')) {
   throw new Error('Mobile on-hook phone should use its smallest responsive image')
 }
+if (await interactionPrompt.textContent() !== '<- pick up my line') throw new Error('Telephone lyric interaction prompt is missing')
+if (!(await interactionPrompt.evaluate(element => getComputedStyle(element).fontFamily)).includes('Tajamuka Script')) {
+  throw new Error('Telephone interaction prompt must use Tajamuka Script')
+}
 const idleButtonBox = await telephoneButton.boundingBox()
 const idlePhoneBox = await telephonePlayer.locator('.telephone-player__phone--idle').boundingBox()
-if (!idleButtonBox || !idlePhoneBox || !releaseCtaBox) throw new Error('Idle telephone spacing is not measurable')
+const interactionPromptBox = await interactionPrompt.boundingBox()
+if (!idleButtonBox || !idlePhoneBox || !interactionPromptBox || !releaseCtaBox) throw new Error('Idle telephone spacing is not measurable')
+if (interactionPromptBox.x < idlePhoneBox.x + idlePhoneBox.width - 1) throw new Error('Telephone interaction prompt must sit to the right of the phone')
 if (Math.abs(idleButtonBox.height - idlePhoneBox.height) > 1) throw new Error('Telephone button should not add empty space above the phone')
 const artworkToCtaGap = releaseCtaBox.y - (editorialArtBox.y + editorialArtBox.height)
 const ctaToPhoneGap = idlePhoneBox.y - (releaseCtaBox.y + releaseCtaBox.height)
@@ -193,6 +200,7 @@ await telephoneButton.click()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'playing')
 if (await telephoneButton.getAttribute('aria-label') !== 'Stop and rewind Telephone') throw new Error('Off-hook phone should stop Telephone')
 if (await telephoneImage.getAttribute('src') !== '/assets/phone_off_hook.png') throw new Error('Playing state should show the off-hook phone')
+if (await interactionPrompt.count() !== 0) throw new Error('Telephone interaction prompt should clear after pickup')
 if (!new URL(await telephoneImage.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/phone_off_hook-120.png')) {
   throw new Error('Mobile off-hook phone should use its smallest responsive image')
 }
