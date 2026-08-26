@@ -98,29 +98,29 @@ const slides = page.locator('.mobile-slide')
 
 if (continuous) {
   if (await dots.count() !== 0) throw new Error('Continuous mobile scrolling should not show slide navigation dots')
-  if (await slides.count() !== 6) throw new Error('Expected six continuous mobile panels')
-  for (let index = 0; index < 6; index += 1) {
+  if (await slides.count() !== 5) throw new Error('Expected five continuous mobile panels with Booking hidden')
+  for (let index = 0; index < 5; index += 1) {
     if (await slides.nth(index).getAttribute('aria-hidden') !== null) throw new Error('Continuous mobile panels should remain accessible')
     if (await slides.nth(index).getAttribute('inert') !== null) throw new Error('Continuous mobile panels should not be inert')
   }
-  for (let index = 1; index < 6; index += 1) {
+  for (let index = 1; index < 5; index += 1) {
     const isolation = await slides.nth(index).evaluate(element => getComputedStyle(element).isolation)
     if (isolation !== 'isolate') throw new Error('Continuous mobile panel did not contain its negative-z-index video background')
   }
   const viewportHeight = await page.evaluate(() => window.innerHeight)
   const documentHeight = await page.evaluate(() => document.documentElement.scrollHeight)
-  if (documentHeight < viewportHeight * 5.5) throw new Error('Continuous mobile panels do not create a full vertical document')
+  if (documentHeight < viewportHeight * 4.5) throw new Error('Continuous mobile panels do not create a full vertical document')
   await page.evaluate(() => window.scrollTo(0, 0))
   await page.mouse.wheel(0, 600)
   await page.waitForTimeout(150)
   if (await page.evaluate(() => window.scrollY) <= 0) throw new Error('Continuous mobile mode did not allow native document scrolling')
 } else {
-  if (await dots.count() !== 6) throw new Error('Expected six mobile slide navigation dots in discrete mode')
-  await dots.nth(5).click()
+  if (await dots.count() !== 5) throw new Error('Expected five mobile slide navigation dots with Booking hidden')
+  await dots.nth(4).click()
   await page.waitForTimeout(350)
   await page.keyboard.press('ArrowDown')
   await page.waitForTimeout(350)
-  if (await slides.nth(5).getAttribute('aria-hidden') !== 'false') throw new Error('Discrete navigation wrapped past the final slide')
+  if (await slides.nth(4).getAttribute('aria-hidden') !== 'false') throw new Error('Discrete navigation wrapped past the final slide')
   await dots.nth(0).click()
   await page.waitForTimeout(350)
   await page.keyboard.press('ArrowUp')
@@ -304,18 +304,19 @@ await page.waitForTimeout(350)
 if (await showsSlide.locator('.show-link').count() !== 0) throw new Error('Placeholder show listings should not render')
 if (!(await showsSlide.locator('.show-empty').isVisible())) throw new Error('Shows coming-soon treatment is missing')
 if (await showsSlide.locator('.show-empty__cta').getAttribute('href') !== '#mailing-list') throw new Error('Show alerts CTA should link to the mailing list')
+if (await page.locator('.site--mobile .manager-card').count() !== 0) throw new Error('Hidden Booking panel should not render on mobile')
 
-const merchSlide = slides.nth(4)
+const merchSlide = slides.nth(3)
 if (continuous) await merchSlide.scrollIntoViewIfNeeded()
-else await dots.nth(4).click()
+else await dots.nth(3).click()
 await page.waitForTimeout(350)
 if (await merchSlide.locator('.logo-marquee').count() !== 0) throw new Error('An empty merch carousel should not render')
 if (!(await merchSlide.locator('.merch-empty').isVisible())) throw new Error('Merch coming-soon treatment is missing')
 if (await merchSlide.locator('.merch-empty__cta').getAttribute('href') !== '#mailing-list') throw new Error('Merch alerts CTA should link to the mailing list')
 
-const newsletterSlide = slides.nth(5)
+const newsletterSlide = slides.nth(4)
 if (continuous) await newsletterSlide.scrollIntoViewIfNeeded()
-else await dots.nth(5).click()
+else await dots.nth(4).click()
 await page.waitForTimeout(350)
 const form = newsletterSlide.locator('form')
 await form.waitFor({ state: 'visible', timeout: 15_000 })
@@ -329,6 +330,7 @@ await newsletterSlide.locator('.formkit-alert-success').waitFor({ state: 'visibl
 if (new URL(page.url()).origin !== new URL(url).origin) throw new Error('Kit form unexpectedly navigated')
 
 await page.setViewportSize({ width: 900, height: 844 })
+if (await page.locator('.site--desktop .manager-card').count() !== 0) throw new Error('Hidden Booking section should not render on desktop')
 const desktopRelease = page.locator('.site--desktop .top-pick-release')
 const desktopEditorialArt = desktopRelease.locator('.release-spotlight__initial')
 const desktopEditorialArtBox = await desktopEditorialArt.boundingBox()

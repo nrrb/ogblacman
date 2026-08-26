@@ -125,6 +125,7 @@ sections:
     items: []
     mobile_media: *standard_mobile_media
   booking:
+    visible: false
     heading: { title: BOOKING }
     manager:
       role: Manager

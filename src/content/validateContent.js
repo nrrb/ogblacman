@@ -161,6 +161,9 @@ export function validateContent(content) {
     string(item.action_label, `sections.upcoming_shows.items[${index}].action_label`)
   })
 
+  if (typeof sections.booking.visible !== 'boolean') {
+    fail('sections.booking.visible', 'expected a boolean')
+  }
   object(sections.booking.manager, 'sections.booking.manager')
   for (const key of ['role', 'name', 'email', 'phone']) {
     string(sections.booking.manager[key], `sections.booking.manager.${key}`)

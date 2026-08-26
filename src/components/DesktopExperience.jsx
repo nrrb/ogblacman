@@ -62,12 +62,16 @@ export default function DesktopExperience({ content }) {
             </div>
           </div>
 
-          <SectionHeading
-            heading={content.sections.booking.heading}
-            wrapperClass="display-heading--feature"
-            titleClass="heading-title--feature"
-          />
-          <ManagerCard manager={content.sections.booking.manager} />
+          {content.sections.booking.visible && (
+            <>
+              <SectionHeading
+                heading={content.sections.booking.heading}
+                wrapperClass="display-heading--feature"
+                titleClass="heading-title--feature"
+              />
+              <ManagerCard manager={content.sections.booking.manager} />
+            </>
+          )}
         </div>
 
         <div className="section section--content">

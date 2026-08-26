@@ -13,6 +13,8 @@ if (content.shared.style_images.grain_overlay !== undefined || content.shared.st
   throw new Error('Deleted grain assets must not remain in content')
 }
 if (content.sections.upcoming_shows.items.length !== 0) throw new Error('Shows should not include placeholder events')
+if (content.sections.booking.visible !== false) throw new Error('Booking should be hidden by content configuration')
+if (content.sections.booking.manager.name !== 'Gabrielle Labolito') throw new Error('Hidden Booking details must remain available')
 if (!Array.isArray(content.sections.merch.items)) throw new Error('Merch items must be expandable')
 if (content.sections.merch.items.length !== 0) throw new Error('Merch should not include placeholder products')
 if (content.sections.merch.cta.url !== '#mailing-list') throw new Error('Merch alerts must link to the mailing list')
@@ -64,6 +66,18 @@ for (const invalidValue of [undefined, 'true', 1]) {
     invalidMobileRejected = error.message.includes('mobile.continuous_scroll')
   }
   if (!invalidMobileRejected) throw new Error(`Invalid mobile scrolling value was accepted: ${String(invalidValue)}`)
+}
+
+for (const invalidValue of [undefined, 'false', 0]) {
+  const invalidBooking = structuredClone(content)
+  invalidBooking.sections.booking.visible = invalidValue
+  let invalidBookingRejected = false
+  try {
+    validateContent(invalidBooking)
+  } catch (error) {
+    invalidBookingRejected = error.message.includes('sections.booking.visible')
+  }
+  if (!invalidBookingRejected) throw new Error(`Invalid Booking visibility was accepted: ${String(invalidValue)}`)
 }
 
 for (const invalidValue of [undefined, 'gold', '#FC30']) {

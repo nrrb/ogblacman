@@ -15,11 +15,15 @@ import TopPickRelease from './TopPickRelease.jsx'
 
 export default function MobileExperience({ content }) {
   const shows = content.sections.upcoming_shows
+  const booking = content.sections.booking
   const merch = content.sections.merch
+  const bookingVisible = booking.visible
+  const merchSlideIndex = bookingVisible ? 4 : 3
+  const newsletterSlideIndex = merchSlideIndex + 1
 
   return (
     <MobileSlider
-      slideCount={6}
+      slideCount={newsletterSlideIndex + 1}
       continuous={content.mobile.continuous_scroll}
       dotLabel={content.accessibility.slider_dot_label}
       previousLabel={content.accessibility.previous_slide_label}
@@ -91,23 +95,25 @@ export default function MobileExperience({ content }) {
             />
           </div>
 
-          <div className="mobile-slide" {...slideAttributes(3)}>
-            <div className="mobile-slide__content mobile-slide__content--how">
-              <SectionHeading
-                heading={content.sections.booking.heading}
-                wrapperClass="display-heading--mobile-how"
-                titleClass="heading-title--mobile-how"
+          {bookingVisible && (
+            <div className="mobile-slide" {...slideAttributes(3)}>
+              <div className="mobile-slide__content mobile-slide__content--how">
+                <SectionHeading
+                  heading={booking.heading}
+                  wrapperClass="display-heading--mobile-how"
+                  titleClass="heading-title--mobile-how"
+                />
+                <ManagerCard manager={booking.manager} />
+              </div>
+              <BackgroundVideo
+                media={booking.mobile_media}
+                videoId="mobile-how-video"
+                className="background-media background-media--slide"
               />
-              <ManagerCard manager={content.sections.booking.manager} />
             </div>
-            <BackgroundVideo
-              media={content.sections.booking.mobile_media}
-              videoId="mobile-how-video"
-              className="background-media background-media--slide"
-            />
-          </div>
+          )}
 
-          <div className="mobile-slide" {...slideAttributes(4)}>
+          <div className="mobile-slide" {...slideAttributes(merchSlideIndex)}>
             <div className="mobile-slide__content mobile-slide__content--middle mobile-slide__content--merch">
               <SectionHeading
                 heading={merch.heading}
@@ -135,7 +141,7 @@ export default function MobileExperience({ content }) {
             />
           </div>
 
-          <div id="mailing-list" className="mobile-slide" {...slideAttributes(5)}>
+          <div id="mailing-list" className="mobile-slide" {...slideAttributes(newsletterSlideIndex)}>
             <div className="mobile-slide__content mobile-slide__content--newsletter">
               <div>
                 <SectionHeading
