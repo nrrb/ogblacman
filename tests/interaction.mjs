@@ -73,7 +73,7 @@ if (await page.locator('meta[name="twitter:image"]').getAttribute('content') !==
 }
 const imagePreloads = page.locator('link[rel="preload"][as="image"]')
 if (await imagePreloads.count() !== 3) throw new Error('Telephone player images should have responsive preload hints')
-for (const expectedAsset of ['phone_on_hook-180.png', 'phone_off_hook-120.png', 'telephone-cover-96.webp']) {
+for (const expectedAsset of ['phone_on_hook-180.png', 'phone_off_hook-120.png', 'telephone-cover-320.webp']) {
   const matchingPreload = page.locator(`link[rel="preload"][href*="${expectedAsset}"]`)
   if (await matchingPreload.count() !== 1) throw new Error(`Missing image preload for ${expectedAsset}`)
   if (!(await matchingPreload.getAttribute('imagesrcset'))) throw new Error(`Missing responsive preload sources for ${expectedAsset}`)
@@ -142,15 +142,18 @@ if (!(await editorialArt.isVisible())) throw new Error('Telephone cover artwork 
 if (await editorialArt.getAttribute('src') !== '/assets/telephone-cover.png') {
   throw new Error('Telephone release uses the wrong editorial artwork')
 }
-if (!new URL(await editorialArt.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/telephone-cover-96.webp')) {
-  throw new Error('Mobile release artwork should use its smallest responsive image')
+if (!new URL(await editorialArt.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/telephone-cover-320.webp')) {
+  throw new Error('Mobile release artwork should use an appropriately sized responsive image')
 }
 const editorialArtBox = await editorialArt.boundingBox()
 const releaseTitleBox = await secondSlide.locator('.release-spotlight__title').boundingBox()
 const releaseCopyBox = await secondSlide.locator('.release-spotlight__copy').boundingBox()
 if (!editorialArtBox || !releaseTitleBox || !releaseCopyBox) throw new Error('Telephone editorial layout is not measurable')
-if (editorialArtBox.x + editorialArtBox.width >= releaseTitleBox.x || editorialArtBox.x + editorialArtBox.width >= releaseCopyBox.x) {
-  throw new Error('Telephone cover artwork must sit to the left of the Telephone title and copy')
+if (editorialArtBox.y <= releaseCopyBox.y + releaseCopyBox.height) {
+  throw new Error('Telephone cover artwork must sit beneath the Telephone description')
+}
+if (editorialArtBox.width < releaseTitleBox.width * .75 || editorialArtBox.width > releaseTitleBox.width * 1.25) {
+  throw new Error('Telephone cover artwork width should remain close to the Telephone subtitle width')
 }
 const releaseCta = secondSlide.locator('.release-spotlight__cta')
 if (await releaseCta.getAttribute('href') !== 'https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release') {
@@ -317,6 +320,21 @@ await newsletterSlide.locator('.formkit-alert-success').waitFor({ state: 'visibl
 if (new URL(page.url()).origin !== new URL(url).origin) throw new Error('Kit form unexpectedly navigated')
 
 await page.setViewportSize({ width: 900, height: 844 })
+const desktopRelease = page.locator('.site--desktop .top-pick-release')
+const desktopEditorialArt = desktopRelease.locator('.release-spotlight__initial')
+const desktopEditorialArtBox = await desktopEditorialArt.boundingBox()
+const desktopReleaseTitleBox = await desktopRelease.locator('.release-spotlight__title').boundingBox()
+const desktopReleaseCopyBox = await desktopRelease.locator('.release-spotlight__copy').boundingBox()
+if (!desktopEditorialArtBox || !desktopReleaseTitleBox || !desktopReleaseCopyBox) throw new Error('Desktop Telephone editorial layout is not measurable')
+if (desktopEditorialArtBox.y <= desktopReleaseCopyBox.y + desktopReleaseCopyBox.height) {
+  throw new Error('Desktop Telephone cover artwork must sit beneath the Telephone description')
+}
+if (desktopEditorialArtBox.width < desktopReleaseTitleBox.width * .75 || desktopEditorialArtBox.width > desktopReleaseTitleBox.width * 1.25) {
+  throw new Error('Desktop Telephone cover artwork width should remain close to the Telephone subtitle width')
+}
+if (!new URL(await desktopEditorialArt.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/telephone-cover-640.webp')) {
+  throw new Error('Desktop release artwork should use an appropriately sized responsive image')
+}
 const desktopForm = page.locator('.site--desktop form[data-uid="bb5435c1d3"]')
 await desktopForm.waitFor({ state: 'attached' })
 const desktopEmailBox = await desktopForm.locator('input[name="email_address"]').boundingBox()

@@ -230,17 +230,14 @@ video {
 }
 
 .release-spotlight__intro {
-  display: grid;
-  grid-template-columns: 130px minmax(0, 1fr);
-  align-items: start;
-  gap: 22px;
   margin-top: 8px;
 }
 
 .release-spotlight__initial {
   display: block;
-  width: 100%;
+  width: min(62%, 360px);
   height: auto;
+  margin-top: 20px;
   aspect-ratio: 1;
   object-fit: cover;
 }
@@ -250,6 +247,7 @@ video {
 }
 
 .release-spotlight__title {
+  width: fit-content;
   margin: 0;
   color: var(--color-body-text);
   font-family: "Tajamuka Script", Arial, sans-serif;
@@ -622,9 +620,12 @@ video {
   }
 
   .site--mobile .release-spotlight__intro {
-    grid-template-columns: clamp(76px, 22vw, 84px) minmax(0, 1fr);
-    gap: 10px;
     margin-top: 5px;
+  }
+
+  .site--mobile .release-spotlight__initial {
+    width: 62%;
+    margin-top: 10px;
   }
 
   .site--mobile .release-spotlight__title {
