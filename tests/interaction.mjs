@@ -55,9 +55,25 @@ page.on('console', message => {
 page.on('pageerror', error => errors.push(error.message))
 
 await page.goto(url, { waitUntil: 'load' })
+if (!new URL(await page.locator('link[rel="icon"]').getAttribute('href'), url).pathname.endsWith('/assets/favicon-32.png')) {
+  throw new Error('Telephone artwork favicon is missing')
+}
+if (!new URL(await page.locator('link[rel="apple-touch-icon"]').getAttribute('href'), url).pathname.endsWith('/assets/apple-touch-icon.png')) {
+  throw new Error('Telephone artwork Apple touch icon is missing')
+}
+if (await page.locator('meta[property="og:image"]').getAttribute('content') !== 'https://www.ogblacman.com/assets/telephone-cover-social.jpg') {
+  throw new Error('Open Graph preview must use the Telephone artwork')
+}
+if (await page.locator('meta[property="og:image:width"]').getAttribute('content') !== '1200'
+  || await page.locator('meta[property="og:image:height"]').getAttribute('content') !== '630') {
+  throw new Error('Open Graph preview dimensions must match the social image')
+}
+if (await page.locator('meta[name="twitter:image"]').getAttribute('content') !== 'https://www.ogblacman.com/assets/telephone-cover-social.jpg') {
+  throw new Error('Twitter preview must use the Telephone artwork')
+}
 const imagePreloads = page.locator('link[rel="preload"][as="image"]')
 if (await imagePreloads.count() !== 3) throw new Error('Telephone player images should have responsive preload hints')
-for (const expectedAsset of ['phone_on_hook-180.png', 'phone_off_hook-120.png', 'og-blacman-popcorn-player-96.png']) {
+for (const expectedAsset of ['phone_on_hook-180.png', 'phone_off_hook-120.png', 'telephone-cover-96.webp']) {
   const matchingPreload = page.locator(`link[rel="preload"][href*="${expectedAsset}"]`)
   if (await matchingPreload.count() !== 1) throw new Error(`Missing image preload for ${expectedAsset}`)
   if (!(await matchingPreload.getAttribute('imagesrcset'))) throw new Error(`Missing responsive preload sources for ${expectedAsset}`)
@@ -122,11 +138,11 @@ const releaseDetails = await secondSlide.locator('.release-spotlight__details').
 if (!releaseDetails.includes('Telephone')) throw new Error('Telephone release title is missing')
 if (!releaseDetails.includes('AUGUST 26, 2026')) throw new Error('Telephone release date is missing')
 const editorialArt = secondSlide.locator('.release-spotlight__initial')
-if (!(await editorialArt.isVisible())) throw new Error('Popcorn Player editorial artwork is missing')
-if (await editorialArt.getAttribute('src') !== '/assets/og-blacman-popcorn-player.png') {
+if (!(await editorialArt.isVisible())) throw new Error('Telephone cover artwork is missing')
+if (await editorialArt.getAttribute('src') !== '/assets/telephone-cover.png') {
   throw new Error('Telephone release uses the wrong editorial artwork')
 }
-if (!new URL(await editorialArt.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/og-blacman-popcorn-player-96.png')) {
+if (!new URL(await editorialArt.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/telephone-cover-96.webp')) {
   throw new Error('Mobile release artwork should use its smallest responsive image')
 }
 const editorialArtBox = await editorialArt.boundingBox()
@@ -134,7 +150,7 @@ const releaseTitleBox = await secondSlide.locator('.release-spotlight__title').b
 const releaseCopyBox = await secondSlide.locator('.release-spotlight__copy').boundingBox()
 if (!editorialArtBox || !releaseTitleBox || !releaseCopyBox) throw new Error('Telephone editorial layout is not measurable')
 if (editorialArtBox.x + editorialArtBox.width >= releaseTitleBox.x || editorialArtBox.x + editorialArtBox.width >= releaseCopyBox.x) {
-  throw new Error('Popcorn Player artwork must sit to the left of the Telephone title and copy')
+  throw new Error('Telephone cover artwork must sit to the left of the Telephone title and copy')
 }
 const releaseCta = secondSlide.locator('.release-spotlight__cta')
 if (await releaseCta.getAttribute('href') !== 'https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release') {

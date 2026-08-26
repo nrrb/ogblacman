@@ -21,8 +21,8 @@ if (!content.sections.newsletter.form.fields.find(field => field.id === 'email')
 if (content.sections.top_pick.player.track_src !== '/music/telephone.mp3') {
   throw new Error('Top pick must use the local Telephone track')
 }
-if (content.sections.top_pick.editorial_image.src !== '/assets/og-blacman-popcorn-player.png') {
-  throw new Error('Telephone release copy must use the Popcorn Player artwork')
+if (content.sections.top_pick.editorial_image.src !== '/assets/telephone-cover.png') {
+  throw new Error('Telephone release copy must use the Telephone cover artwork')
 }
 if (content.sections.top_pick.player.idle_image.src !== '/assets/phone_on_hook.png') {
   throw new Error('Telephone player must use the on-hook phone while idle')
