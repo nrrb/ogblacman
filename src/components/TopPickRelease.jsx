@@ -56,6 +56,7 @@ export default function TopPickRelease({ section, variant = 'desktop' }) {
   const [duration, setDuration] = useState(0)
   const [errorMessage, setErrorMessage] = useState('')
   const isPlaying = playbackState === 'playing'
+  const showInteractionPrompt = playbackState === 'idle' || playbackState === 'error'
 
   function stopAnalyzer() {
     if (animationFrame.current !== null) {
@@ -260,7 +261,7 @@ export default function TopPickRelease({ section, variant = 'desktop' }) {
 
           <button
             type="button"
-            className="telephone-player__button"
+            className={`telephone-player__button${showInteractionPrompt ? ' telephone-player__button--prompted' : ''}`}
             aria-label={isPlaying ? `Stop and rewind ${release.title}` : `Play ${release.title}`}
             aria-pressed={isPlaying}
             disabled={playbackState === 'loading'}
@@ -284,6 +285,11 @@ export default function TopPickRelease({ section, variant = 'desktop' }) {
                 />
               )}
             </span>
+            {showInteractionPrompt && (
+              <span className="telephone-player__interaction-prompt" aria-hidden="true">
+                {playerCopy.interactionPrompt}
+              </span>
+            )}
           </button>
 
           <div className="telephone-player__readout" aria-live="polite">

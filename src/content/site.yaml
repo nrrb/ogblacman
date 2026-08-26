@@ -56,6 +56,7 @@ homePage:
           url: https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release
           ariaLabel: Follow Telephone by OG Blacman on DistroKid
       playerCopy:
+        interactionPrompt: <- pick up my line
         idleStatus: LIFT TO LISTEN
         loadingStatus: CONNECTING
         playingStatus: LINE OPEN
