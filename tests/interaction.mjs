@@ -73,7 +73,7 @@ if (await page.locator('meta[name="twitter:image"]').getAttribute('content') !==
 }
 const imagePreloads = page.locator('link[rel="preload"][as="image"]')
 if (await imagePreloads.count() !== 3) throw new Error('Telephone player images should have responsive preload hints')
-for (const expectedAsset of ['phone_on_hook-180.png', 'phone_off_hook-120.png', 'telephone-cover-640.webp']) {
+for (const expectedAsset of ['phone_on_hook-240.png', 'phone_off_hook-160.png', 'telephone-cover-640.webp']) {
   const matchingPreload = page.locator(`link[rel="preload"][href*="${expectedAsset}"]`)
   if (await matchingPreload.count() !== 1) throw new Error(`Missing image preload for ${expectedAsset}`)
   if (!(await matchingPreload.getAttribute('imagesrcset'))) throw new Error(`Missing responsive preload sources for ${expectedAsset}`)
@@ -95,15 +95,17 @@ const slider = page.locator('.mobile-slider')
 const continuous = await slider.evaluate(element => element.classList.contains('mobile-slider--continuous'))
 const dots = page.locator('.slider-dot')
 const slides = page.locator('.mobile-slide')
+const expectedSlideIds = ['hero', 'featured-release', 'shows', 'merch', 'mailing-list']
 
 if (continuous) {
   if (await dots.count() !== 0) throw new Error('Continuous mobile scrolling should not show slide navigation dots')
-  if (await slides.count() !== 5) throw new Error('Expected five continuous mobile panels with Booking hidden')
-  for (let index = 0; index < 5; index += 1) {
+  if (await slides.count() !== expectedSlideIds.length) throw new Error('Visible section statuses did not produce the expected mobile panels')
+  for (let index = 0; index < expectedSlideIds.length; index += 1) {
+    if (await slides.nth(index).getAttribute('id') !== expectedSlideIds[index]) throw new Error('Mobile panel order does not match the content model')
     if (await slides.nth(index).getAttribute('aria-hidden') !== null) throw new Error('Continuous mobile panels should remain accessible')
     if (await slides.nth(index).getAttribute('inert') !== null) throw new Error('Continuous mobile panels should not be inert')
   }
-  for (let index = 1; index < 5; index += 1) {
+  for (let index = 1; index < expectedSlideIds.length; index += 1) {
     const isolation = await slides.nth(index).evaluate(element => getComputedStyle(element).isolation)
     if (isolation !== 'isolate') throw new Error('Continuous mobile panel did not contain its negative-z-index video background')
   }
@@ -115,12 +117,12 @@ if (continuous) {
   await page.waitForTimeout(150)
   if (await page.evaluate(() => window.scrollY) <= 0) throw new Error('Continuous mobile mode did not allow native document scrolling')
 } else {
-  if (await dots.count() !== 5) throw new Error('Expected five mobile slide navigation dots with Booking hidden')
-  await dots.nth(4).click()
+  if (await dots.count() !== expectedSlideIds.length) throw new Error('Visible section statuses did not produce the expected navigation dots')
+  await dots.nth(expectedSlideIds.length - 1).click()
   await page.waitForTimeout(350)
   await page.keyboard.press('ArrowDown')
   await page.waitForTimeout(350)
-  if (await slides.nth(4).getAttribute('aria-hidden') !== 'false') throw new Error('Discrete navigation wrapped past the final slide')
+  if (await slides.nth(expectedSlideIds.length - 1).getAttribute('aria-hidden') !== 'false') throw new Error('Discrete navigation wrapped past the final slide')
   await dots.nth(0).click()
   await page.waitForTimeout(350)
   await page.keyboard.press('ArrowUp')
@@ -128,9 +130,10 @@ if (continuous) {
   if (await slides.nth(0).getAttribute('aria-hidden') !== 'false') throw new Error('Discrete navigation wrapped before the first slide')
 }
 
-const secondSlide = slides.nth(1)
+const releaseSlideIndex = expectedSlideIds.indexOf('featured-release')
+const secondSlide = page.locator('#featured-release')
 if (continuous) await secondSlide.scrollIntoViewIfNeeded()
-else await dots.nth(1).click()
+else await dots.nth(releaseSlideIndex).click()
 await page.waitForTimeout(350)
 if (!continuous && await secondSlide.getAttribute('aria-hidden') !== 'false') throw new Error('Second slide did not activate')
 if (!(await secondSlide.innerText()).includes('HOT RELEASE')) throw new Error('Hot release slide heading is missing')
@@ -263,8 +266,10 @@ if (continuous) {
   if (scrollAfterWheel <= scrollBeforeWheel) throw new Error('Scrolling over the telephone player did not scroll the page')
 }
 
-if (continuous) await slides.nth(2).scrollIntoViewIfNeeded()
-else await dots.nth(2).click()
+const showsSlideIndex = expectedSlideIds.indexOf('shows')
+const showsSlide = page.locator('#shows')
+if (continuous) await showsSlide.scrollIntoViewIfNeeded()
+else await dots.nth(showsSlideIndex).click()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.analyzerActive === 'false')
 const visualFramesAfterLeaving = await page.evaluate(() => window.__telephoneAnalyzerMetrics.frames)
 await page.waitForTimeout(250)
@@ -275,7 +280,7 @@ const offscreenState = await page.evaluate(() => ({
 if (offscreenState.frames > visualFramesAfterLeaving + 1) throw new Error('Offscreen Telephone analyzer continued rendering')
 if (offscreenState.paused) throw new Error('Moving the Telephone analyzer offscreen should not pause audio')
 if (continuous) await secondSlide.scrollIntoViewIfNeeded()
-else await dots.nth(1).click()
+else await dots.nth(releaseSlideIndex).click()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.analyzerActive === 'true')
 await page.waitForTimeout(150)
 if (await page.evaluate(() => window.__telephoneAnalyzerMetrics.frames) <= offscreenState.frames) {
@@ -297,40 +302,46 @@ await page.waitForFunction(expected => window.__telephoneAnalyzerMetrics.resumes
 await telephoneButton.click()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'idle')
 
-const showsSlide = slides.nth(2)
 if (continuous) await showsSlide.scrollIntoViewIfNeeded()
-else await dots.nth(2).click()
+else await dots.nth(showsSlideIndex).click()
 await page.waitForTimeout(350)
 if (await showsSlide.locator('.show-link').count() !== 0) throw new Error('Placeholder show listings should not render')
 if (!(await showsSlide.locator('.show-empty').isVisible())) throw new Error('Shows coming-soon treatment is missing')
 if (await showsSlide.locator('.show-empty__cta').getAttribute('href') !== '#mailing-list') throw new Error('Show alerts CTA should link to the mailing list')
 if (await page.locator('.site--mobile .manager-card').count() !== 0) throw new Error('Hidden Booking panel should not render on mobile')
 
-const merchSlide = slides.nth(3)
+const merchSlideIndex = expectedSlideIds.indexOf('merch')
+const merchSlide = page.locator('#merch')
 if (continuous) await merchSlide.scrollIntoViewIfNeeded()
-else await dots.nth(3).click()
+else await dots.nth(merchSlideIndex).click()
 await page.waitForTimeout(350)
 if (await merchSlide.locator('.logo-marquee').count() !== 0) throw new Error('An empty merch carousel should not render')
 if (!(await merchSlide.locator('.merch-empty').isVisible())) throw new Error('Merch coming-soon treatment is missing')
 if (await merchSlide.locator('.merch-empty__cta').getAttribute('href') !== '#mailing-list') throw new Error('Merch alerts CTA should link to the mailing list')
 
-const newsletterSlide = slides.nth(4)
+const newsletterSlideIndex = expectedSlideIds.indexOf('mailing-list')
+const newsletterSlide = page.locator('#mailing-list')
 if (continuous) await newsletterSlide.scrollIntoViewIfNeeded()
-else await dots.nth(4).click()
+else await dots.nth(newsletterSlideIndex).click()
 await page.waitForTimeout(350)
 const form = newsletterSlide.locator('form')
 await form.waitFor({ state: 'visible', timeout: 15_000 })
 if (await form.getAttribute('data-uid') !== 'bb5435c1d3') throw new Error('Official Kit form embed did not initialize')
 if (await form.locator('input[name="fields[first_name]"]').getAttribute('required') !== null) throw new Error('Newsletter first name field should be optional')
 if (await form.locator('input[name="email_address"]').getAttribute('required') === null) throw new Error('Newsletter email field should be required')
+if (await form.locator('label[for="mobile-newsletter-first-name"]').textContent() !== 'First name (optional)') throw new Error('Newsletter first-name label does not use editorial copy')
+if (await form.locator('label[for="mobile-newsletter-email"]').textContent() !== 'Email address * (required)') throw new Error('Newsletter email label does not use editorial copy')
 if (await form.locator('[data-element="submit"] span').innerText() !== 'STAY IN THE LOOP') throw new Error('Newsletter CTA label is incorrect')
+if (await form.locator('[data-element="submit"]').getAttribute('data-submitting-label') !== 'SIGNING YOU UP…') throw new Error('Newsletter submitting copy is missing')
 await form.locator('input[name="email_address"]').fill('local@example.test')
 await form.locator('[data-element="submit"]').click()
 await newsletterSlide.locator('.formkit-alert-success').waitFor({ state: 'visible' })
 if (new URL(page.url()).origin !== new URL(url).origin) throw new Error('Kit form unexpectedly navigated')
 
 await page.setViewportSize({ width: 900, height: 844 })
+await page.locator('.site--desktop').waitFor({ state: 'visible' })
 if (await page.locator('.site--desktop .manager-card').count() !== 0) throw new Error('Hidden Booking section should not render on desktop')
+await page.locator('.site--desktop #mailing-list .newsletter-footer').waitFor({ state: 'visible' })
 const desktopRelease = page.locator('.site--desktop .top-pick-release')
 const desktopEditorialArt = desktopRelease.locator('.release-spotlight__initial')
 const desktopEditorialArtBox = await desktopEditorialArt.boundingBox()

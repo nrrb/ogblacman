@@ -460,6 +460,36 @@ video {
   font-size: 13px;
 }
 
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 12px;
+}
+
+.footer-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.newsletter-privacy {
+  width: min(100%, 640px);
+  margin-top: 18px;
+  color: color-mix(in srgb, var(--color-body-text) 60%, transparent);
+  font-family: Neuehaasdisplayroman, Arial, sans-serif;
+  font-size: 12px;
+}
+
+.social-links--fallback {
+  position: static;
+  margin: 48px auto;
+}
+
+.section--footer-only {
+  min-height: auto;
+}
+
 @media screen and (max-width: 767px) {
   #app,
   #app > main {
@@ -715,6 +745,14 @@ video {
 
   .mobile-slide__content--newsletter .newsletter-footer {
     margin-top: 45px;
+    font-size: 10px;
+  }
+
+  .mobile-slide > .newsletter-footer--fallback {
+    position: absolute;
+    z-index: 2;
+    inset: auto 36px 24px;
+    margin: 0;
     font-size: 10px;
   }
 

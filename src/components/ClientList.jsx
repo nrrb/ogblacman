@@ -1,22 +1,40 @@
 import AppLink from './AppLink.jsx'
 
+const ticketLabels = {
+  available: 'TICKETS',
+  soldOut: 'SOLD OUT',
+  cancelled: 'CANCELLED',
+  unavailable: 'INFO SOON',
+}
+
+function formatShowDate(show) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: show.timezone,
+  }).format(new Date(show.startAt)).toUpperCase()
+}
+
 export default function ClientList({ items, variant }) {
   return (
     <div className={`client-list${variant === 'mobile' ? ' client-list--mobile' : ''}`}>
       <div className={`client-grid${variant === 'desktop' ? ' client-grid--desktop' : ''}`} role="list">
         {items.map((item) => (
           <div
-            key={item.id}
+            key={item._key}
             role="listitem"
             className={`client-grid__item ${variant === 'mobile' ? 'client-grid__item--half' : 'client-grid__item--quarter'}`}
           >
             <AppLink
-              link={{ url: item.url, title: item.link_title, label: item.label }}
+              link={item.ticketLink}
               className="client-link show-link"
             >
-              {item.meta && <span className="show-link__date">{item.meta}</span>}
-              <span className="show-link__location">{item.label}</span>
-              {item.action_label && <span className="show-link__action">{item.action_label}</span>}
+              <span className="show-link__date">{formatShowDate(item)}</span>
+              <span className="show-link__location">{item.venue} · {item.city}</span>
+              <span className="show-link__action">{ticketLabels[item.ticketStatus]}</span>
             </AppLink>
           </div>
         ))}

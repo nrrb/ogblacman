@@ -25,8 +25,8 @@ export default function App() {
   }, [])
 
   const styleVariables = {
-    '--color-heading-outline': siteContent.theme.heading_outline_color,
-    '--heading-outline-width': siteContent.theme.heading_outline_width,
+    '--color-heading-outline': siteContent.presentation.theme.headingOutlineColor,
+    '--heading-outline-width': siteContent.presentation.theme.headingOutlineWidth,
   }
   const shouldLoadAnalytics = import.meta.env.PROD
     && typeof window !== 'undefined'

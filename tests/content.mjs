@@ -1,113 +1,144 @@
 import fs from 'node:fs'
 import { parse } from 'yaml'
+import { hydrateContent } from '../src/content/hydrateContent.js'
+import { HOME_SECTION_ORDER, sectionHref, visibleSectionNames } from '../src/content/sectionVisibility.js'
 import { validateContent } from '../src/content/validateContent.js'
 
 const source = fs.readFileSync(new URL('../src/content/site.yaml', import.meta.url), 'utf8')
 const content = validateContent(parse(source))
+const sections = content.homePage.sections
+const sectionNames = HOME_SECTION_ORDER
 
-if (content.mobile.continuous_scroll !== true) throw new Error('Continuous mobile scrolling should be enabled by default')
-if (!/^#[0-9a-f]{6}$/i.test(content.theme.heading_outline_color)) throw new Error('Heading outline color must come from site.yaml')
-if (content.theme.heading_outline_width !== 6) throw new Error('Heading outline width must come from site.yaml')
-if (content.shared.texture !== undefined) throw new Error('Deleted CTA texture must not remain in content')
-if (content.shared.style_images.grain_overlay !== undefined || content.shared.style_images.grain_background !== undefined) {
-  throw new Error('Deleted grain assets must not remain in content')
+if (!content.siteSettings || !content.homePage) throw new Error('Content must use singleton-shaped siteSettings and homePage roots')
+if (content.theme !== undefined || content.mobile !== undefined || content.shared !== undefined) {
+  throw new Error('Presentation settings must not remain in editorial content')
 }
-if (content.sections.upcoming_shows.items.length !== 0) throw new Error('Shows should not include placeholder events')
-if (content.sections.booking.visible !== false) throw new Error('Booking should be hidden by content configuration')
-if (content.sections.booking.manager.name !== 'Gabrielle Labolito') throw new Error('Hidden Booking details must remain available')
-if (!Array.isArray(content.sections.merch.items)) throw new Error('Merch items must be expandable')
-if (content.sections.merch.items.length !== 0) throw new Error('Merch should not include placeholder products')
-if (content.sections.merch.cta.url !== '#mailing-list') throw new Error('Merch alerts must link to the mailing list')
-if (content.sections.newsletter.form.fields.find(field => field.id === 'name').required) throw new Error('Newsletter name must be optional')
-if (!content.sections.newsletter.form.fields.find(field => field.id === 'email').required) throw new Error('Newsletter email must be required')
-if (content.sections.top_pick.player.track_src !== '/music/telephone.mp3') {
-  throw new Error('Top pick must use the local Telephone track')
+if (content.siteSettings.seo.title !== 'OG BLACMAN') throw new Error('SEO title must be editable in site settings')
+if (content.siteSettings.seo.socialImage.asset !== 'telephoneSocial') throw new Error('SEO social image must use a semantic asset reference')
+if (content.siteSettings.socialLinks.some((link) => !link.url.startsWith('https://'))) throw new Error('Social URLs must use HTTPS')
+if (content.siteSettings.socialLinks.some((link) => link.platform === 'youtube')) throw new Error('Unverified YouTube profile must not render')
+if (content.siteSettings.footer.status !== 'visible') throw new Error('Footer visibility must be independently configurable')
+if (content.siteSettings.integrations.kit.formUid !== 'bb5435c1d3') throw new Error('Public Kit form identifier must come from site settings')
+if (content.siteSettings.integrations.kit.embedUrl !== undefined) throw new Error('Executable integration URLs must not be editor-controlled')
+
+for (const name of sectionNames) {
+  if (!['visible', 'hidden'].includes(sections[name].status)) throw new Error(`${name} must have an editorial status`)
+  const toggled = structuredClone(content)
+  toggled.homePage.sections[name].status = name === 'booking' ? 'visible' : 'hidden'
+  validateContent(toggled)
 }
-if (content.sections.top_pick.editorial_image.src !== '/assets/telephone-cover.png') {
-  throw new Error('Telephone release copy must use the Telephone cover artwork')
+if (visibleSectionNames(sections).join(',') !== 'hero,featuredRelease,shows,merch,newsletter') {
+  throw new Error('Visible section order must follow the stable home-page model')
 }
-if (content.sections.top_pick.player.idle_image.src !== '/assets/phone_on_hook.png') {
-  throw new Error('Telephone player must use the on-hook phone while idle')
+if (sectionHref('featuredRelease') !== '#featured-release' || sectionHref('newsletter') !== '#mailing-list') {
+  throw new Error('Semantic section links must resolve to rendered section IDs')
 }
-if (content.sections.top_pick.player.active_image.src !== '/assets/phone_off_hook.png') {
-  throw new Error('Telephone player must use the off-hook phone during playback')
+if (sections.booking.status !== 'hidden') throw new Error('Booking should remain hidden by content status')
+if (sections.booking.contact.name !== 'Gabrielle Labolito') throw new Error('Hidden Booking details must remain available')
+
+if (sections.featuredRelease.release.releaseDate !== '2026-08-26') throw new Error('Featured release must use one canonical release date')
+if (sections.featuredRelease.release.release_date !== undefined) throw new Error('Duplicate formatted release date must not remain')
+if (sections.featuredRelease.release.audio.asset !== 'telephone') throw new Error('Featured release must use a semantic audio asset')
+if (sections.featuredRelease.release.coverArt.asset !== 'telephoneCover') throw new Error('Featured release must use semantic cover art')
+if (sections.featuredRelease.release.primaryLink.url !== 'https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release') {
+  throw new Error('Featured release must retain its DistroKid link')
 }
-if (content.sections.top_pick.heading.title !== 'HOT RELEASE') {
-  throw new Error('Telephone section heading must identify the hot release')
-}
-if (content.sections.top_pick.release_date_iso !== '2026-08-26') {
-  throw new Error('Telephone release date must be August 26, 2026')
-}
-if (content.sections.top_pick.cta.url !== 'https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release') {
-  throw new Error('Telephone must link to its DistroKid release page')
-}
-if (content.sections.top_pick.streaming_links !== undefined) throw new Error('Top pick external streaming links must be removed')
+
+if (sections.shows.items.length !== 0) throw new Error('Shows should not include placeholder events')
+if (sections.merch.items.length !== 0) throw new Error('Merch should not include placeholder products')
+if (sections.newsletter.form !== undefined) throw new Error('Unused legacy newsletter form schema must be removed')
+if (!sections.newsletter.formCopy.successMessage) throw new Error('Newsletter editorial feedback copy is missing')
+if (!sections.newsletter.formCopy.submittingLabel) throw new Error('Newsletter submitting copy is missing')
 
 const expanded = structuredClone(content)
-expanded.sections.merch.items.push({
-  id: 'content-test-product',
-  image: { src: '/assets/reference/test-product.png', alt: 'Content test product' },
-  link: { label: 'Test product', url: 'https://example-shop.fourthwall.com/products/test', title: 'View the test product' },
+expanded.homePage.sections.shows.items.push({
+  _key: 'content-test-show',
+  startAt: '2026-10-01T20:00:00-05:00',
+  timezone: 'America/Chicago',
+  venue: 'Test Venue',
+  city: 'Chicago, IL',
+  ticketStatus: 'available',
+  ticketLink: {
+    type: 'external',
+    label: 'Tickets',
+    url: 'https://example.com/tickets',
+  },
+})
+expanded.homePage.sections.merch.items.push({
+  _key: 'content-test-product',
+  title: 'Test product',
+  price: '$25',
+  availability: 'available',
+  image: { asset: 'telephoneCover', alt: 'Content test product' },
+  productLink: {
+    type: 'external',
+    label: 'View test product',
+    url: 'https://example.com/products/test',
+  },
 })
 validateContent(expanded)
-if (expanded.sections.merch.items.length !== content.sections.merch.items.length + 1) throw new Error('Merch carousel did not accept an additional item')
+const hydrated = hydrateContent(expanded)
+if (hydrated.siteSettings.integrations.kit.embedUrl !== 'https://og-blacman.kit.com/bb5435c1d3/index.js') {
+  throw new Error('The public Kit identifier must hydrate through the trusted application host')
+}
+if (hydrated.homePage.sections.merch.items[0].image.src !== '/assets/telephone-cover.png') {
+  throw new Error('Semantic image references must hydrate to runtime assets')
+}
+if (hydrated.siteSettings.socialLinks.some((link) => !link.icon?.src)) throw new Error('Social platform icons must hydrate from application configuration')
 
-const discreteMobile = structuredClone(content)
-discreteMobile.mobile.continuous_scroll = false
-validateContent(discreteMobile)
+const newsletterHidden = structuredClone(content)
+newsletterHidden.homePage.sections.newsletter.status = 'hidden'
+validateContent(newsletterHidden)
+const hydratedWithoutNewsletter = hydrateContent(newsletterHidden)
+if (!hydratedWithoutNewsletter.homePage.sections.shows.emptyState.cta.disabled) {
+  throw new Error('Links to a hidden Newsletter section must become non-interactive')
+}
+if (!hydratedWithoutNewsletter.homePage.sections.merch.emptyState.cta.disabled) {
+  throw new Error('Merch links to a hidden Newsletter section must become non-interactive')
+}
 
-for (const invalidValue of [undefined, 'true', 1]) {
-  const invalidMobile = structuredClone(content)
-  invalidMobile.mobile.continuous_scroll = invalidValue
-  let invalidMobileRejected = false
+const allHidden = structuredClone(content)
+for (const name of sectionNames) allHidden.homePage.sections[name].status = 'hidden'
+let allHiddenRejected = false
+try {
+  validateContent(allHidden)
+} catch (error) {
+  allHiddenRejected = error.message.includes('at least one section')
+}
+if (!allHiddenRejected) throw new Error('Content accepted a home page with no visible sections')
+
+for (const invalidStatus of [undefined, true, 'draft']) {
+  const invalid = structuredClone(content)
+  invalid.homePage.sections.hero.status = invalidStatus
+  let rejected = false
   try {
-    validateContent(invalidMobile)
+    validateContent(invalid)
   } catch (error) {
-    invalidMobileRejected = error.message.includes('mobile.continuous_scroll')
+    rejected = error.message.includes('homePage.sections.hero.status')
   }
-  if (!invalidMobileRejected) throw new Error(`Invalid mobile scrolling value was accepted: ${String(invalidValue)}`)
+  if (!rejected) throw new Error(`Invalid section status was accepted: ${String(invalidStatus)}`)
 }
 
-for (const invalidValue of [undefined, 'false', 0]) {
-  const invalidBooking = structuredClone(content)
-  invalidBooking.sections.booking.visible = invalidValue
-  let invalidBookingRejected = false
-  try {
-    validateContent(invalidBooking)
-  } catch (error) {
-    invalidBookingRejected = error.message.includes('sections.booking.visible')
-  }
-  if (!invalidBookingRejected) throw new Error(`Invalid Booking visibility was accepted: ${String(invalidValue)}`)
-}
-
-for (const invalidValue of [undefined, 'gold', '#FC30']) {
-  const invalidTheme = structuredClone(content)
-  invalidTheme.theme.heading_outline_color = invalidValue
-  let invalidThemeRejected = false
-  try {
-    validateContent(invalidTheme)
-  } catch (error) {
-    invalidThemeRejected = error.message.includes('theme.heading_outline_color')
-  }
-  if (!invalidThemeRejected) throw new Error(`Invalid heading outline color was accepted: ${String(invalidValue)}`)
-}
-
-const duplicate = structuredClone(content)
-const duplicateShow = {
-  id: 'duplicate-show',
-  meta: 'SHOW DATE',
-  label: 'SHOW LOCATION',
-  action_label: 'TICKETS',
-  url: null,
-  link_title: null,
-}
-duplicate.sections.upcoming_shows.items.push(duplicateShow, structuredClone(duplicateShow))
+const duplicate = structuredClone(expanded)
+duplicate.homePage.sections.shows.items.push(structuredClone(duplicate.homePage.sections.shows.items[0]))
 let duplicateRejected = false
 try {
   validateContent(duplicate)
 } catch (error) {
-  duplicateRejected = error.message.includes('duplicate ID')
+  duplicateRejected = error.message.includes('duplicate key')
 }
-if (!duplicateRejected) throw new Error('Duplicate collection IDs must be rejected')
+if (!duplicateRejected) throw new Error('Duplicate Sanity-style array keys were accepted')
 
-console.log('YAML content schema and expandable collections passed.')
+for (const invalidUrl of ['http://example.com', 'not-a-url']) {
+  const invalid = structuredClone(content)
+  invalid.siteSettings.socialLinks[0].url = invalidUrl
+  let rejected = false
+  try {
+    validateContent(invalid)
+  } catch (error) {
+    rejected = error.message.includes('siteSettings.socialLinks[0].url')
+  }
+  if (!rejected) throw new Error(`Invalid social URL was accepted: ${invalidUrl}`)
+}
+
+console.log('Sanity-ready singleton content, semantic fields, and section visibility passed.')

@@ -1,10 +1,17 @@
-export default function AppLink({ link, children, ...rest }) {
-  const rel = link.rel || (link.target === '_blank' ? 'noopener noreferrer' : undefined)
-  const content = children ?? link.label
+import { sectionHref } from '../content/sectionVisibility.js'
 
-  if (!link.url) {
+export default function AppLink({ link, children, ...rest }) {
+  const href = link?.disabled
+    ? null
+    : link?.type === 'section'
+      ? sectionHref(link.section)
+      : link?.url
+  const opensNewTab = link?.type === 'external'
+  const content = children ?? link?.label
+
+  if (!href) {
     return (
-      <span title={link.title || undefined} {...rest}>
+      <span aria-disabled={link?.disabled ? 'true' : undefined} {...rest}>
         {content}
       </span>
     )
@@ -12,10 +19,10 @@ export default function AppLink({ link, children, ...rest }) {
 
   return (
     <a
-      href={link.url}
-      title={link.title || undefined}
-      target={link.target || undefined}
-      rel={rel}
+      href={href}
+      target={opensNewTab ? '_blank' : undefined}
+      rel={opensNewTab ? 'noopener noreferrer' : undefined}
+      aria-label={link.ariaLabel || undefined}
       {...rest}
     >
       {content}

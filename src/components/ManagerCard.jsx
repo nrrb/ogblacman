@@ -4,7 +4,7 @@ export default function ManagerCard({ manager }) {
   return (
     <address className="manager-contact">
       <div className="manager-contact__heading">
-        <div className="manager-contact__eyebrow">{manager.role}</div>
+        <div className="manager-contact__eyebrow">{manager.jobTitle}</div>
         <div className="manager-contact__name">{manager.name}</div>
       </div>
 

@@ -1,164 +1,124 @@
-accessibility:
-  slider_dot_label: "Show slide {current} of {total}"
-  previous_slide_label: Previous slide
-  next_slide_label: Next slide
-
-mobile:
-  continuous_scroll: true
-
-theme:
-  heading_outline_color: "#EFBF04"
-  heading_outline_width: 6
-
-shared:
-  style_images:
-    secondary_gradient: /assets/reference/text-gradient-secondary.jpg
-  arrow:
-    src: /assets/reference/cta-arrow.png
-    alt: ""
-
-social_links:
-  - id: instagram
-    label: Instagram
-    url: https://www.instagram.com/ogblacman/
-    title: Follow OG Blacman on Instagram
-    target: _blank
-    icon:
-      src: /assets/reference/social-instagram-icon.svg
-      alt: Instagram
-  - id: tiktok
-    label: TikTok
-    url: http://tiktok.com/@ogblacman
-    title: Follow OG Blacman on TikTok
-    target: _blank
-    icon:
-      src: /assets/reference/social-tiktok-icon.png
-      alt: TikTok
-      sizes: "(max-width: 1168px) 100vw, 1168px"
-      sources:
-        - { src: /assets/reference/social-tiktok-icon-500w.png, width: 500 }
-        - { src: /assets/reference/social-tiktok-icon-800w.png, width: 800 }
-        - { src: /assets/reference/social-tiktok-icon-1080w.png, width: 1080 }
-        - { src: /assets/reference/social-tiktok-icon.png, width: 1168 }
-  - id: youtube
-    label: YouTube
-    url: http://tiktok.com/@ogblacman
-    title: Watch OG Blacman
-    target: _blank
-    icon:
-      src: /assets/reference/social-youtube-icon.png
-      alt: YouTube
-      sizes: "(max-width: 512px) 100vw, 512px"
-      sources:
-        - { src: /assets/reference/social-youtube-icon-500w.png, width: 500 }
-        - { src: /assets/reference/social-youtube-icon.png, width: 512 }
-sections:
-  hero:
-    heading: { title: OG BLACMAN }
-    cta: { label: CLIMB DOWN, url: null, title: null }
-    media:
-      desktop:
-        poster: /assets/hero/hero-montage-desktop-poster.jpg
-        sources:
-          - { src: /assets/hero/hero-montage-desktop.mp4, type: video/mp4 }
-          - { src: /assets/hero/hero-montage-desktop.webm, type: video/webm }
-      mobile:
-        poster: /assets/hero/hero-montage-mobile-poster.jpg
-        sources:
-          - { src: /assets/hero/hero-montage-mobile.mp4, type: video/mp4 }
-          - { src: /assets/hero/hero-montage-mobile.webm, type: video/webm }
-  top_pick:
-    heading: { title: HOT RELEASE }
-    release_label: NEW SINGLE
-    release_date: AUGUST 26, 2026
-    release_date_iso: "2026-08-26"
-    copy: Telephone lands August 26, 2026. Hear OG Blacman's hot release now in the Popcorn Player, then follow the release on DistroKid.
-    editorial_image:
-      src: /assets/telephone-cover.png
+siteSettings:
+  identity:
+    name: OG BLACMAN
+    canonicalUrl: https://www.ogblacman.com/
+  seo:
+    title: OG BLACMAN
+    description: OG Blacman — music, shows, merch, and more.
+    socialImage:
+      asset: telephoneSocial
       alt: OG Blacman Telephone cover artwork
-      sizes: "(max-width: 767px) 81vw, 512px"
-      sources:
-        - { src: /assets/telephone-cover-96.webp, width: 96 }
-        - { src: /assets/telephone-cover-160.webp, width: 160 }
-        - { src: /assets/telephone-cover-320.webp, width: 320 }
-        - { src: /assets/telephone-cover-640.webp, width: 640 }
-        - { src: /assets/telephone-cover-1200.webp, width: 1200 }
-    cta:
-      label: FOLLOW TELEPHONE ON DISTROKID
-      url: https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release
-      title: Follow Telephone by OG Blacman on DistroKid
-      target: _blank
-    player:
-      artist: OG Blacman
-      title: Telephone
-      track_src: "/music/telephone.mp3"
-      duration: 143.9447
-      start_label: Play Telephone
-      stop_label: Stop and rewind Telephone
-      idle_image:
-        src: /assets/phone_on_hook.png
-        alt: ""
-        sizes: "(max-width: 767px) 178px, 230px"
-        sources:
-          - { src: /assets/phone_on_hook-180.png, width: 180 }
-          - { src: /assets/phone_on_hook-240.png, width: 240 }
-          - { src: /assets/phone_on_hook-480.png, width: 480 }
-          - { src: /assets/phone_on_hook.png, width: 1254 }
-      active_image:
-        src: /assets/phone_off_hook.png
-        alt: ""
-        sizes: "(max-width: 767px) 89px, 115px"
-        sources:
-          - { src: /assets/phone_off_hook-120.png, width: 120 }
-          - { src: /assets/phone_off_hook-160.png, width: 160 }
-          - { src: /assets/phone_off_hook-240.png, width: 240 }
-          - { src: /assets/phone_off_hook-320.png, width: 320 }
-          - { src: /assets/phone_off_hook.png, width: 887 }
-    mobile_media: &standard_mobile_media
-      poster: "/assets/reference/mobile-standard-background-poster.jpg?v=montage-v1"
-      sources:
-        - { src: "/assets/reference/mobile-standard-background.mp4?v=montage-v1", type: video/mp4 }
-        - { src: "/assets/reference/mobile-standard-background.webm?v=montage-v1", type: video/webm }
-  upcoming_shows:
-    heading: { title: SHOWS }
-    copy: Events coming soon, sign up for the mailing list to stay informed!
-    items: []
-    mobile_media: *standard_mobile_media
-  booking:
-    visible: false
-    heading: { title: BOOKING }
-    manager:
-      role: Manager
-      name: Gabrielle Labolito
-      email: glabolito@gmail.com
-      phone: 215-680-0240
-    mobile_media: *standard_mobile_media
-  merch:
-    heading: { title: MERCH }
-    copy: Official OG Blacman merch is in the works. Sign up for the mailing list and be first in line when the drop lands.
-    cta: { label: GET DROP ALERTS, url: "#mailing-list", title: Sign up for OG Blacman merch drop alerts }
-    items: []
-    mobile_media:
-      poster: "/assets/reference/mobile-studios-background-poster.jpg?v=montage-v1"
-      sources:
-        - { src: "/assets/reference/mobile-studios-background.mp4?v=montage-v1", type: video/mp4 }
-        - { src: "/assets/reference/mobile-studios-background.webm?v=montage-v1", type: video/webm }
-  newsletter:
-    heading: { title: GET UPDATES }
-    form:
-      required_marker: "*"
-      fields:
-        - { id: name, name: Name, type: text, label: Name, placeholder: Your name, required: false }
-        - { id: email, name: Email, type: email, label: Email, placeholder: youremail@email.com, required: true }
-      submit_label: "Sign up     →"
-      wait_label: Please wait...
-      success_message: You're on the list. Thank you for signing up!
-      error_message: Something went wrong. Please try again.
-    mobile_media:
-      poster: "/assets/reference/mobile-clients-background-poster.jpg?v=montage-v1"
-      sources:
-        - { src: "/assets/reference/mobile-clients-background.mp4?v=montage-v1", type: video/mp4 }
-        - { src: "/assets/reference/mobile-clients-background.webm?v=montage-v1", type: video/webm }
+    noIndex: false
+  socialLinks:
+    - _key: instagram
+      platform: instagram
+      label: Instagram
+      url: https://www.instagram.com/ogblacman/
+    - _key: tiktok
+      platform: tiktok
+      label: TikTok
+      url: https://www.tiktok.com/@ogblacman
+  footer:
+    status: visible
+    copyrightOwner: OG BLACMAN
+    copyrightStartYear: 2026
+    links: []
+  integrations:
+    kit:
+      formUid: bb5435c1d3
 
-footer:
-  copyright: © COPYRIGHT 2026 OG BLACMAN. ALL RIGHTS RESERVED.
+homePage:
+  sections:
+    hero:
+      status: visible
+      heading: { title: OG BLACMAN }
+      supportingText: null
+      scrollPrompt: CLIMB DOWN
+      backgroundVideo:
+        primary: heroDesktop
+        mobileOverride: heroMobile
+    featuredRelease:
+      status: visible
+      heading: { title: HOT RELEASE }
+      release:
+        typeLabel: NEW SINGLE
+        artist: OG Blacman
+        title: Telephone
+        releaseDate: "2026-08-26"
+        description: Telephone lands August 26, 2026. Hear OG Blacman's hot release now in the Popcorn Player, then follow the release on DistroKid.
+        coverArt:
+          asset: telephoneCover
+          alt: OG Blacman Telephone cover artwork
+        audio: { asset: telephone }
+        primaryLink:
+          type: external
+          label: FOLLOW TELEPHONE ON DISTROKID
+          url: https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release
+          ariaLabel: Follow Telephone by OG Blacman on DistroKid
+      playerCopy:
+        idleStatus: LIFT TO LISTEN
+        loadingStatus: CONNECTING
+        playingStatus: LINE OPEN
+        errorMessage: Telephone could not be played.
+      mobileBackground: standardMobile
+    shows:
+      status: visible
+      heading: { title: SHOWS }
+      emptyState:
+        statusLabel: Live transmission
+        availability: No dates posted — yet
+        headline: The next show
+        accent: is loading.
+        body: Events coming soon, sign up for the mailing list to stay informed!
+        cta:
+          type: section
+          section: newsletter
+          label: Get show alerts
+      items: []
+      mobileBackground: standardMobile
+    booking:
+      status: hidden
+      heading: { title: BOOKING }
+      intro: null
+      contact:
+        jobTitle: Manager
+        name: Gabrielle Labolito
+        email: glabolito@gmail.com
+        phone: 215-680-0240
+        preferredContact: email
+      mobileBackground: standardMobile
+    merch:
+      status: visible
+      heading: { title: MERCH }
+      intro: Official OG Blacman merchandise.
+      emptyState:
+        statusLabel: OG Blacman goods
+        availability: Drop 001 — in development
+        headline: The first drop
+        accent: is taking shape.
+        body: Official OG Blacman merch is in the works. Sign up for the mailing list and be first in line when the drop lands.
+        cta:
+          type: section
+          section: newsletter
+          label: GET DROP ALERTS
+          ariaLabel: Sign up for OG Blacman merch drop alerts
+      items: []
+      mobileBackground: merchMobile
+    newsletter:
+      status: visible
+      heading: { title: GET UPDATES }
+      intro: null
+      formCopy:
+        ariaLabel: Join the OG Blacman mailing list
+        firstNameLabel: First name
+        firstNamePlaceholder: Your first name
+        emailLabel: Email address
+        emailPlaceholder: you@example.com
+        optionalLabel: optional
+        requiredLabel: required
+        submitLabel: STAY IN THE LOOP
+        submittingLabel: SIGNING YOU UP…
+        successMessage: You're on the list. Thank you for signing up!
+        errorMessage: The signup form could not load. Please check your connection and try again.
+      privacyNotice: null
+      mobileBackground: newsletterMobile

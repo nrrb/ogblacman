@@ -26,7 +26,17 @@ function formatTime(seconds) {
   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
 }
 
-export default function TopPickRelease({ release, variant = 'desktop' }) {
+function formatReleaseDate(value) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(`${value}T00:00:00Z`)).toUpperCase()
+}
+
+export default function TopPickRelease({ section, variant = 'desktop' }) {
+  const { release, playerCopy, playerImages } = section
   const audio = useRef(null)
   const canvas = useRef(null)
   const canvasContext = useRef(null)
@@ -43,7 +53,7 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
   const [playbackState, setPlaybackState] = useState('idle')
   const [isPlayerVisible, setIsPlayerVisible] = useState(true)
   const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(release.player.duration)
+  const [duration, setDuration] = useState(0)
   const [errorMessage, setErrorMessage] = useState('')
   const isPlaying = playbackState === 'playing'
 
@@ -145,10 +155,10 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
     try {
       await prepareAnalyzer()
       await audioElement.play()
-    } catch (error) {
+    } catch {
       suspendAudioContext()
       setPlaybackState('error')
-      setErrorMessage(error instanceof Error ? error.message : 'Telephone could not be played.')
+      setErrorMessage(playerCopy.errorMessage)
     }
   }
 
@@ -202,23 +212,23 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
       <div className="release-spotlight__content">
         <div className="release-spotlight__details">
           <div className="release-spotlight__meta">
-            <span>{release.release_label}</span>
+            <span>{release.typeLabel}</span>
             <span aria-hidden="true">•</span>
-            <time dateTime={release.release_date_iso}>{release.release_date}</time>
+            <time dateTime={release.releaseDate}>{formatReleaseDate(release.releaseDate)}</time>
           </div>
           <div className="release-spotlight__intro">
             <div className="release-spotlight__text">
-              <h3 className="release-spotlight__title">{release.player.title}</h3>
-              <p className="release-spotlight__copy">{release.copy}</p>
+              <h3 className="release-spotlight__title">{release.title}</h3>
+              <p className="release-spotlight__copy">{release.description}</p>
               <ResponsiveImage
-                image={release.editorial_image}
+                image={release.coverArt}
                 className="release-spotlight__initial"
                 loading="eager"
                 fetchPriority="high"
                 decoding="async"
               />
-              <AppLink link={release.cta} className="release-spotlight__cta">
-                <span>{release.cta.label}</span>
+              <AppLink link={release.primaryLink} className="release-spotlight__cta">
+                <span>{release.primaryLink.label}</span>
                 <span className="release-spotlight__arrow" aria-hidden="true">→</span>
               </AppLink>
             </div>
@@ -234,7 +244,7 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
         >
           <audio
             ref={audio}
-            src={release.player.track_src}
+            src={release.audio.src}
             preload="metadata"
             onPlay={() => setPlaybackState('playing')}
             onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
@@ -244,21 +254,21 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
             onError={() => {
               suspendAudioContext()
               setPlaybackState('error')
-              setErrorMessage('Telephone could not be played.')
+              setErrorMessage(playerCopy.errorMessage)
             }}
           />
 
           <button
             type="button"
             className="telephone-player__button"
-            aria-label={isPlaying ? release.player.stop_label : release.player.start_label}
+            aria-label={isPlaying ? `Stop and rewind ${release.title}` : `Play ${release.title}`}
             aria-pressed={isPlaying}
             disabled={playbackState === 'loading'}
             onClick={togglePlayback}
           >
             <span className={`telephone-player__phone telephone-player__phone--${isPlaying ? 'active' : 'idle'}`}>
               <ResponsiveImage
-                image={isPlaying ? release.player.active_image : release.player.idle_image}
+                image={isPlaying ? playerImages.active : playerImages.idle}
                 className="telephone-player__image"
                 loading="eager"
                 fetchPriority="high"
@@ -277,14 +287,14 @@ export default function TopPickRelease({ release, variant = 'desktop' }) {
           </button>
 
           <div className="telephone-player__readout" aria-live="polite">
-            <span>{isPlaying ? 'LINE OPEN' : playbackState === 'loading' ? 'CONNECTING' : 'LIFT TO LISTEN'}</span>
+            <span>{isPlaying ? playerCopy.playingStatus : playbackState === 'loading' ? playerCopy.loadingStatus : playerCopy.idleStatus}</span>
             <span>{formatTime(currentTime)} / {formatTime(duration)}</span>
           </div>
           <progress
             className="telephone-player__progress"
             value={currentTime}
-            max={duration || release.player.duration}
-            aria-label={`${release.player.title} playback progress`}
+            max={duration || 1}
+            aria-label={`${release.title} playback progress`}
           />
           {errorMessage && <p className="telephone-player__error" role="alert">{errorMessage}</p>}
         </div>

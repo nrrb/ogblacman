@@ -1,12 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './KitSignup.css'
 
-const KIT_EMBED = Object.freeze({
-  uid: 'bb5435c1d3',
-  scriptSrc: 'https://og-blacman.kit.com/bb5435c1d3/index.js',
-  runtimeSrcPrefix: 'https://f.convertkit.com/ckjs/ck.',
-})
-
 let cachedFormMarkup = ''
 let cachedFormConfig = null
 let initialEmbedPromise = null
@@ -30,12 +24,12 @@ function removeFromKitRegistry(form) {
   window.__sv_forms = window.__sv_forms.filter((entry) => entry.element !== form)
 }
 
-function waitForKitRuntime() {
+function waitForKitRuntime(runtimeSrcPrefix) {
   if (window.CK?.default) return Promise.resolve()
 
   return new Promise((resolve, reject) => {
     const runtimeScript = [...document.scripts].find((script) =>
-      script.src.startsWith(KIT_EMBED.runtimeSrcPrefix),
+      script.src.startsWith(runtimeSrcPrefix),
     )
 
     if (!runtimeScript) {
@@ -66,31 +60,14 @@ function waitForKitRuntime() {
   })
 }
 
-function createField({ id, label, name, type, autocomplete, placeholder, required = false }) {
+function createField({ id, label, name, type, autocomplete, placeholder, required = false, copy }) {
   const wrapper = document.createElement('div')
   wrapper.className = 'formkit-field kit-signup__field'
 
   const fieldLabel = document.createElement('label')
   fieldLabel.className = 'kit-signup__label'
   fieldLabel.htmlFor = id
-  fieldLabel.textContent = label
-
-  if (required) {
-    const visibleRequired = document.createElement('span')
-    visibleRequired.className = 'kit-signup__required'
-    visibleRequired.setAttribute('aria-hidden', 'true')
-    visibleRequired.textContent = ' *'
-
-    const accessibleRequired = document.createElement('span')
-    accessibleRequired.className = 'kit-signup__sr-only'
-    accessibleRequired.textContent = ' (required)'
-    fieldLabel.append(visibleRequired, accessibleRequired)
-  } else {
-    const optional = document.createElement('span')
-    optional.className = 'kit-signup__optional'
-    optional.textContent = ' (optional)'
-    fieldLabel.append(optional)
-  }
+  updateFieldLabel(fieldLabel, label, required, copy)
 
   const input = document.createElement('input')
   input.id = id
@@ -106,7 +83,29 @@ function createField({ id, label, name, type, autocomplete, placeholder, require
   return wrapper
 }
 
-function enhanceMessages(form) {
+function updateFieldLabel(fieldLabel, label, required, copy) {
+  fieldLabel.replaceChildren(document.createTextNode(label))
+
+  if (required) {
+    const visibleRequired = document.createElement('span')
+    visibleRequired.className = 'kit-signup__required'
+    visibleRequired.setAttribute('aria-hidden', 'true')
+    visibleRequired.textContent = ' *'
+
+    const accessibleRequired = document.createElement('span')
+    accessibleRequired.className = 'kit-signup__sr-only'
+    accessibleRequired.textContent = ` (${copy.requiredLabel})`
+    fieldLabel.append(visibleRequired, accessibleRequired)
+  } else {
+    const optional = document.createElement('span')
+    optional.className = 'kit-signup__optional'
+    optional.textContent = ` (${copy.optionalLabel})`
+    fieldLabel.append(optional)
+  }
+
+}
+
+function enhanceMessages(form, copy) {
   const errorList = form.querySelector('[data-element="errors"]')
   if (errorList) {
     errorList.setAttribute('role', 'alert')
@@ -118,10 +117,13 @@ function enhanceMessages(form) {
     successMessage.setAttribute('role', 'status')
     successMessage.setAttribute('aria-live', 'polite')
     successMessage.setAttribute('aria-atomic', 'true')
+    if (successMessage.textContent !== copy.successMessage) {
+      successMessage.textContent = copy.successMessage
+    }
   }
 }
 
-export default function KitSignup({ idPrefix = 'kit-signup' }) {
+export default function KitSignup({ idPrefix = 'kit-signup', integration, copy }) {
   const embedHost = useRef(null)
   const [loadFailed, setLoadFailed] = useState(false)
 
@@ -145,7 +147,7 @@ export default function KitSignup({ idPrefix = 'kit-signup' }) {
 
       if (!enhancedForms.has(form)) {
         enhancedForms.add(form)
-        form.setAttribute('aria-label', 'Join the OG Blacman mailing list')
+        form.setAttribute('aria-label', copy.ariaLabel)
         form.removeAttribute('target')
 
         const fields = form.querySelector('[data-element="fields"]')
@@ -155,23 +157,25 @@ export default function KitSignup({ idPrefix = 'kit-signup' }) {
           fields.insertBefore(
             createField({
               id: `${idPrefix}-first-name`,
-              label: 'First name',
+              label: copy.firstNameLabel,
               name: 'fields[first_name]',
               type: 'text',
               autocomplete: 'given-name',
-              placeholder: 'Your first name',
+              placeholder: copy.firstNamePlaceholder,
+              copy,
             }),
             submit,
           )
           fields.insertBefore(
             createField({
               id: `${idPrefix}-email`,
-              label: 'Email address',
+              label: copy.emailLabel,
               name: 'email_address',
               type: 'email',
               autocomplete: 'email',
-              placeholder: 'you@example.com',
+              placeholder: copy.emailPlaceholder,
               required: true,
+              copy,
             }),
             submit,
           )
@@ -185,12 +189,16 @@ export default function KitSignup({ idPrefix = 'kit-signup' }) {
         if (firstName && firstNameLabel) {
           firstName.id = `${idPrefix}-first-name`
           firstNameLabel.htmlFor = firstName.id
+          firstName.placeholder = copy.firstNamePlaceholder
+          updateFieldLabel(firstNameLabel, copy.firstNameLabel, false, copy)
         }
         if (email && emailLabel) {
           email.id = `${idPrefix}-email`
           emailLabel.htmlFor = email.id
           email.required = true
           email.setAttribute('aria-required', 'true')
+          email.placeholder = copy.emailPlaceholder
+          updateFieldLabel(emailLabel, copy.emailLabel, true, copy)
         }
 
         if (submit) {
@@ -198,13 +206,14 @@ export default function KitSignup({ idPrefix = 'kit-signup' }) {
           submit.disabled = true
           submit.setAttribute('aria-disabled', 'true')
           const label = submit.querySelector('span')
-          if (label && label.textContent !== 'STAY IN THE LOOP') {
-            label.textContent = 'STAY IN THE LOOP'
+          if (label && label.textContent !== copy.submitLabel) {
+            label.textContent = copy.submitLabel
           }
+          submit.dataset.submittingLabel = copy.submittingLabel
         }
       }
 
-      enhanceMessages(form)
+      enhanceMessages(form, copy)
     }
 
     function enableForm(form) {
@@ -217,7 +226,7 @@ export default function KitSignup({ idPrefix = 'kit-signup' }) {
 
     function restoreCachedForm() {
       host.innerHTML = cachedFormMarkup
-      const form = host.querySelector(`form[data-uid="${KIT_EMBED.uid}"]`)
+      const form = host.querySelector(`form[data-uid="${integration.formUid}"]`)
       if (!form) throw new Error('The cached Kit form could not be restored.')
 
       window.__sv_forms = [
@@ -232,7 +241,7 @@ export default function KitSignup({ idPrefix = 'kit-signup' }) {
 
     function watchEmbedHost() {
       mutationObserver = new MutationObserver(() => {
-        const form = host.querySelector(`form[data-uid="${KIT_EMBED.uid}"]`)
+        const form = host.querySelector(`form[data-uid="${integration.formUid}"]`)
         if (form) enhanceForm(form)
       })
       mutationObserver.observe(host, { childList: true, subtree: true })
@@ -241,8 +250,8 @@ export default function KitSignup({ idPrefix = 'kit-signup' }) {
     async function loadOfficialEmbed() {
       embedScript = document.createElement('script')
       embedScript.async = true
-      embedScript.dataset.uid = KIT_EMBED.uid
-      embedScript.src = KIT_EMBED.scriptSrc
+      embedScript.dataset.uid = integration.formUid
+      embedScript.src = integration.embedUrl
 
       const embedLoaded = new Promise((resolve, reject) => {
         embedScript.addEventListener('load', resolve, { once: true })
@@ -254,11 +263,11 @@ export default function KitSignup({ idPrefix = 'kit-signup' }) {
       host.appendChild(embedScript)
       await embedLoaded
 
-      const form = host.querySelector(`form[data-uid="${KIT_EMBED.uid}"]`)
+      const form = host.querySelector(`form[data-uid="${integration.formUid}"]`)
       if (!form) throw new Error('Kit did not render the signup form.')
       enhanceForm(form)
       cacheGeneratedForm(form)
-      await waitForKitRuntime()
+      await waitForKitRuntime(integration.runtimeSrcPrefix)
       enableForm(form)
       return form
     }
@@ -302,14 +311,14 @@ export default function KitSignup({ idPrefix = 'kit-signup' }) {
       removeFromKitRegistry(activeForm)
       if (embedScript?.isConnected) embedScript.remove()
     }
-  }, [idPrefix])
+  }, [copy, idPrefix, integration])
 
   return (
     <div className="kit-signup">
       <div ref={embedHost} className="kit-signup__embed" />
       {loadFailed && (
         <p className="kit-signup__load-error" role="alert">
-          The signup form could not load. Please check your connection and try again.
+          {copy.errorMessage}
         </p>
       )}
     </div>

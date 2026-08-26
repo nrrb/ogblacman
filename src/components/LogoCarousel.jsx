@@ -28,9 +28,9 @@ export default function LogoCarousel({ items }) {
             <div className="logo-marquee__spacing logo-marquee__spacing--large">
               <div ref={track} className="logo-marquee__track">
                 {items.map((item) => (
-                  <div key={item.id} className="logo-marquee__item">
-                    {item.link?.url ? (
-                      <AppLink link={item.link} className="logo-marquee__link">
+                  <div key={item._key} className="logo-marquee__item">
+                    {item.productLink ? (
+                      <AppLink link={item.productLink} className="logo-marquee__link">
                         <ResponsiveImage image={item.image} className="logo-marquee__image" loading="lazy" />
                       </AppLink>
                     ) : (
