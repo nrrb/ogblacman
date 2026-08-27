@@ -538,6 +538,11 @@ video {
     will-change: transform;
   }
 
+  .site--mobile .mobile-slide {
+    border: 0;
+    box-shadow: none;
+  }
+
   .mobile-slider--discrete .mobile-slide[aria-hidden="true"] {
     visibility: hidden;
     pointer-events: none;
@@ -585,6 +590,12 @@ video {
     min-height: 100vh;
     min-height: 100dvh;
     overflow: hidden;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .site--mobile .mobile-slider {
+    background: var(--color-page-background);
   }
 
   .mobile-slider--continuous .background-media--mobile-hero {
