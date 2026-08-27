@@ -51,32 +51,17 @@ export const presentation = Object.freeze({
       height: 630,
       type: 'image/jpeg',
     },
-    telephoneIdle: responsiveImage(
-      '/assets/phone_on_hook.png',
-      '(max-width: 767px) 178px, 230px',
-      [
-        { src: '/assets/phone_on_hook-180.png', width: 180 },
-        { src: '/assets/phone_on_hook-240.png', width: 240 },
-        { src: '/assets/phone_on_hook-480.png', width: 480 },
-        { src: '/assets/phone_on_hook.png', width: 1254 },
-      ],
-    ),
-    telephoneActive: responsiveImage(
-      '/assets/phone_off_hook.png',
-      '(max-width: 767px) 89px, 115px',
-      [
-        { src: '/assets/phone_off_hook-120.png', width: 120 },
-        { src: '/assets/phone_off_hook-160.png', width: 160 },
-        { src: '/assets/phone_off_hook-240.png', width: 240 },
-        { src: '/assets/phone_off_hook-320.png', width: 320 },
-        { src: '/assets/phone_off_hook.png', width: 887 },
-      ],
-    ),
   },
   audio: {
     telephone: { src: '/music/telephone.mp3' },
   },
   videos: {
+    treePhone: {
+      poster: '/assets/tree-phone/tree-phone-first.webp',
+      sources: [
+        { src: '/assets/tree-phone/tree-phone.mp4', type: 'video/mp4' },
+      ],
+    },
     heroDesktop: {
       poster: '/assets/hero/hero-montage-desktop-poster.jpg',
       sources: [

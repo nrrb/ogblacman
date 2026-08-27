@@ -48,11 +48,8 @@ export function hydrateContent(rawContent) {
 
   const release = sections.featuredRelease.release
   release.coverArt = resolveImage(release.coverArt)
+  release.video = resolveVideo(release.video.asset)
   release.audio = resolveAsset(presentation.audio, release.audio.asset, 'audio')
-  sections.featuredRelease.playerImages = {
-    idle: { ...presentation.images.telephoneIdle, alt: '' },
-    active: { ...presentation.images.telephoneActive, alt: '' },
-  }
 
   for (const sectionName of ['featuredRelease', 'shows', 'booking', 'merch', 'newsletter']) {
     sections[sectionName].mobileBackground = resolveVideo(sections[sectionName].mobileBackground)

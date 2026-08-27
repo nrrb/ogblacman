@@ -4,44 +4,6 @@ const url = process.env.TEST_URL || 'http://127.0.0.1:4173/'
 const browser = await chromium.launch({ headless: true })
 const page = await browser.newPage({ viewport: { width: 600, height: 844 } })
 const errors = []
-await page.addInitScript(() => {
-  window.__telephoneAnalyzerMetrics = {
-    frames: 0,
-    fills: 0,
-    suspends: 0,
-    resumes: 0,
-  }
-
-  const originalClearRect = CanvasRenderingContext2D.prototype.clearRect
-  CanvasRenderingContext2D.prototype.clearRect = function patchedClearRect(...args) {
-    if (this.canvas?.classList.contains('telephone-player__analyzer')) {
-      window.__telephoneAnalyzerMetrics.frames += 1
-    }
-    return originalClearRect.apply(this, args)
-  }
-
-  const originalFillRect = CanvasRenderingContext2D.prototype.fillRect
-  CanvasRenderingContext2D.prototype.fillRect = function patchedFillRect(...args) {
-    if (this.canvas?.classList.contains('telephone-player__analyzer')) {
-      window.__telephoneAnalyzerMetrics.fills += 1
-    }
-    return originalFillRect.apply(this, args)
-  }
-
-  const AudioContextConstructor = window.AudioContext || window.webkitAudioContext
-  if (AudioContextConstructor) {
-    const originalSuspend = AudioContextConstructor.prototype.suspend
-    AudioContextConstructor.prototype.suspend = function patchedSuspend(...args) {
-      window.__telephoneAnalyzerMetrics.suspends += 1
-      return originalSuspend.apply(this, args)
-    }
-    const originalResume = AudioContextConstructor.prototype.resume
-    AudioContextConstructor.prototype.resume = function patchedResume(...args) {
-      window.__telephoneAnalyzerMetrics.resumes += 1
-      return originalResume.apply(this, args)
-    }
-  }
-})
 await page.route('**/subscriptions', async route => {
   await route.fulfill({
     status: 200,
@@ -71,13 +33,12 @@ if (await page.locator('meta[property="og:image:width"]').getAttribute('content'
 if (await page.locator('meta[name="twitter:image"]').getAttribute('content') !== 'https://www.ogblacman.com/assets/telephone-cover-social.jpg') {
   throw new Error('Twitter preview must use the Telephone artwork')
 }
+const videoPreloads = page.locator('link[rel="preload"][as="video"]')
+if (await videoPreloads.count() !== 1) throw new Error('Tree Phone video should have a preload hint')
+if (!(await videoPreloads.first().getAttribute('href')).includes('/assets/tree-phone/tree-phone.mp4')) throw new Error('Tree Phone video preload is missing')
 const imagePreloads = page.locator('link[rel="preload"][as="image"]')
-if (await imagePreloads.count() !== 3) throw new Error('Telephone player images should have responsive preload hints')
-for (const expectedAsset of ['phone_on_hook-240.png', 'phone_off_hook-160.png', 'telephone-cover-640.webp']) {
-  const matchingPreload = page.locator(`link[rel="preload"][href*="${expectedAsset}"]`)
-  if (await matchingPreload.count() !== 1) throw new Error(`Missing image preload for ${expectedAsset}`)
-  if (!(await matchingPreload.getAttribute('imagesrcset'))) throw new Error(`Missing responsive preload sources for ${expectedAsset}`)
-}
+if (await imagePreloads.count() !== 1) throw new Error('Telephone cover should have one responsive preload hint')
+if (!(await imagePreloads.first().getAttribute('href')).includes('telephone-cover-640.webp')) throw new Error('Telephone cover preload is missing')
 if (await page.locator('.grain-overlay').count() !== 0) throw new Error('Deleted grain overlay should not render')
 if (await page.locator('.text-cta__texture').count() !== 0) throw new Error('Deleted CTA texture should not render')
 if (!(await page.locator('.site--mobile').isVisible())) {
@@ -175,14 +136,11 @@ if (await releaseCta.getAttribute('href') !== 'https://distrokid.com/hyperfollow
 if (await releaseCta.getAttribute('target') !== '_blank') throw new Error('Telephone DistroKid link should open in a new tab')
 const telephonePlayer = secondSlide.locator('.telephone-player--mobile')
 const telephoneButton = telephonePlayer.locator('.telephone-player__button')
-const telephoneImage = telephonePlayer.locator('.telephone-player__image')
+const telephoneVideo = telephonePlayer.locator('.telephone-player__video')
 const interactionPrompt = telephonePlayer.locator('.telephone-player__interaction-prompt')
 const audio = telephonePlayer.locator('audio')
-if (await telephoneButton.getAttribute('aria-label') !== 'Play Telephone') throw new Error('On-hook phone should start Telephone')
-if (await telephoneImage.getAttribute('src') !== '/assets/phone_on_hook.png') throw new Error('Idle player should show the on-hook phone')
-if (!new URL(await telephoneImage.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/phone_on_hook-180.png')) {
-  throw new Error('Mobile on-hook phone should use its smallest responsive image')
-}
+if (await telephoneButton.getAttribute('aria-label') !== 'Pick up Telephone') throw new Error('Tree Phone should invite pickup')
+if (await telephoneVideo.getAttribute('poster') !== '/assets/tree-phone/tree-phone-first.webp') throw new Error('Tree Phone should use its optimized first-frame poster')
 const promptLines = await interactionPrompt.locator('.telephone-player__prompt-line').allTextContents()
 if (promptLines.join('|') !== 'pick|up my|line') throw new Error('Telephone lyric interaction prompt lines are missing')
 if (await interactionPrompt.locator('.telephone-player__prompt-arrow').textContent() !== '<-') throw new Error('Telephone lyric interaction arrow is missing')
@@ -190,84 +148,50 @@ if (!(await interactionPrompt.evaluate(element => getComputedStyle(element).font
   throw new Error('Telephone interaction prompt must use Tajamuka Script')
 }
 const idleButtonBox = await telephoneButton.boundingBox()
-const idlePhoneBox = await telephonePlayer.locator('.telephone-player__phone--idle').boundingBox()
 const interactionPromptBox = await interactionPrompt.boundingBox()
-if (!idleButtonBox || !idlePhoneBox || !interactionPromptBox || !releaseCtaBox) throw new Error('Idle telephone spacing is not measurable')
-if (interactionPromptBox.x < idlePhoneBox.x + idlePhoneBox.width - 1) throw new Error('Telephone interaction prompt must sit to the right of the phone')
-if (Math.abs(idleButtonBox.height - idlePhoneBox.height) > 1) throw new Error('Telephone button should not add empty space above the phone')
+if (!idleButtonBox || !interactionPromptBox || !releaseCtaBox) throw new Error('Idle Tree Phone spacing is not measurable')
+if (interactionPromptBox.x < idleButtonBox.x + idleButtonBox.width / 2 - 4) throw new Error('Telephone interaction prompt must sit to the right of the phone')
 const artworkToCtaGap = releaseCtaBox.y - (editorialArtBox.y + editorialArtBox.height)
-const ctaToPhoneGap = idlePhoneBox.y - (releaseCtaBox.y + releaseCtaBox.height)
+const videoBox = await telephoneVideo.boundingBox()
+if (!videoBox) throw new Error('Tree Phone video spacing is not measurable')
+const ctaToPhoneGap = videoBox.y - (releaseCtaBox.y + releaseCtaBox.height)
 if (ctaToPhoneGap > artworkToCtaGap + 6) throw new Error('CTA-to-phone spacing should match the artwork-to-CTA rhythm')
 await telephoneButton.click()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'playing')
-if (await telephoneButton.getAttribute('aria-label') !== 'Stop and rewind Telephone') throw new Error('Off-hook phone should stop Telephone')
-if (await telephoneImage.getAttribute('src') !== '/assets/phone_off_hook.png') throw new Error('Playing state should show the off-hook phone')
+if (await telephoneButton.getAttribute('aria-label') !== 'Hang up Telephone') throw new Error('Playing Tree Phone should invite hangup')
+if (await telephoneVideo.evaluate((element) => element.paused)) throw new Error('Tree Phone video should play after pickup')
+if (await telephoneVideo.evaluate((element) => element.playbackRate !== 2)) throw new Error('Tree Phone video should play at 2x speed')
 if (await interactionPrompt.count() !== 1) throw new Error('Telephone interaction prompt column must remain after pickup')
-if (!new URL(await telephoneImage.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/phone_off_hook-120.png')) {
-  throw new Error('Mobile off-hook phone should use its smallest responsive image')
-}
-const analyzer = telephonePlayer.locator('.telephone-player__analyzer')
-if (!(await analyzer.isVisible())) throw new Error('Telephone spectrum analyzer is missing during playback')
-if (await telephonePlayer.getAttribute('data-analyzer-active') !== 'true') throw new Error('Visible Telephone analyzer should be active during playback')
-if (await analyzer.getAttribute('width') !== '20' || await analyzer.getAttribute('height') !== '20') {
-  throw new Error('Telephone spectrum analyzer must use a 20x20 canvas')
-}
-const activePhoneBox = await telephonePlayer.locator('.telephone-player__phone--active').boundingBox()
 const activeButtonBox = await telephoneButton.boundingBox()
 const activePromptBox = await interactionPrompt.boundingBox()
-const analyzerBox = await analyzer.boundingBox()
-if (!idleButtonBox || !idlePhoneBox || !interactionPromptBox || !activePhoneBox || !activeButtonBox || !activePromptBox || !analyzerBox) throw new Error('Telephone player layout is not measurable')
-if (Math.abs(activePhoneBox.height - idlePhoneBox.height) > 1) throw new Error('Off-hook phone must fit within the on-hook phone height')
+if (!idleButtonBox || !interactionPromptBox || !activeButtonBox || !activePromptBox) throw new Error('Telephone player layout is not measurable')
 if (Math.abs(activeButtonBox.height - idleButtonBox.height) > 1) throw new Error('Telephone player height must remain stable between states')
 for (const dimension of ['x', 'y', 'width', 'height']) {
   if (Math.abs(activeButtonBox[dimension] - idleButtonBox[dimension]) > 1) throw new Error(`Telephone button ${dimension} shifted after pickup`)
   if (Math.abs(activePromptBox[dimension] - interactionPromptBox[dimension]) > 1) throw new Error(`Telephone prompt ${dimension} shifted after pickup`)
 }
-const expectedAnalyzerWidth = activePhoneBox.width * (5 / 7)
-const expectedAnalyzerHeight = activePhoneBox.height * (3 / 28)
-if (Math.abs(analyzerBox.width - expectedAnalyzerWidth) > 1 || Math.abs(analyzerBox.height - expectedAnalyzerHeight) > 1) {
-  throw new Error('Telephone analyzer must scale proportionally with the off-hook phone')
-}
-const analyzerCenterX = analyzerBox.x + analyzerBox.width / 2
-const phoneCenterX = activePhoneBox.x + activePhoneBox.width / 2
-if (Math.abs(analyzerCenterX - phoneCenterX) > 1) throw new Error('Telephone spectrum analyzer must remain horizontally centered')
-const analyzerBottom = analyzerBox.y + analyzerBox.height
-const expectedAnalyzerBottom = activePhoneBox.y + activePhoneBox.height * (29 / 56)
-if (Math.abs(analyzerBottom - expectedAnalyzerBottom) > 1) throw new Error('Telephone spectrum analyzer must keep its bottom anchor')
-const analyzerZIndex = await analyzer.evaluate(element => getComputedStyle(element).zIndex)
-const phoneZIndex = await telephoneImage.evaluate(element => getComputedStyle(element).zIndex)
-if (Number(analyzerZIndex) >= Number(phoneZIndex)) throw new Error('Telephone spectrum analyzer must sit behind the phone')
-await page.waitForTimeout(300)
-const analyzerDrewBars = await analyzer.evaluate(element => {
-  const pixels = element.getContext('2d').getImageData(0, 0, element.width, element.height).data
-  for (let index = 0; index < pixels.length; index += 4) {
-    if (pixels[index + 1] > 80 && pixels[index + 3] > 0) return true
-  }
-  return false
-})
-if (!analyzerDrewBars) throw new Error('Telephone spectrum analyzer did not draw frequency bars')
-const analyzerGrowsUp = await analyzer.evaluate(element => {
-  const context = element.getContext('2d')
-  const bottomRow = context.getImageData(0, element.height - 1, element.width, 1).data
-  for (let index = 0; index < bottomRow.length; index += 4) {
-    if (bottomRow[index + 3] > 0) return true
-  }
-  return false
-})
-if (!analyzerGrowsUp) throw new Error('Telephone spectrum bars must anchor at the bottom and grow upward')
-await page.evaluate(() => {
-  window.__telephoneAnalyzerMetrics.frames = 0
-  window.__telephoneAnalyzerMetrics.fills = 0
-})
-await page.waitForTimeout(600)
-const analyzerMetrics = await page.evaluate(() => ({ ...window.__telephoneAnalyzerMetrics }))
-if (analyzerMetrics.frames < 8 || analyzerMetrics.frames > 22) {
-  throw new Error(`Telephone analyzer should render near 30fps; observed ${analyzerMetrics.frames} frames in 600ms`)
-}
-if (analyzerMetrics.fills > analyzerMetrics.frames * 30) {
-  throw new Error('Telephone analyzer should batch pixels into no more than three color segments per bar')
-}
 if (await secondSlide.locator('.streaming-link').count() !== 0) throw new Error('Top pick streaming links should be removed')
+
+await page.waitForFunction(() => {
+  const video = document.querySelector('.telephone-player--mobile video')
+  const audio = document.querySelector('.telephone-player--mobile audio')
+  return video?.currentTime > video.duration / 2 && !audio?.paused && audio.volume > 0
+})
+await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'ended', null, { timeout: 10000 })
+const endedButtonBox = await telephoneButton.boundingBox()
+if (!endedButtonBox) throw new Error('Ended Tree Phone layout is not measurable')
+for (const dimension of ['x', 'y', 'width', 'height']) {
+  if (Math.abs(endedButtonBox[dimension] - idleButtonBox[dimension]) > 1) throw new Error(`Telephone button ${dimension} shifted after playback`)
+}
+const volumeBeforeReverse = await audio.evaluate(element => element.volume)
+await telephoneButton.click()
+await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'reversing')
+await page.waitForTimeout(150)
+const volumeDuringReverse = await audio.evaluate(element => element.volume)
+if (volumeDuringReverse >= volumeBeforeReverse) throw new Error('Hanging up should fade Telephone audio out')
+await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'idle', null, { timeout: 10000 })
+const stoppedAudio = await audio.evaluate(element => ({ paused: element.paused, volume: element.volume, currentTime: element.currentTime }))
+if (!stoppedAudio.paused || stoppedAudio.volume !== 0 || stoppedAudio.currentTime !== 0) throw new Error('Hanging up should stop and rewind Telephone audio')
 
 if (continuous) {
   const volumeBeforeWheel = await audio.evaluate(element => element.volume)
@@ -285,37 +209,7 @@ const showsSlideIndex = expectedSlideIds.indexOf('shows')
 const showsSlide = page.locator('#shows')
 if (continuous) await showsSlide.scrollIntoViewIfNeeded()
 else await dots.nth(showsSlideIndex).click()
-await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.analyzerActive === 'false')
-const visualFramesAfterLeaving = await page.evaluate(() => window.__telephoneAnalyzerMetrics.frames)
 await page.waitForTimeout(250)
-const offscreenState = await page.evaluate(() => ({
-  frames: window.__telephoneAnalyzerMetrics.frames,
-  paused: document.querySelector('.telephone-player--mobile audio')?.paused,
-}))
-if (offscreenState.frames > visualFramesAfterLeaving + 1) throw new Error('Offscreen Telephone analyzer continued rendering')
-if (offscreenState.paused) throw new Error('Moving the Telephone analyzer offscreen should not pause audio')
-if (continuous) await secondSlide.scrollIntoViewIfNeeded()
-else await dots.nth(releaseSlideIndex).click()
-await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.analyzerActive === 'true')
-await page.waitForTimeout(150)
-if (await page.evaluate(() => window.__telephoneAnalyzerMetrics.frames) <= offscreenState.frames) {
-  throw new Error('Telephone analyzer did not resume after returning onscreen')
-}
-
-const suspendsBeforeStop = await page.evaluate(() => window.__telephoneAnalyzerMetrics.suspends)
-await telephoneButton.click()
-await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'idle')
-const stoppedAudio = await audio.evaluate(element => ({ paused: element.paused, currentTime: element.currentTime }))
-if (!stoppedAudio.paused || stoppedAudio.currentTime !== 0) throw new Error('Hanging up should stop and rewind Telephone')
-if (await telephoneImage.getAttribute('src') !== '/assets/phone_on_hook.png') throw new Error('Stopped player should return to the on-hook phone')
-if (await analyzer.count() !== 0) throw new Error('Spectrum analyzer should close when Telephone stops')
-await page.waitForFunction(expected => window.__telephoneAnalyzerMetrics.suspends > expected, suspendsBeforeStop)
-const resumesBeforeRestart = await page.evaluate(() => window.__telephoneAnalyzerMetrics.resumes)
-await telephoneButton.click()
-await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'playing')
-await page.waitForFunction(expected => window.__telephoneAnalyzerMetrics.resumes > expected, resumesBeforeRestart)
-await telephoneButton.click()
-await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'idle')
 
 if (continuous) await showsSlide.scrollIntoViewIfNeeded()
 else await dots.nth(showsSlideIndex).click()

@@ -25,6 +25,11 @@ function responsivePreload(image, targetWidth) {
   return `<link rel="preload" as="image" href="${escapeAttribute(preferred.src)}" imagesrcset="${escapeAttribute(srcSet)}" imagesizes="${escapeAttribute(image.sizes)}" fetchpriority="high" />`
 }
 
+function videoPreload(video) {
+  const source = video.sources.find((item) => item.type === 'video/mp4') || video.sources[0]
+  return `<link rel="preload" as="video" href="${escapeAttribute(source.src)}" type="${escapeAttribute(source.type)}" fetchpriority="high" />`
+}
+
 function siteContentPlugin() {
   const { siteSettings } = content
   const featuredReleaseVisible = content.homePage.sections.featuredRelease.status === 'visible'
@@ -45,8 +50,7 @@ function siteContentPlugin() {
       : '',
     '<!-- FEATURED_RELEASE_PRELOADS -->': featuredReleaseVisible
       ? [
-          responsivePreload(presentation.images.telephoneIdle, 240),
-          responsivePreload(presentation.images.telephoneActive, 160),
+          videoPreload(presentation.videos.treePhone),
           responsivePreload(presentation.images.telephoneCover, 640),
         ].join('\n    ')
       : '',

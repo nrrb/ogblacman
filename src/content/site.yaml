@@ -50,6 +50,7 @@ homePage:
         coverArt:
           asset: telephoneCover
           alt: OG Blacman Telephone cover artwork
+        video: { asset: treePhone }
         audio: { asset: telephone }
         primaryLink:
           type: external

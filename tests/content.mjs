@@ -39,6 +39,7 @@ if (sections.booking.contact.name !== 'Gabrielle Labolito') throw new Error('Hid
 if (sections.featuredRelease.release.releaseDate !== '2026-08-26') throw new Error('Featured release must use one canonical release date')
 if (sections.featuredRelease.release.release_date !== undefined) throw new Error('Duplicate formatted release date must not remain')
 if (sections.featuredRelease.release.audio.asset !== 'telephone') throw new Error('Featured release must use a semantic audio asset')
+if (sections.featuredRelease.release.video.asset !== 'treePhone') throw new Error('Featured release must use the Tree Phone video asset')
 if (sections.featuredRelease.release.coverArt.asset !== 'telephoneCover') throw new Error('Featured release must use semantic cover art')
 if (sections.featuredRelease.showHeading !== false) throw new Error('Featured release Hot Release heading should be hidden')
 if (!sections.featuredRelease.release.description.includes("Hear a sample of OG Blacman's hot release now in the Tree Phone")) {

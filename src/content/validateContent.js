@@ -164,6 +164,7 @@ export function validateContent(content) {
     fail('homePage.sections.featuredRelease.release.releaseDate', 'expected a YYYY-MM-DD date')
   }
   imageReference(release.coverArt, 'homePage.sections.featuredRelease.release.coverArt')
+  assetReference(release.video, 'homePage.sections.featuredRelease.release.video')
   assetReference(release.audio, 'homePage.sections.featuredRelease.release.audio')
   sectionLink(release.primaryLink, 'homePage.sections.featuredRelease.release.primaryLink')
   const playerCopy = object(featuredRelease.playerCopy, 'homePage.sections.featuredRelease.playerCopy')

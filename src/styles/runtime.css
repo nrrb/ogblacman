@@ -325,7 +325,7 @@ video {
   width: min(100%, 460px);
 }
 
-.telephone-player__button--prompted .telephone-player__phone {
+.telephone-player__button--video .telephone-player__video {
   grid-column: 1;
   grid-row: 1;
 }
@@ -377,39 +377,14 @@ video {
   outline-offset: 6px;
 }
 
-.telephone-player__phone {
-  position: relative;
-  display: block;
-  isolation: isolate;
-}
-
-.telephone-player__phone--idle {
-  width: min(100%, 230px);
-}
-
-.telephone-player__phone--active {
-  width: min(100%, 115px);
-}
-
-.telephone-player__image {
-  position: relative;
-  z-index: 1;
+.telephone-player__video {
   display: block;
   width: 100%;
-  height: auto;
-  image-rendering: pixelated;
-}
-
-.telephone-player__analyzer {
-  position: absolute;
-  z-index: 0;
-  left: 50%;
-  top: 51.785714%;
-  width: 71.428571%;
-  height: 10.714286%;
-  transform: translate(-50%, -100%);
-  image-rendering: pixelated;
-  pointer-events: none;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid color-mix(in srgb, var(--color-gold-1) 68%, transparent);
+  border-radius: 10px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-gold-1) 18%, transparent), 0 10px 24px rgb(0 0 0 / 35%);
 }
 
 .telephone-player__readout {
@@ -753,12 +728,8 @@ video {
     font-size: clamp(32px, 10.5vw, 42px);
   }
 
-  .site--mobile .telephone-player__phone--idle {
+  .site--mobile .telephone-player__video {
     width: min(100%, 178px);
-  }
-
-  .site--mobile .telephone-player__phone--active {
-    width: min(100%, 89px);
   }
 
   .site--mobile .telephone-player__readout,
