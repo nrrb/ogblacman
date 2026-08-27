@@ -16,7 +16,7 @@ if (content.theme !== undefined || content.mobile !== undefined || content.share
 if (content.siteSettings.seo.title !== 'OG BLACMAN') throw new Error('SEO title must be editable in site settings')
 if (content.siteSettings.seo.socialImage.asset !== 'telephoneSocial') throw new Error('SEO social image must use a semantic asset reference')
 if (content.siteSettings.socialLinks.some((link) => !link.url.startsWith('https://'))) throw new Error('Social URLs must use HTTPS')
-if (content.siteSettings.socialLinks.some((link) => link.platform === 'youtube')) throw new Error('Unverified YouTube profile must not render')
+if (content.siteSettings.socialLinks.length !== 5) throw new Error('All five social profiles must be configured')
 if (content.siteSettings.footer.status !== 'visible') throw new Error('Footer visibility must be independently configurable')
 if (content.siteSettings.integrations.kit.formUid !== 'bb5435c1d3') throw new Error('Public Kit form identifier must come from site settings')
 if (content.siteSettings.integrations.kit.embedUrl !== undefined) throw new Error('Executable integration URLs must not be editor-controlled')

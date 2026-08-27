@@ -22,6 +22,12 @@ export const presentation = Object.freeze({
   },
   socialIcons: {
     instagram: { src: '/assets/reference/social-instagram-icon.svg', alt: '' },
+    youtube: responsiveImage('/assets/reference/social-youtube-icon.png', '(max-width: 1168px) 100vw, 1168px', [
+      { src: '/assets/reference/social-youtube-icon-500w.png', width: 500 },
+      { src: '/assets/reference/social-youtube-icon.png', width: 1168 },
+    ]),
+    spotify: { src: '/assets/reference/social-spotify-icon.svg', alt: '' },
+    appleMusic: { src: '/assets/reference/social-apple-music-icon.svg', alt: '' },
     tiktok: responsiveImage(
       '/assets/reference/social-tiktok-icon.png',
       '(max-width: 1168px) 100vw, 1168px',

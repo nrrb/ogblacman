@@ -115,7 +115,7 @@ export function validateContent(content) {
   const platforms = new Set()
   socialLinks.forEach((item, index) => {
     const path = `siteSettings.socialLinks[${index}]`
-    const platform = enumeration(item.platform, ['instagram', 'tiktok', 'youtube'], `${path}.platform`)
+    const platform = enumeration(item.platform, ['instagram', 'tiktok', 'youtube', 'spotify', 'appleMusic'], `${path}.platform`)
     if (platforms.has(platform)) fail(`${path}.platform`, `duplicate platform "${platform}"`)
     platforms.add(platform)
     string(item.label, `${path}.label`)

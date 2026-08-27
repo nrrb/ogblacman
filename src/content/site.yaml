@@ -18,6 +18,18 @@ siteSettings:
       platform: tiktok
       label: TikTok
       url: https://www.tiktok.com/@ogblacman
+    - _key: youtube
+      platform: youtube
+      label: YouTube
+      url: https://www.youtube.com/@OGBlacman
+    - _key: spotify
+      platform: spotify
+      label: Spotify
+      url: https://open.spotify.com/artist/4IevfFRT6HOrhw0N22iaXp
+    - _key: apple-music
+      platform: appleMusic
+      label: Apple Music
+      url: https://music.apple.com/us/artist/og-blacman/1527928844
   footer:
     status: visible
     copyrightOwner: OG BLACMAN
