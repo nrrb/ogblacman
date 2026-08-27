@@ -74,11 +74,13 @@ export default function MobileExperience({ content }) {
       return (
         <div id={HOME_SECTION_IDS.featuredRelease} key={name} className="mobile-slide" {...attributes}>
           <div className="mobile-slide__content mobile-slide__content--middle mobile-slide__content--top-pick">
-            <SectionHeading
-              heading={featuredRelease.heading}
-              wrapperClass="display-heading--stacked"
-              titleClass="heading-title--mobile-about"
-            />
+            {featuredRelease.showHeading !== false && (
+              <SectionHeading
+                heading={featuredRelease.heading}
+                wrapperClass="display-heading--stacked"
+                titleClass="heading-title--mobile-about"
+              />
+            )}
             <TopPickRelease section={featuredRelease} variant="mobile" />
           </div>
           <BackgroundVideo

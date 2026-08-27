@@ -49,11 +49,13 @@ export default function DesktopExperience({ content }) {
           <div className="section section--content">
             {isSectionVisible(featuredRelease) && (
               <div id={HOME_SECTION_IDS.featuredRelease}>
-                <SectionHeading
-                  heading={featuredRelease.heading}
-                  wrapperClass="display-heading--about"
-                  titleClass="heading-title--about"
-                />
+                {featuredRelease.showHeading !== false && (
+                  <SectionHeading
+                    heading={featuredRelease.heading}
+                    wrapperClass="display-heading--about"
+                    titleClass="heading-title--about"
+                  />
+                )}
                 <TopPickRelease section={featuredRelease} variant="desktop" />
               </div>
             )}

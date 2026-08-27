@@ -155,6 +155,7 @@ export function validateContent(content) {
   optionalString(heroVideo.mobileOverride, 'homePage.sections.hero.backgroundVideo.mobileOverride')
 
   const featuredRelease = sections.featuredRelease
+  if (featuredRelease.showHeading !== undefined) boolean(featuredRelease.showHeading, 'homePage.sections.featuredRelease.showHeading')
   const release = object(featuredRelease.release, 'homePage.sections.featuredRelease.release')
   for (const field of ['typeLabel', 'artist', 'title', 'description']) {
     string(release[field], `homePage.sections.featuredRelease.release.${field}`)
