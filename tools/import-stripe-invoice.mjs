@@ -18,7 +18,7 @@ export function parseArgs(argv) {
     customerEmail: null,
     memo: null,
     invoiceDescription: null,
-    dueDays: null,
+    dueDays: 14,
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -271,7 +271,7 @@ export async function main() {
     auto_advance: 'false',
     currency: args.currency,
   };
-  if (args.dueDays !== null && Number.isFinite(args.dueDays)) {
+  if (Number.isFinite(args.dueDays)) {
     invoiceFields.days_until_due = String(args.dueDays);
   }
   if (args.invoiceDescription) {
