@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "montage": "node tools/montage.mjs",
     "process:hero": "node tools/process-hero.mjs",
+    "test:media": "node --test tests/media.test.mjs",
     "test:montage": "node --test tests/montage.test.mjs",
     "test:interaction": "node tests/interaction.mjs",
     "test:content": "node tests/content.mjs"

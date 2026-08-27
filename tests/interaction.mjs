@@ -1,7 +1,10 @@
 import { chromium } from 'playwright'
 
 const url = process.env.TEST_URL || 'http://127.0.0.1:4173/'
-const browser = await chromium.launch({ headless: true })
+const browser = await chromium.launch({
+  headless: true,
+  ...(process.env.PLAYWRIGHT_CHANNEL ? { channel: process.env.PLAYWRIGHT_CHANNEL } : {}),
+})
 const page = await browser.newPage({ viewport: { width: 600, height: 844 } })
 const errors = []
 await page.route('**/subscriptions', async route => {
@@ -46,6 +49,10 @@ if (!(await page.locator('.site--mobile').isVisible())) {
 }
 if (await page.locator('.site--desktop').count() !== 0) {
   throw new Error('Desktop experience should not mount below the mobile breakpoint')
+}
+const initialHeroSources = page.locator('#mobile-hero-video source')
+if (!/^video\/webm; codecs="vp9"$/.test(await initialHeroSources.first().getAttribute('type'))) {
+  throw new Error('Hero video should prefer an explicitly declared VP9 source')
 }
 
 await page.setViewportSize({ width: 390, height: 844 })
@@ -298,5 +305,18 @@ if (kitInstances.connectedRegistryEntries !== 1) throw new Error('Duplicate Kit 
 if (kitInstances.runtimeScripts !== 1) throw new Error('Kit runtime loaded more than once after remount')
 
 if (errors.length) throw new Error(`Browser console errors: ${errors.join('; ')}`)
+
+const reducedMotionPage = await browser.newPage({
+  viewport: { width: 390, height: 844 },
+  reducedMotion: 'reduce',
+})
+await reducedMotionPage.goto(url, { waitUntil: 'load' })
+const reducedMotionHero = reducedMotionPage.locator('#mobile-hero-video')
+await reducedMotionHero.waitFor({ state: 'attached' })
+if (await reducedMotionHero.getAttribute('preload') !== 'none') throw new Error('Reduced-motion hero should not preload video')
+if (await reducedMotionHero.locator('source[src]').count() !== 0) throw new Error('Reduced-motion hero should not attach video sources')
+if (!(await reducedMotionHero.evaluate(element => element.paused))) throw new Error('Reduced-motion hero should remain paused')
+await reducedMotionPage.close()
+
 await browser.close()
 console.log(`Mobile ${continuous ? 'continuous scrolling' : 'discrete navigation'} and safe local form behavior passed.`)

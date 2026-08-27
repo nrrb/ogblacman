@@ -10,7 +10,7 @@ const DEFAULTS = Object.freeze({
   input: 'public/hero-montage.mp4',
   outputDirectory: 'public/assets/hero',
   posterTime: 4.5,
-  fps: 30,
+  fps: 24,
   desktopWidth: 1280,
   desktopHeight: 720,
   mobileWidth: 404,
@@ -29,6 +29,7 @@ Options:
   -i, --input <file>           Source montage (default: ${DEFAULTS.input})
   -o, --output-dir <dir>       Delivery asset directory (default: ${DEFAULTS.outputDirectory})
       --poster-time <seconds>  Poster frame timestamp (default: ${DEFAULTS.posterTime})
+      --fps <number>           Delivery frame rate (default: ${DEFAULTS.fps})
       --mobile-focus <0..1>    Horizontal mobile crop focus: 0 left, 1 right (default: ${DEFAULTS.mobileFocus})
       --overwrite              Replace an existing delivery set
   -h, --help                   Show this help
@@ -58,6 +59,7 @@ function parseArgs(argv) {
     else if (flag === '--input' || flag === '-i') options.input = valueAfter(argv, index++, flag);
     else if (flag === '--output-dir' || flag === '-o') options.outputDirectory = valueAfter(argv, index++, flag);
     else if (flag === '--poster-time') options.posterTime = parseNumber(valueAfter(argv, index++, flag), flag, 0, 86_400);
+    else if (flag === '--fps') options.fps = parseNumber(valueAfter(argv, index++, flag), flag, 1, 60);
     else if (flag === '--mobile-focus') options.mobileFocus = parseNumber(valueAfter(argv, index++, flag), flag, 0, 1);
     else throw new Error(`Unknown option: ${flag}`);
   }
@@ -203,14 +205,14 @@ async function main() {
 
   console.log('[1/3] Encoding H.264 desktop and mobile assets');
   await Promise.all([
-    encodeH264(input, files.desktopMp4, desktopFilter, options, 24),
-    encodeH264(input, files.mobileMp4, mobileFilter, options, 25),
+    encodeH264(input, files.desktopMp4, desktopFilter, options, 29),
+    encodeH264(input, files.mobileMp4, mobileFilter, options, 30),
   ]);
 
   console.log('[2/3] Encoding VP9 desktop and mobile fallbacks');
   await Promise.all([
-    encodeVp9(input, files.desktopWebm, desktopFilter, options, 34),
-    encodeVp9(input, files.mobileWebm, mobileFilter, options, 35),
+    encodeVp9(input, files.desktopWebm, desktopFilter, options, 41),
+    encodeVp9(input, files.mobileWebm, mobileFilter, options, 42),
   ]);
 
   console.log('[3/3] Extracting desktop and mobile posters');

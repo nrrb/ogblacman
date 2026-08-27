@@ -71,15 +71,15 @@ export const presentation = Object.freeze({
     heroDesktop: {
       poster: '/assets/hero/hero-montage-desktop-poster.jpg',
       sources: [
-        { src: '/assets/hero/hero-montage-desktop.mp4', type: 'video/mp4' },
-        { src: '/assets/hero/hero-montage-desktop.webm', type: 'video/webm' },
+        { src: '/assets/hero/hero-montage-desktop.webm', type: 'video/webm; codecs="vp9"' },
+        { src: '/assets/hero/hero-montage-desktop.mp4', type: 'video/mp4; codecs="avc1.640028"' },
       ],
     },
     heroMobile: {
       poster: '/assets/hero/hero-montage-mobile-poster.jpg',
       sources: [
-        { src: '/assets/hero/hero-montage-mobile.mp4', type: 'video/mp4' },
-        { src: '/assets/hero/hero-montage-mobile.webm', type: 'video/webm' },
+        { src: '/assets/hero/hero-montage-mobile.webm', type: 'video/webm; codecs="vp9"' },
+        { src: '/assets/hero/hero-montage-mobile.mp4', type: 'video/mp4; codecs="avc1.640028"' },
       ],
     },
     standardMobile: {
