@@ -10,6 +10,7 @@
     "montage": "node tools/montage.mjs",
     "process:hero": "node tools/process-hero.mjs",
     "process:fonts": "node tools/process-fonts.mjs",
+    "test:cache": "node --test tests/cache.test.mjs",
     "test:fonts": "node --test tests/fonts.test.mjs",
     "test:media": "node --test tests/media.test.mjs",
     "test:montage": "node --test tests/montage.test.mjs",

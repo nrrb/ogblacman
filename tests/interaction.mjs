@@ -26,14 +26,14 @@ if (!new URL(await page.locator('link[rel="icon"]').getAttribute('href'), url).p
 if (!new URL(await page.locator('link[rel="apple-touch-icon"]').getAttribute('href'), url).pathname.endsWith('/assets/apple-touch-icon.png')) {
   throw new Error('Telephone artwork Apple touch icon is missing')
 }
-if (await page.locator('meta[property="og:image"]').getAttribute('content') !== 'https://www.ogblacman.com/assets/telephone-cover-social.jpg') {
+if (await page.locator('meta[property="og:image"]').getAttribute('content') !== 'https://www.ogblacman.com/assets/telephone-cover-social.jpg?v=telephone-v1') {
   throw new Error('Open Graph preview must use the Telephone artwork')
 }
 if (await page.locator('meta[property="og:image:width"]').getAttribute('content') !== '1200'
   || await page.locator('meta[property="og:image:height"]').getAttribute('content') !== '630') {
   throw new Error('Open Graph preview dimensions must match the social image')
 }
-if (await page.locator('meta[name="twitter:image"]').getAttribute('content') !== 'https://www.ogblacman.com/assets/telephone-cover-social.jpg') {
+if (await page.locator('meta[name="twitter:image"]').getAttribute('content') !== 'https://www.ogblacman.com/assets/telephone-cover-social.jpg?v=telephone-v1') {
   throw new Error('Twitter preview must use the Telephone artwork')
 }
 const videoPreloads = page.locator('link[rel="preload"][as="video"]')
@@ -134,7 +134,7 @@ if (!releaseDetails.includes('Telephone')) throw new Error('Telephone release ti
 if (!releaseDetails.includes('AUGUST 26, 2026')) throw new Error('Telephone release date is missing')
 const editorialArt = secondSlide.locator('.release-spotlight__initial')
 if (!(await editorialArt.isVisible())) throw new Error('Telephone cover artwork is missing')
-if (await editorialArt.getAttribute('src') !== '/assets/telephone-cover.png') {
+if (new URL(await editorialArt.getAttribute('src'), url).pathname !== '/assets/telephone-cover.png') {
   throw new Error('Telephone release uses the wrong editorial artwork')
 }
 if (!new URL(await editorialArt.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/telephone-cover-320.webp')) {
@@ -171,7 +171,7 @@ const telephoneVideo = telephonePlayer.locator('.telephone-player__video')
 const interactionPrompt = telephonePlayer.locator('.telephone-player__interaction-prompt')
 const audio = telephonePlayer.locator('audio')
 if (await telephoneButton.getAttribute('aria-label') !== 'Pick up Telephone') throw new Error('Tree Phone should invite pickup')
-if (await telephoneVideo.getAttribute('poster') !== '/assets/tree-phone/tree-phone-first.webp') throw new Error('Tree Phone should use its optimized first-frame poster')
+if (new URL(await telephoneVideo.getAttribute('poster'), url).pathname !== '/assets/tree-phone/tree-phone-first.webp') throw new Error('Tree Phone should use its optimized first-frame poster')
 const promptLines = await interactionPrompt.locator('.telephone-player__prompt-line').allTextContents()
 if (promptLines.join('|') !== 'pick|up my|line') throw new Error('Telephone lyric interaction prompt lines are missing')
 if (await interactionPrompt.locator('.telephone-player__prompt-arrow').textContent() !== '<-') throw new Error('Telephone lyric interaction arrow is missing')

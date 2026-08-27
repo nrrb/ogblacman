@@ -91,7 +91,7 @@ const hydrated = hydrateContent(expanded)
 if (hydrated.siteSettings.integrations.kit.embedUrl !== 'https://og-blacman.kit.com/bb5435c1d3/index.js') {
   throw new Error('The public Kit identifier must hydrate through the trusted application host')
 }
-if (hydrated.homePage.sections.merch.items[0].image.src !== '/assets/telephone-cover.png') {
+if (new URL(hydrated.homePage.sections.merch.items[0].image.src, 'https://example.test').pathname !== '/assets/telephone-cover.png') {
   throw new Error('Semantic image references must hydrate to runtime assets')
 }
 if (hydrated.siteSettings.socialLinks.some((link) => !link.icon?.src)) throw new Error('Social platform icons must hydrate from application configuration')
