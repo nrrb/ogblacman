@@ -614,146 +614,56 @@ textarea.form-control {
 
 @font-face {
   font-family: Quinn;
-  src: url("/assets/reference/font-quinn-bold.ttf") format("truetype");
+  src: url("/assets/fonts/quinn-bold-latin-ext.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0000-024F, U+1E00-1EFF, U+2000-206F, U+20A0-20CF;
 }
 
 @font-face {
   font-family: Neuehaasdisplaymediu;
-  src: url("/assets/reference/font-neue-haas-display-medium.ttf") format("truetype");
+  src: url("/assets/fonts/neue-haas-display-medium-latin-ext.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0000-024F, U+1E00-1EFF, U+2000-206F, U+20A0-20CF;
 }
 
 @font-face {
   font-family: Neuehaasdisplayroman;
-  src: url("/assets/reference/font-neue-haas-display-roman.ttf") format("truetype");
+  src: url("/assets/fonts/neue-haas-display-roman-latin-ext.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0000-024F, U+1E00-1EFF, U+2000-206F, U+20A0-20CF;
 }
 
 @font-face {
   font-family: Neuehaasdisplaythin;
-  src: url("/assets/reference/font-neue-haas-display-thin.ttf") format("truetype");
+  src: url("/assets/fonts/neue-haas-display-thin-latin-ext.woff2") format("woff2");
   font-weight: 100;
   font-style: normal;
   font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayMediumItalic;
-  src: url("/assets/reference/font-neue-haas-display-medium-italic.ttf") format("truetype");
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayBoldItalic;
-  src: url("/assets/reference/font-neue-haas-display-bold-italic.ttf") format("truetype");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayBlackItalic;
-  src: url("/assets/reference/font-neue-haas-display-black-italic.ttf") format("truetype");
-  font-weight: 900;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayXThin;
-  src: url("/assets/reference/font-neue-haas-display-extra-thin.ttf") format("truetype");
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayLightItalic;
-  src: url("/assets/reference/font-neue-haas-display-light-italic.ttf") format("truetype");
-  font-weight: 300;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayBold;
-  src: url("/assets/reference/font-neue-haas-display-bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayBlac;
-  src: url("/assets/reference/font-neue-haas-display-black.ttf") format("truetype");
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
+  unicode-range: U+0000-024F, U+1E00-1EFF, U+2000-206F, U+20A0-20CF;
 }
 
 @font-face {
   font-family: NeueHaasDisplayLight;
-  src: url("/assets/reference/font-neue-haas-display-light.ttf") format("truetype");
+  src: url("/assets/fonts/neue-haas-display-light-latin-ext.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayRomanItalic;
-  src: url("/assets/reference/font-neue-haas-display-roman-italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayXXThinItalic;
-  src: url("/assets/reference/font-neue-haas-display-ultra-thin-italic.ttf") format("truetype");
-  font-weight: 100;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayXXThin;
-  src: url("/assets/reference/font-neue-haas-display-ultra-thin.ttf") format("truetype");
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayXThinItalic;
-  src: url("/assets/reference/font-neue-haas-display-extra-thin-italic.ttf") format("truetype");
-  font-weight: 100;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: NeueHaasDisplayThinItalic;
-  src: url("/assets/reference/font-neue-haas-display-thin-italic.ttf") format("truetype");
-  font-weight: 100;
-  font-style: italic;
-  font-display: swap;
+  unicode-range: U+0000-024F, U+1E00-1EFF, U+2000-206F, U+20A0-20CF;
 }
 
 @font-face {
   font-family: "Tajamuka Script";
-  src: url("/assets/fonts/tajamuka-script.ttf") format("truetype");
+  src: url("/assets/fonts/tajamuka-script-latin-ext.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0000-024F, U+1E00-1EFF, U+2000-206F, U+20A0-20CF;
 }
 
 .split-layout {

@@ -37,12 +37,13 @@ export default function SectionHeading({ heading, wrapperClass, titleClass, titl
     }
 
     async function initializeMeasurement() {
+      scheduleMeasurement()
       try {
         await document.fonts?.load(`400 ${getComputedStyle(svgText.current).fontSize} "Tajamuka Script"`)
       } catch {
-        // The fallback measurement below still keeps the heading usable.
+        // The initial fallback measurement still keeps the heading usable.
       }
-      scheduleMeasurement()
+      if (!cancelled) scheduleMeasurement()
     }
 
     initializeMeasurement()
