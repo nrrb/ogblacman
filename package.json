@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "montage": "node tools/montage.mjs",
     "process:hero": "node tools/process-hero.mjs",
+    "test:bundle": "node --test tests/bundle.test.mjs",
     "process:fonts": "node tools/process-fonts.mjs",
     "test:cache": "node --test tests/cache.test.mjs",
     "test:fonts": "node --test tests/fonts.test.mjs",
@@ -20,12 +21,12 @@
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "yaml": "^2.8.1"
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.1.0",
     "playwright": "1.55.0",
-    "vite": "latest"
+    "vite": "latest",
+    "yaml": "^2.8.1"
   }
 }

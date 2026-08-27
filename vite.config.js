@@ -3,9 +3,45 @@ import react from '@vitejs/plugin-react'
 import fs from 'node:fs'
 import { parse } from 'yaml'
 import { presentation } from './src/config/presentation.js'
+import { hydrateContent } from './src/content/hydrateContent.js'
 import { validateContent } from './src/content/validateContent.js'
 
-const content = validateContent(parse(fs.readFileSync(new URL('./src/content/site.yaml', import.meta.url), 'utf8')))
+const rawSiteContent = validateContent(parse(fs.readFileSync(new URL('./src/content/site.yaml', import.meta.url), 'utf8')))
+const siteContent = hydrateContent(rawSiteContent)
+const rawPalette = parse(fs.readFileSync(new URL('./og-colors.yaml', import.meta.url), 'utf8'))
+const colorNames = ['black1', 'black2', 'white', 'gold1', 'gold2']
+const hexColorPattern = /^#[0-9a-f]{6}$/i
+
+for (const colorName of colorNames) {
+  if (!hexColorPattern.test(rawPalette[colorName])) {
+    throw new Error(`Palette color "${colorName}" must be a six-digit hex color.`)
+  }
+}
+
+const paletteVariables = Object.fromEntries(colorNames.map(colorName => [
+  `--color-${colorName.replace(/([a-z])(\d)/, '$1-$2')}`,
+  rawPalette[colorName],
+]))
+
+function compiledDataPlugin() {
+  const compiledSiteContent = [
+    `export const rawSiteContent = ${JSON.stringify(rawSiteContent)}`,
+    `export const siteContent = ${JSON.stringify(siteContent)}`,
+  ].join('\n')
+  const compiledPalette = `export const paletteVariables = Object.freeze(${JSON.stringify(paletteVariables)})`
+
+  return {
+    name: 'compiled-site-data',
+    apply: 'build',
+    enforce: 'pre',
+    transform(_code, id) {
+      const modulePath = id.split('?', 1)[0].replaceAll('\\', '/')
+      if (modulePath.endsWith('/src/content/loadContent.js')) return { code: compiledSiteContent, map: { mappings: '' } }
+      if (modulePath.endsWith('/src/styles/palette.js')) return { code: compiledPalette, map: { mappings: '' } }
+      return null
+    },
+  }
+}
 
 function escapeAttribute(value) {
   return String(value)
@@ -31,8 +67,8 @@ function videoPreload(video) {
 }
 
 function siteContentPlugin() {
-  const { siteSettings } = content
-  const featuredReleaseVisible = content.homePage.sections.featuredRelease.status === 'visible'
+  const { siteSettings } = rawSiteContent
+  const featuredReleaseVisible = rawSiteContent.homePage.sections.featuredRelease.status === 'visible'
   const socialImage = presentation.images[siteSettings.seo.socialImage.asset]
   const escapedReplacements = {
     '{{SITE_TITLE}}': siteSettings.seo.title,
@@ -72,5 +108,5 @@ function siteContentPlugin() {
 }
 
 export default defineConfig({
-  plugins: [react(), siteContentPlugin()],
+  plugins: [react(), compiledDataPlugin(), siteContentPlugin()],
 })
