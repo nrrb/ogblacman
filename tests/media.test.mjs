@@ -42,7 +42,13 @@ test('hero delivery assets retain the montage while meeting delivery budgets', a
 })
 
 test('hero source order prefers an explicitly declared VP9 stream', () => {
-  for (const video of [presentation.videos.heroDesktop, presentation.videos.heroMobile]) {
+  for (const video of [
+    presentation.videos.heroDesktop,
+    presentation.videos.heroMobile,
+    presentation.videos.standardMobile,
+    presentation.videos.merchMobile,
+    presentation.videos.newsletterMobile,
+  ]) {
     assert.match(video.sources[0].type, /^video\/webm; codecs="vp9"$/)
     assert.match(video.sources[1].type, /^video\/mp4; codecs="avc1\.640028"$/)
   }

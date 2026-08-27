@@ -6,11 +6,65 @@ function canPlayBackgroundVideo() {
   return !reducedMotion && !window.navigator.connection?.saveData
 }
 
-export default function BackgroundVideo({ media, videoId, children, ...rest }) {
+export default function BackgroundVideo({
+  media,
+  videoId,
+  children,
+  loadingStrategy = 'eager',
+  priority = false,
+  ...rest
+}) {
+  const containerRef = useRef(null)
   const videoRef = useRef(null)
   const [videoEnabled, setVideoEnabled] = useState(canPlayBackgroundVideo)
+  const [isNearViewport, setIsNearViewport] = useState(
+    () => loadingStrategy === 'eager' || priority,
+  )
+  const [isVisible, setIsVisible] = useState(
+    () => loadingStrategy === 'eager' || priority,
+  )
   const sourceList = media.sources.map((source) => source.src).join(',')
-  const posterStyle = { backgroundImage: `url("${media.poster}")` }
+  const shouldAttachMedia = videoEnabled && isNearViewport
+  const shouldAttachPoster = loadingStrategy === 'eager' || isNearViewport
+  const posterStyle = shouldAttachPoster
+    ? { backgroundImage: `url("${media.poster}")` }
+    : undefined
+
+  useEffect(() => {
+    if (loadingStrategy === 'eager') {
+      setIsNearViewport(true)
+      return undefined
+    }
+
+    const container = containerRef.current
+    if (!container || typeof window.IntersectionObserver !== 'function') {
+      setIsNearViewport(true)
+      setIsVisible(true)
+      return undefined
+    }
+
+    const proximityObserver = new IntersectionObserver(
+      ([entry]) => setIsNearViewport(entry.isIntersecting),
+      { rootMargin: '99% 0px', threshold: 0 },
+    )
+    proximityObserver.observe(container)
+    return () => proximityObserver.disconnect()
+  }, [loadingStrategy])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container || typeof window.IntersectionObserver !== 'function') {
+      setIsVisible(true)
+      return undefined
+    }
+
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.01 },
+    )
+    visibilityObserver.observe(container)
+    return () => visibilityObserver.disconnect()
+  }, [])
 
   useEffect(() => {
     const motionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)')
@@ -30,8 +84,16 @@ export default function BackgroundVideo({ media, videoId, children, ...rest }) {
     const video = videoRef.current
     if (!video) return undefined
 
+    video.load()
+    if (!shouldAttachMedia) video.pause()
+  }, [shouldAttachMedia])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return undefined
+
     const updatePlayback = () => {
-      if (!videoEnabled || document.hidden) {
+      if (!shouldAttachMedia || !isVisible || document.hidden) {
         video.pause()
         return
       }
@@ -40,7 +102,6 @@ export default function BackgroundVideo({ media, videoId, children, ...rest }) {
 
     video.muted = true
     video.playsInline = true
-    video.load()
     updatePlayback()
     document.addEventListener('visibilitychange', updatePlayback)
 
@@ -48,32 +109,35 @@ export default function BackgroundVideo({ media, videoId, children, ...rest }) {
       document.removeEventListener('visibilitychange', updatePlayback)
       video.pause()
     }
-  }, [videoEnabled])
+  }, [isVisible, shouldAttachMedia])
 
   return (
     <div
+      ref={containerRef}
       {...rest}
       data-poster-url={media.poster}
       data-video-urls={sourceList}
       data-autoplay="true"
       data-loop="true"
+      data-media-loaded={String(shouldAttachMedia)}
+      data-media-visible={String(isVisible)}
     >
       <video
         id={videoId}
         ref={videoRef}
-        autoPlay={videoEnabled}
+        autoPlay={shouldAttachMedia && isVisible}
         loop
         muted
         playsInline
-        poster={media.poster}
-        preload={videoEnabled ? 'auto' : 'none'}
+        poster={shouldAttachPoster ? media.poster : undefined}
+        preload={shouldAttachMedia ? 'auto' : 'none'}
         style={posterStyle}
         data-object-fit="cover"
       >
         {media.sources.map((source) => (
           <source
             key={source.src}
-            src={videoEnabled ? source.src : undefined}
+            src={shouldAttachMedia ? source.src : undefined}
             type={source.type}
           />
         ))}

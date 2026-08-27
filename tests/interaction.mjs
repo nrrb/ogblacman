@@ -64,6 +64,24 @@ const continuous = await slider.evaluate(element => element.classList.contains('
 const dots = page.locator('.slider-dot')
 const slides = page.locator('.mobile-slide')
 const expectedSlideIds = ['hero', 'featured-release', 'shows', 'merch', 'mailing-list']
+const heroBackground = page.locator('#hero .background-media')
+const releaseBackground = page.locator('#featured-release .background-media')
+const showsBackground = page.locator('#shows .background-media')
+const merchBackground = page.locator('#merch .background-media')
+const newsletterBackground = page.locator('#mailing-list .background-media')
+
+if (await heroBackground.getAttribute('data-media-loaded') !== 'true') throw new Error('Mobile hero media should load immediately')
+if (await heroBackground.getAttribute('data-media-visible') !== 'true') throw new Error('Mobile hero media should begin visible')
+if (await releaseBackground.getAttribute('data-media-loaded') !== 'true') throw new Error('The approaching release background should preload')
+if (await releaseBackground.getAttribute('data-media-visible') !== 'false') throw new Error('The approaching release background should remain paused')
+for (const [name, background] of [
+  ['shows', showsBackground],
+  ['merch', merchBackground],
+  ['newsletter', newsletterBackground],
+]) {
+  if (await background.getAttribute('data-media-loaded') !== 'false') throw new Error(`${name} mobile background loaded too early`)
+  if (await background.locator('source[src]').count() !== 0) throw new Error(`${name} mobile background sources were attached too early`)
+}
 
 if (continuous) {
   if (await dots.count() !== 0) throw new Error('Continuous mobile scrolling should not show slide navigation dots')
@@ -103,6 +121,12 @@ const secondSlide = page.locator('#featured-release')
 if (continuous) await secondSlide.scrollIntoViewIfNeeded()
 else await dots.nth(releaseSlideIndex).click()
 await page.waitForTimeout(350)
+if (await heroBackground.getAttribute('data-media-visible') !== 'false') throw new Error('Off-screen mobile hero should pause')
+if (await releaseBackground.getAttribute('data-media-visible') !== 'true') throw new Error('Visible release background should play')
+if (await showsBackground.getAttribute('data-media-loaded') !== 'true') throw new Error('The approaching shows background should preload')
+for (const [name, background] of [['merch', merchBackground], ['newsletter', newsletterBackground]]) {
+  if (await background.getAttribute('data-media-loaded') !== 'false') throw new Error(`${name} mobile background loaded during release view`)
+}
 if (!continuous && await secondSlide.getAttribute('aria-hidden') !== 'false') throw new Error('Second slide did not activate')
 if (await secondSlide.locator('.display-heading').count() !== 0) throw new Error('Hot release heading should be hidden')
 const releaseDetails = await secondSlide.locator('.release-spotlight__details').innerText()

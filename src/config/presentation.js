@@ -85,22 +85,22 @@ export const presentation = Object.freeze({
     standardMobile: {
       poster: '/assets/reference/mobile-standard-background-poster.jpg?v=montage-v1',
       sources: [
-        { src: '/assets/reference/mobile-standard-background.mp4?v=montage-v1', type: 'video/mp4' },
-        { src: '/assets/reference/mobile-standard-background.webm?v=montage-v1', type: 'video/webm' },
+        { src: '/assets/reference/mobile-standard-background.webm?v=montage-v1', type: 'video/webm; codecs="vp9"' },
+        { src: '/assets/reference/mobile-standard-background.mp4?v=montage-v1', type: 'video/mp4; codecs="avc1.640028"' },
       ],
     },
     merchMobile: {
       poster: '/assets/reference/mobile-studios-background-poster.jpg?v=montage-v1',
       sources: [
-        { src: '/assets/reference/mobile-studios-background.mp4?v=montage-v1', type: 'video/mp4' },
-        { src: '/assets/reference/mobile-studios-background.webm?v=montage-v1', type: 'video/webm' },
+        { src: '/assets/reference/mobile-studios-background.webm?v=montage-v1', type: 'video/webm; codecs="vp9"' },
+        { src: '/assets/reference/mobile-studios-background.mp4?v=montage-v1', type: 'video/mp4; codecs="avc1.640028"' },
       ],
     },
     newsletterMobile: {
       poster: '/assets/reference/mobile-clients-background-poster.jpg?v=montage-v1',
       sources: [
-        { src: '/assets/reference/mobile-clients-background.mp4?v=montage-v1', type: 'video/mp4' },
-        { src: '/assets/reference/mobile-clients-background.webm?v=montage-v1', type: 'video/webm' },
+        { src: '/assets/reference/mobile-clients-background.webm?v=montage-v1', type: 'video/webm; codecs="vp9"' },
+        { src: '/assets/reference/mobile-clients-background.mp4?v=montage-v1', type: 'video/mp4; codecs="avc1.640028"' },
       ],
     },
   },

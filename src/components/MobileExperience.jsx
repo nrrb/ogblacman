@@ -47,6 +47,8 @@ export default function MobileExperience({ content }) {
             media={hero.backgroundVideo.mobileOverride || hero.backgroundVideo.primary}
             videoId="mobile-hero-video"
             className="background-media background-media--mobile-hero"
+            loadingStrategy="viewport"
+            priority
           >
             <div className="mobile-slide__overlay">
               <div className="mobile-slide__inner">
@@ -87,6 +89,7 @@ export default function MobileExperience({ content }) {
             media={featuredRelease.mobileBackground}
             videoId="mobile-about-video"
             className="background-media background-media--slide"
+            loadingStrategy="viewport"
           />
           {extrasFor(name)}
         </div>
@@ -115,6 +118,7 @@ export default function MobileExperience({ content }) {
             media={shows.mobileBackground}
             videoId="mobile-why-video"
             className="background-media background-media--slide"
+            loadingStrategy="viewport"
           />
           {extrasFor(name)}
         </div>
@@ -138,6 +142,7 @@ export default function MobileExperience({ content }) {
             media={booking.mobileBackground}
             videoId="mobile-how-video"
             className="background-media background-media--slide"
+            loadingStrategy="viewport"
           />
           {extrasFor(name)}
         </div>
@@ -172,6 +177,7 @@ export default function MobileExperience({ content }) {
             media={merch.mobileBackground}
             videoId="mobile-studios-video"
             className="background-media background-media--slide"
+            loadingStrategy="viewport"
           />
           {extrasFor(name)}
         </div>
@@ -202,6 +208,7 @@ export default function MobileExperience({ content }) {
           media={newsletter.mobileBackground}
           videoId="mobile-newsletter-video"
           className="background-media background-media--slide"
+          loadingStrategy="viewport"
         />
         {extrasFor(name)}
       </div>
