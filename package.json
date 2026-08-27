@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "montage": "node tools/montage.mjs",
+    "stripe:import": "node tools/import-stripe-invoice.mjs",
     "process:hero": "node tools/process-hero.mjs",
     "test:bundle": "node --test tests/bundle.test.mjs",
     "process:fonts": "node tools/process-fonts.mjs",
@@ -15,6 +16,7 @@
     "test:fonts": "node --test tests/fonts.test.mjs",
     "test:media": "node --test tests/media.test.mjs",
     "test:montage": "node --test tests/montage.test.mjs",
+    "test:stripe-import": "node --test tests/stripe-invoice-import.test.mjs",
     "test:interaction": "node tests/interaction.mjs",
     "test:content": "node tests/content.mjs"
   },
