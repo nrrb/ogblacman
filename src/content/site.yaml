@@ -45,7 +45,7 @@ homePage:
         artist: OG Blacman
         title: Telephone
         releaseDate: "2026-08-26"
-        description: Telephone lands August 26, 2026. Hear OG Blacman's hot release now in the Popcorn Player, then follow the release on DistroKid.
+        description: Telephone lands August 26, 2026. Hear a sample of OG Blacman's hot release now in the Tree Phone, then follow the release on DistroKid.
         coverArt:
           asset: telephoneCover
           alt: OG Blacman Telephone cover artwork
@@ -56,7 +56,11 @@ homePage:
           url: https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release
           ariaLabel: Follow Telephone by OG Blacman on DistroKid
       playerCopy:
-        interactionPrompt: <- pick up my line
+        interactionPrompt:
+          firstLine: pick
+          arrow: <-
+          middleLine: up my
+          lastLine: line
         idleStatus: LIFT TO LISTEN
         loadingStatus: CONNECTING
         playingStatus: LINE OPEN

@@ -56,7 +56,6 @@ export default function TopPickRelease({ section, variant = 'desktop' }) {
   const [duration, setDuration] = useState(0)
   const [errorMessage, setErrorMessage] = useState('')
   const isPlaying = playbackState === 'playing'
-  const showInteractionPrompt = playbackState === 'idle' || playbackState === 'error'
 
   function stopAnalyzer() {
     if (animationFrame.current !== null) {
@@ -261,7 +260,7 @@ export default function TopPickRelease({ section, variant = 'desktop' }) {
 
           <button
             type="button"
-            className={`telephone-player__button${showInteractionPrompt ? ' telephone-player__button--prompted' : ''}`}
+            className="telephone-player__button telephone-player__button--prompted"
             aria-label={isPlaying ? `Stop and rewind ${release.title}` : `Play ${release.title}`}
             aria-pressed={isPlaying}
             disabled={playbackState === 'loading'}
@@ -285,11 +284,18 @@ export default function TopPickRelease({ section, variant = 'desktop' }) {
                 />
               )}
             </span>
-            {showInteractionPrompt && (
-              <span className="telephone-player__interaction-prompt" aria-hidden="true">
-                {playerCopy.interactionPrompt}
+            <span className="telephone-player__interaction-prompt" aria-hidden="true">
+              <span className="telephone-player__prompt-line telephone-player__prompt-line--first">
+                {playerCopy.interactionPrompt.firstLine}
               </span>
-            )}
+              <span className="telephone-player__prompt-arrow">{playerCopy.interactionPrompt.arrow}</span>
+              <span className="telephone-player__prompt-line telephone-player__prompt-line--middle">
+                {playerCopy.interactionPrompt.middleLine}
+              </span>
+              <span className="telephone-player__prompt-line telephone-player__prompt-line--last">
+                {playerCopy.interactionPrompt.lastLine}
+              </span>
+            </span>
           </button>
 
           <div className="telephone-player__readout" aria-live="polite">

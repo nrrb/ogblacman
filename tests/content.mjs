@@ -40,10 +40,15 @@ if (sections.featuredRelease.release.releaseDate !== '2026-08-26') throw new Err
 if (sections.featuredRelease.release.release_date !== undefined) throw new Error('Duplicate formatted release date must not remain')
 if (sections.featuredRelease.release.audio.asset !== 'telephone') throw new Error('Featured release must use a semantic audio asset')
 if (sections.featuredRelease.release.coverArt.asset !== 'telephoneCover') throw new Error('Featured release must use semantic cover art')
+if (!sections.featuredRelease.release.description.includes("Hear a sample of OG Blacman's hot release now in the Tree Phone")) {
+  throw new Error('Featured release description must identify the Tree Phone sample')
+}
 if (sections.featuredRelease.release.primaryLink.url !== 'https://distrokid.com/hyperfollow/ogblacman/telephone?ref=release') {
   throw new Error('Featured release must retain its DistroKid link')
 }
-if (sections.featuredRelease.playerCopy.interactionPrompt !== '<- pick up my line') {
+const interactionPrompt = sections.featuredRelease.playerCopy.interactionPrompt
+if (interactionPrompt.firstLine !== 'pick' || interactionPrompt.arrow !== '<-'
+  || interactionPrompt.middleLine !== 'up my' || interactionPrompt.lastLine !== 'line') {
   throw new Error('Telephone interaction prompt must remain editable release copy')
 }
 

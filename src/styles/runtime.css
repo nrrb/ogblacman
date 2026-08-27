@@ -334,6 +334,10 @@ video {
   grid-column: 2;
   grid-row: 1;
   align-self: center;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: repeat(3, auto);
+  column-gap: .12em;
   max-width: 190px;
   color: var(--color-body-text);
   font-family: "Tajamuka Script", Arial, sans-serif;
@@ -342,6 +346,26 @@ video {
   line-height: .82;
   text-align: left;
   text-transform: lowercase;
+}
+
+.telephone-player__prompt-line--first {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.telephone-player__prompt-arrow {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.telephone-player__prompt-line--middle {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.telephone-player__prompt-line--last {
+  grid-column: 2;
+  grid-row: 3;
 }
 
 .telephone-player__button:disabled {
