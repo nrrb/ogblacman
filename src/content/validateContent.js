@@ -166,7 +166,11 @@ export function validateContent(content) {
   assetReference(release.audio, 'homePage.sections.featuredRelease.release.audio')
   sectionLink(release.primaryLink, 'homePage.sections.featuredRelease.release.primaryLink')
   const playerCopy = object(featuredRelease.playerCopy, 'homePage.sections.featuredRelease.playerCopy')
-  for (const field of ['interactionPrompt', 'idleStatus', 'loadingStatus', 'playingStatus', 'errorMessage']) {
+  const interactionPrompt = object(playerCopy.interactionPrompt, 'homePage.sections.featuredRelease.playerCopy.interactionPrompt')
+  for (const field of ['firstLine', 'arrow', 'middleLine', 'lastLine']) {
+    string(interactionPrompt[field], `homePage.sections.featuredRelease.playerCopy.interactionPrompt.${field}`)
+  }
+  for (const field of ['idleStatus', 'loadingStatus', 'playingStatus', 'errorMessage']) {
     string(playerCopy[field], `homePage.sections.featuredRelease.playerCopy.${field}`)
   }
   string(featuredRelease.mobileBackground, 'homePage.sections.featuredRelease.mobileBackground')

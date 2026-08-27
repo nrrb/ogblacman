@@ -183,7 +183,9 @@ if (await telephoneImage.getAttribute('src') !== '/assets/phone_on_hook.png') th
 if (!new URL(await telephoneImage.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/phone_on_hook-180.png')) {
   throw new Error('Mobile on-hook phone should use its smallest responsive image')
 }
-if (await interactionPrompt.textContent() !== '<- pick up my line') throw new Error('Telephone lyric interaction prompt is missing')
+const promptLines = await interactionPrompt.locator('.telephone-player__prompt-line').allTextContents()
+if (promptLines.join('|') !== 'pick|up my|line') throw new Error('Telephone lyric interaction prompt lines are missing')
+if (await interactionPrompt.locator('.telephone-player__prompt-arrow').textContent() !== '<-') throw new Error('Telephone lyric interaction arrow is missing')
 if (!(await interactionPrompt.evaluate(element => getComputedStyle(element).fontFamily)).includes('Tajamuka Script')) {
   throw new Error('Telephone interaction prompt must use Tajamuka Script')
 }
@@ -200,7 +202,7 @@ await telephoneButton.click()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'playing')
 if (await telephoneButton.getAttribute('aria-label') !== 'Stop and rewind Telephone') throw new Error('Off-hook phone should stop Telephone')
 if (await telephoneImage.getAttribute('src') !== '/assets/phone_off_hook.png') throw new Error('Playing state should show the off-hook phone')
-if (await interactionPrompt.count() !== 0) throw new Error('Telephone interaction prompt should clear after pickup')
+if (await interactionPrompt.count() !== 1) throw new Error('Telephone interaction prompt column must remain after pickup')
 if (!new URL(await telephoneImage.evaluate(element => element.currentSrc)).pathname.endsWith('/assets/phone_off_hook-120.png')) {
   throw new Error('Mobile off-hook phone should use its smallest responsive image')
 }
@@ -212,10 +214,15 @@ if (await analyzer.getAttribute('width') !== '20' || await analyzer.getAttribute
 }
 const activePhoneBox = await telephonePlayer.locator('.telephone-player__phone--active').boundingBox()
 const activeButtonBox = await telephoneButton.boundingBox()
+const activePromptBox = await interactionPrompt.boundingBox()
 const analyzerBox = await analyzer.boundingBox()
-if (!idleButtonBox || !idlePhoneBox || !activePhoneBox || !activeButtonBox || !analyzerBox) throw new Error('Telephone player layout is not measurable')
+if (!idleButtonBox || !idlePhoneBox || !interactionPromptBox || !activePhoneBox || !activeButtonBox || !activePromptBox || !analyzerBox) throw new Error('Telephone player layout is not measurable')
 if (Math.abs(activePhoneBox.height - idlePhoneBox.height) > 1) throw new Error('Off-hook phone must fit within the on-hook phone height')
 if (Math.abs(activeButtonBox.height - idleButtonBox.height) > 1) throw new Error('Telephone player height must remain stable between states')
+for (const dimension of ['x', 'y', 'width', 'height']) {
+  if (Math.abs(activeButtonBox[dimension] - idleButtonBox[dimension]) > 1) throw new Error(`Telephone button ${dimension} shifted after pickup`)
+  if (Math.abs(activePromptBox[dimension] - interactionPromptBox[dimension]) > 1) throw new Error(`Telephone prompt ${dimension} shifted after pickup`)
+}
 const expectedAnalyzerWidth = activePhoneBox.width * (5 / 7)
 const expectedAnalyzerHeight = activePhoneBox.height * (3 / 28)
 if (Math.abs(analyzerBox.width - expectedAnalyzerWidth) > 1 || Math.abs(analyzerBox.height - expectedAnalyzerHeight) > 1) {
