@@ -5,7 +5,7 @@ export const assetVersions = Object.freeze({
   mobileBackgrounds: 'montage-v1',
   reference: 'reference-v1',
   telephone: 'telephone-v1',
-  treePhone: 'tree-phone-v1',
+  treePhone: 'tree-phone-v2',
 })
 
 const versioned = (src, version) => `${src}?v=${version}`
