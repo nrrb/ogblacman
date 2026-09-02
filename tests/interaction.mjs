@@ -51,8 +51,13 @@ if (await page.locator('.site--desktop').count() !== 0) {
   throw new Error('Desktop experience should not mount below the mobile breakpoint')
 }
 const initialHeroSources = page.locator('#mobile-hero-video source')
-if (!/^video\/webm; codecs="vp9"$/.test(await initialHeroSources.first().getAttribute('type'))) {
-  throw new Error('Hero video should prefer an explicitly declared VP9 source')
+if (!/^video\/webm; codecs="vp9"$/.test(await initialHeroSources.first().getAttribute('type'))
+  || !/^video\/mp4; codecs="avc1\.64001f"$/.test(await initialHeroSources.nth(1).getAttribute('type'))) {
+  throw new Error('Hero video should use the optimized WebM and H.264 sources')
+}
+if (await page.locator('#mobile-hero-video').getAttribute('loop') !== null
+  || await page.locator('#hero .background-media').getAttribute('data-loop') !== 'false') {
+  throw new Error('Hero video should play once without looping')
 }
 
 await page.setViewportSize({ width: 390, height: 844 })

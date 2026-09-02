@@ -12,6 +12,7 @@ export default function BackgroundVideo({
   children,
   loadingStrategy = 'eager',
   priority = false,
+  loop = true,
   ...rest
 }) {
   const containerRef = useRef(null)
@@ -118,7 +119,7 @@ export default function BackgroundVideo({
       data-poster-url={media.poster}
       data-video-urls={sourceList}
       data-autoplay="true"
-      data-loop="true"
+      data-loop={String(loop)}
       data-media-loaded={String(shouldAttachMedia)}
       data-media-visible={String(isVisible)}
     >
@@ -126,7 +127,7 @@ export default function BackgroundVideo({
         id={videoId}
         ref={videoRef}
         autoPlay={shouldAttachMedia && isVisible}
-        loop
+        loop={loop}
         muted
         playsInline
         poster={shouldAttachPoster ? media.poster : undefined}

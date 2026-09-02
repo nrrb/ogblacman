@@ -28,6 +28,7 @@ export default function DesktopExperience({ content }) {
             media={hero.backgroundVideo.primary}
             videoId="desktop-hero-video"
             className="background-media background-media--desktop-hero"
+            loop={false}
           >
             <SectionHeading
               heading={hero.heading}

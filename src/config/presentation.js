@@ -1,7 +1,7 @@
 const responsiveImage = (src, sizes, sources) => ({ src, sizes, sources })
 
 export const assetVersions = Object.freeze({
-  hero: 'hero-v2',
+  hero: 'hero-v3',
   mobileBackgrounds: 'montage-v1',
   reference: 'reference-v1',
   telephone: 'telephone-v1',
@@ -84,17 +84,17 @@ export const presentation = Object.freeze({
       ],
     },
     heroDesktop: {
-      poster: heroAsset('/assets/hero/hero-montage-desktop-poster.jpg'),
+      poster: heroAsset('/assets/hero/hero-desktop-poster.jpg'),
       sources: [
-        { src: heroAsset('/assets/hero/hero-montage-desktop.webm'), type: 'video/webm; codecs="vp9"' },
-        { src: heroAsset('/assets/hero/hero-montage-desktop.mp4'), type: 'video/mp4; codecs="avc1.640028"' },
+        { src: heroAsset('/assets/hero/hero-desktop.webm'), type: 'video/webm; codecs="vp9"' },
+        { src: heroAsset('/assets/hero/hero-desktop.mp4'), type: 'video/mp4; codecs="avc1.64001f"' },
       ],
     },
     heroMobile: {
-      poster: heroAsset('/assets/hero/hero-montage-mobile-poster.jpg'),
+      poster: heroAsset('/assets/hero/hero-mobile-poster.jpg'),
       sources: [
-        { src: heroAsset('/assets/hero/hero-montage-mobile.webm'), type: 'video/webm; codecs="vp9"' },
-        { src: heroAsset('/assets/hero/hero-montage-mobile.mp4'), type: 'video/mp4; codecs="avc1.640028"' },
+        { src: heroAsset('/assets/hero/hero-mobile.webm'), type: 'video/webm; codecs="vp9"' },
+        { src: heroAsset('/assets/hero/hero-mobile.mp4'), type: 'video/mp4; codecs="avc1.64001f"' },
       ],
     },
     standardMobile: {

@@ -49,6 +49,7 @@ export default function MobileExperience({ content }) {
             className="background-media background-media--mobile-hero"
             loadingStrategy="viewport"
             priority
+            loop={false}
           >
             <div className="mobile-slide__overlay">
               <div className="mobile-slide__inner">
