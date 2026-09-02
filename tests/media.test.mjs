@@ -9,10 +9,10 @@ const execFileAsync = promisify(execFile)
 const heroDirectory = new URL('../public/assets/hero/', import.meta.url)
 
 const expectedAssets = [
-  { name: 'hero-desktop.mp4', codec: 'h264', width: 1280, height: 720, maxBytes: 24_000_000 },
-  { name: 'hero-desktop.webm', codec: 'vp9', width: 1280, height: 720, maxBytes: 28_000_000 },
-  { name: 'hero-mobile.mp4', codec: 'h264', width: 404, height: 720, maxBytes: 13_000_000 },
-  { name: 'hero-mobile.webm', codec: 'vp9', width: 404, height: 720, maxBytes: 13_000_000 },
+  { name: 'hero-desktop.mp4', codec: 'h264', width: 1280, height: 720, maxBytes: 13_000_000 },
+  { name: 'hero-desktop.webm', codec: 'vp9', width: 1280, height: 720, maxBytes: 11_000_000 },
+  { name: 'hero-mobile.mp4', codec: 'h264', width: 404, height: 720, maxBytes: 4_500_000 },
+  { name: 'hero-mobile.webm', codec: 'vp9', width: 404, height: 720, maxBytes: 4_000_000 },
 ]
 
 async function probe(name) {
@@ -35,8 +35,8 @@ test('hero delivery asset is a compact silent video', async () => {
     assert.equal(stream.codec_name, expected.codec)
     assert.equal(stream.width, expected.width)
     assert.equal(stream.height, expected.height)
-    assert.equal(stream.avg_frame_rate, '24000/1001')
-    assert.ok(Math.abs(Number(details.format.duration) - 156.74) < 0.1)
+    assert.equal(stream.avg_frame_rate, '24/1')
+    assert.ok(Math.abs(Number(details.format.duration) - 156.75) < 0.1)
     assert.ok(fileStat.size <= expected.maxBytes, `${expected.name} exceeds ${expected.maxBytes} bytes`)
   }
 })
