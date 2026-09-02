@@ -166,6 +166,7 @@ export function validateContent(content) {
   imageReference(release.coverArt, 'homePage.sections.featuredRelease.release.coverArt')
   assetReference(release.video, 'homePage.sections.featuredRelease.release.video')
   assetReference(release.audio, 'homePage.sections.featuredRelease.release.audio')
+  optionalString(release.youtubeId, 'homePage.sections.featuredRelease.release.youtubeId')
   sectionLink(release.primaryLink, 'homePage.sections.featuredRelease.release.primaryLink')
   const playerCopy = object(featuredRelease.playerCopy, 'homePage.sections.featuredRelease.playerCopy')
   const interactionPrompt = object(playerCopy.interactionPrompt, 'homePage.sections.featuredRelease.playerCopy.interactionPrompt')

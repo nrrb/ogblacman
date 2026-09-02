@@ -64,6 +64,7 @@ homePage:
           alt: OG Blacman Telephone cover artwork
         video: { asset: treePhone }
         audio: { asset: telephone }
+        youtubeId: g5QyDi5Cjtc
         primaryLink:
           type: external
           label: FOLLOW TELEPHONE ON DISTROKID

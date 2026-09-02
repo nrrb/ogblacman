@@ -42,6 +42,19 @@ export default function TopPickRelease({ section, variant = 'desktop' }) {
           </div>
         </div>
 
+        {release.youtubeId && (
+          <div className="release-spotlight__video">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${release.youtubeId}`}
+              title={`${release.title} video`}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+        )}
+
         <TelephonePlayer
           video={release.video}
           audio={release.audio}
