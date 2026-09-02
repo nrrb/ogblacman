@@ -99,9 +99,12 @@ if (continuous) {
   const documentHeight = await page.evaluate(() => document.documentElement.scrollHeight)
   if (documentHeight < viewportHeight * 4.5) throw new Error('Continuous mobile panels do not create a full vertical document')
   await page.evaluate(() => window.scrollTo(0, 0))
+  await page.mouse.move(200, 400)
   await page.mouse.wheel(0, 600)
-  await page.waitForTimeout(150)
-  if (await page.evaluate(() => window.scrollY) <= 0) throw new Error('Continuous mobile mode did not allow native document scrolling')
+  const nativeScrollWorked = await page.waitForFunction(() => window.scrollY > 0, null, { timeout: 3000 })
+    .then(() => true)
+    .catch(() => false)
+  if (!nativeScrollWorked) throw new Error('Continuous mobile mode did not allow native document scrolling')
 } else {
   if (await dots.count() !== expectedSlideIds.length) throw new Error('Visible section statuses did not produce the expected navigation dots')
   await dots.nth(expectedSlideIds.length - 1).click()
@@ -170,6 +173,13 @@ const telephoneButton = telephonePlayer.locator('.telephone-player__button')
 const telephoneVideo = telephonePlayer.locator('.telephone-player__video')
 const interactionPrompt = telephonePlayer.locator('.telephone-player__interaction-prompt')
 const audio = telephonePlayer.locator('audio')
+// Document-absolute rect: the mobile release section flows past one viewport, so
+// clicking the player can scroll the page. We only care that the player itself
+// does not reflow, which viewport-relative boundingBox() cannot tell apart from a scroll.
+const documentBox = (locator) => locator.evaluate((element) => {
+  const rect = element.getBoundingClientRect()
+  return { x: rect.x + window.scrollX, y: rect.y + window.scrollY, width: rect.width, height: rect.height }
+})
 if (await telephoneButton.getAttribute('aria-label') !== 'Pick up Telephone') throw new Error('Tree Phone should invite pickup')
 if (new URL(await telephoneVideo.getAttribute('poster'), url).pathname !== '/assets/tree-phone/tree-phone-first.webp') throw new Error('Tree Phone should use its optimized first-frame poster')
 const promptLines = await interactionPrompt.locator('.telephone-player__prompt-line').allTextContents()
@@ -178,8 +188,8 @@ if (await interactionPrompt.locator('.telephone-player__prompt-arrow').textConte
 if (!(await interactionPrompt.evaluate(element => getComputedStyle(element).fontFamily)).includes('Tajamuka Script')) {
   throw new Error('Telephone interaction prompt must use Tajamuka Script')
 }
-const idleButtonBox = await telephoneButton.boundingBox()
-const interactionPromptBox = await interactionPrompt.boundingBox()
+const idleButtonBox = await documentBox(telephoneButton)
+const interactionPromptBox = await documentBox(interactionPrompt)
 if (!idleButtonBox || !interactionPromptBox || !releaseCtaBox) throw new Error('Idle Tree Phone spacing is not measurable')
 if (interactionPromptBox.x < idleButtonBox.x + idleButtonBox.width / 2 - 4) throw new Error('Telephone interaction prompt must sit to the right of the phone')
 const artworkToCtaGap = releaseCtaBox.y - (editorialArtBox.y + editorialArtBox.height)
@@ -188,13 +198,16 @@ if (!videoBox) throw new Error('Tree Phone video spacing is not measurable')
 const ctaToPhoneGap = videoBox.y - (releaseCtaBox.y + releaseCtaBox.height)
 if (ctaToPhoneGap > artworkToCtaGap + 6) throw new Error('CTA-to-phone spacing should match the artwork-to-CTA rhythm')
 await telephoneButton.click()
+// The release section flows past one viewport; keep the player on-screen so the
+// browser does not throttle the off-screen <video> during playback.
+await telephoneVideo.scrollIntoViewIfNeeded()
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'playing')
 if (await telephoneButton.getAttribute('aria-label') !== 'Hang up Telephone') throw new Error('Playing Tree Phone should invite hangup')
 if (await telephoneVideo.evaluate((element) => element.paused)) throw new Error('Tree Phone video should play after pickup')
 if (await telephoneVideo.evaluate((element) => element.playbackRate !== 2)) throw new Error('Tree Phone video should play at 2x speed')
 if (await interactionPrompt.count() !== 1) throw new Error('Telephone interaction prompt column must remain after pickup')
-const activeButtonBox = await telephoneButton.boundingBox()
-const activePromptBox = await interactionPrompt.boundingBox()
+const activeButtonBox = await documentBox(telephoneButton)
+const activePromptBox = await documentBox(interactionPrompt)
 if (!idleButtonBox || !interactionPromptBox || !activeButtonBox || !activePromptBox) throw new Error('Telephone player layout is not measurable')
 if (Math.abs(activeButtonBox.height - idleButtonBox.height) > 1) throw new Error('Telephone player height must remain stable between states')
 for (const dimension of ['x', 'y', 'width', 'height']) {
@@ -209,7 +222,7 @@ await page.waitForFunction(() => {
   return video?.currentTime > video.duration / 2 && !audio?.paused && audio.volume > 0
 })
 await page.waitForFunction(() => document.querySelector('.telephone-player--mobile')?.dataset.state === 'ended', null, { timeout: 10000 })
-const endedButtonBox = await telephoneButton.boundingBox()
+const endedButtonBox = await documentBox(telephoneButton)
 if (!endedButtonBox) throw new Error('Ended Tree Phone layout is not measurable')
 for (const dimension of ['x', 'y', 'width', 'height']) {
   if (Math.abs(endedButtonBox[dimension] - idleButtonBox[dimension]) > 1) throw new Error(`Telephone button ${dimension} shifted after playback`)

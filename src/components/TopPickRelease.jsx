@@ -1,6 +1,7 @@
 import AppLink from './AppLink.jsx'
 import ResponsiveImage from './ResponsiveImage.jsx'
 import TelephonePlayer from './TelephonePlayer.jsx'
+import YouTubeEmbed from './YouTubeEmbed.jsx'
 
 function formatReleaseDate(value) {
   return new Intl.DateTimeFormat('en-US', {
@@ -36,14 +37,7 @@ export default function TopPickRelease({ section, variant = 'desktop' }) {
               />
               {release.youtubeId && (
                 <div className="release-spotlight__video">
-                  <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${release.youtubeId}`}
-                    title={`${release.title} video`}
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allowFullScreen
-                  />
+                  <YouTubeEmbed id={release.youtubeId} title={`${release.title} video`} />
                 </div>
               )}
               <AppLink link={release.primaryLink} className="release-spotlight__cta">
