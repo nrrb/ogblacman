@@ -3,3 +3,5 @@ dist/
 .DS_Store
 .montage-cache/
 og-video/
+.vercel
+.env*
