@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import SpectrumAnalyzer from './SpectrumAnalyzer.jsx'
 
 const fadeDuration = 650
 
@@ -235,6 +236,7 @@ export default function TelephonePlayer({ video, audio, copy, title, variant = '
           <span className="telephone-player__prompt-line telephone-player__prompt-line--middle">{copy.interactionPrompt.middleLine}</span>
           <span className="telephone-player__prompt-line telephone-player__prompt-line--last">{copy.interactionPrompt.lastLine}</span>
         </span>
+        <SpectrumAnalyzer audioRef={audioRef} active={isPlaying} />
       </button>
 
       <div className="telephone-player__readout" aria-live="polite">

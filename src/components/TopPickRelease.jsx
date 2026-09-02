@@ -34,6 +34,18 @@ export default function TopPickRelease({ section, variant = 'desktop' }) {
                 fetchPriority="high"
                 decoding="async"
               />
+              {release.youtubeId && (
+                <div className="release-spotlight__video">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${release.youtubeId}`}
+                    title={`${release.title} video`}
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                </div>
+              )}
               <AppLink link={release.primaryLink} className="release-spotlight__cta">
                 <span>{release.primaryLink.label}</span>
                 <span className="release-spotlight__arrow" aria-hidden="true">→</span>
@@ -41,19 +53,6 @@ export default function TopPickRelease({ section, variant = 'desktop' }) {
             </div>
           </div>
         </div>
-
-        {release.youtubeId && (
-          <div className="release-spotlight__video">
-            <iframe
-              src={`https://www.youtube-nocookie.com/embed/${release.youtubeId}`}
-              title={`${release.title} video`}
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            />
-          </div>
-        )}
 
         <TelephonePlayer
           video={release.video}

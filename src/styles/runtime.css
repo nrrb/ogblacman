@@ -245,7 +245,7 @@ video {
 .release-spotlight__video {
   position: relative;
   width: min(93%, 540px);
-  margin: 0 auto;
+  margin: 16px auto 0;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: #000;
@@ -337,20 +337,22 @@ video {
 
 .telephone-player__button--prompted {
   grid-template-columns: minmax(0, 230px) minmax(140px, 1fr);
-  grid-template-rows: 1fr;
+  grid-template-rows: auto auto;
+  align-content: center;
   column-gap: 12px;
+  row-gap: 8px;
   width: min(100%, 460px);
 }
 
 .telephone-player__button--video .telephone-player__video {
   grid-column: 1;
-  grid-row: 1;
+  grid-row: 1 / span 2;
 }
 
 .telephone-player__interaction-prompt {
   grid-column: 2;
   grid-row: 1;
-  align-self: center;
+  align-self: end;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: repeat(3, auto);
@@ -383,6 +385,33 @@ video {
 .telephone-player__prompt-line--last {
   grid-column: 2;
   grid-row: 3;
+}
+
+.telephone-player__spectrum {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: start;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: min(100%, 190px);
+  height: 26px;
+  margin-top: 6px;
+}
+
+.telephone-player__spectrum-bar {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  transform: scaleY(.06);
+  transform-origin: bottom;
+  border-radius: 1px;
+  background-color: color-mix(in srgb, var(--color-white) 42%, transparent);
+  transition: transform .45s ease, background-color .3s linear;
+}
+
+.telephone-player__spectrum--live .telephone-player__spectrum-bar {
+  transition: none;
 }
 
 .telephone-player__button:disabled {
@@ -754,6 +783,12 @@ video {
   .site--mobile .telephone-player__interaction-prompt {
     max-width: 145px;
     font-size: clamp(32px, 10.5vw, 42px);
+  }
+
+  .site--mobile .telephone-player__spectrum {
+    width: min(100%, 145px);
+    height: 20px;
+    margin-top: 4px;
   }
 
   .site--mobile .telephone-player__video {
