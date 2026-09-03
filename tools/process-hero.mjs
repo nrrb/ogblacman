@@ -7,28 +7,34 @@ import path from 'node:path';
 import process from 'node:process';
 
 const DEFAULTS = Object.freeze({
-  input: 'public/hero-montage.mp4',
+  input: 'OG_Blacman_-_Telephone_Official_Video [g5QyDi5Cjtc].mp4',
   outputDirectory: 'public/assets/hero',
   posterTime: 4.5,
+  speedFactor: 3,
   fps: 24,
   desktopWidth: 1280,
   desktopHeight: 720,
   mobileWidth: 404,
   mobileHeight: 720,
   mobileFocus: 0.5,
+  desktopMp4Bitrate: '600k',
+  desktopWebmBitrate: '460k',
+  mobileMp4Bitrate: '200k',
+  mobileWebmBitrate: '145k',
 });
 
 function usage() {
   return `
-Create web delivery assets from the generated hero montage.
+Create responsive web delivery assets from the Telephone source video.
 
 Usage:
   npm run process:hero -- [options]
 
 Options:
-  -i, --input <file>           Source montage (default: ${DEFAULTS.input})
+  -i, --input <file>           Source video (default: ${DEFAULTS.input})
   -o, --output-dir <dir>       Delivery asset directory (default: ${DEFAULTS.outputDirectory})
       --poster-time <seconds>  Poster frame timestamp (default: ${DEFAULTS.posterTime})
+      --speed <number>         Playback speed multiplier (default: ${DEFAULTS.speedFactor})
       --fps <number>           Delivery frame rate (default: ${DEFAULTS.fps})
       --mobile-focus <0..1>    Horizontal mobile crop focus: 0 left, 1 right (default: ${DEFAULTS.mobileFocus})
       --overwrite              Replace an existing delivery set
@@ -59,6 +65,7 @@ function parseArgs(argv) {
     else if (flag === '--input' || flag === '-i') options.input = valueAfter(argv, index++, flag);
     else if (flag === '--output-dir' || flag === '-o') options.outputDirectory = valueAfter(argv, index++, flag);
     else if (flag === '--poster-time') options.posterTime = parseNumber(valueAfter(argv, index++, flag), flag, 0, 86_400);
+    else if (flag === '--speed') options.speedFactor = parseNumber(valueAfter(argv, index++, flag), flag, 0.1, 10);
     else if (flag === '--fps') options.fps = parseNumber(valueAfter(argv, index++, flag), flag, 1, 60);
     else if (flag === '--mobile-focus') options.mobileFocus = parseNumber(valueAfter(argv, index++, flag), flag, 0, 1);
     else throw new Error(`Unknown option: ${flag}`);
@@ -90,12 +97,12 @@ function run(command, args) {
 
 function deliveryFiles(outputDirectory) {
   return {
-    desktopMp4: path.join(outputDirectory, 'hero-montage-desktop.mp4'),
-    desktopWebm: path.join(outputDirectory, 'hero-montage-desktop.webm'),
-    desktopPoster: path.join(outputDirectory, 'hero-montage-desktop-poster.jpg'),
-    mobileMp4: path.join(outputDirectory, 'hero-montage-mobile.mp4'),
-    mobileWebm: path.join(outputDirectory, 'hero-montage-mobile.webm'),
-    mobilePoster: path.join(outputDirectory, 'hero-montage-mobile-poster.jpg'),
+    desktopMp4: path.join(outputDirectory, 'hero-desktop.mp4'),
+    desktopWebm: path.join(outputDirectory, 'hero-desktop.webm'),
+    desktopPoster: path.join(outputDirectory, 'hero-desktop-poster.jpg'),
+    mobileMp4: path.join(outputDirectory, 'hero-mobile.mp4'),
+    mobileWebm: path.join(outputDirectory, 'hero-mobile.webm'),
+    mobilePoster: path.join(outputDirectory, 'hero-mobile-poster.jpg'),
   };
 }
 
@@ -104,16 +111,17 @@ function temporaryName(filename) {
   return `${filename.slice(0, -extension.length)}.tmp${extension}`;
 }
 
-function videoFilter(width, height, focus = 0.5) {
+function videoFilter(width, height, focus = 0.5, speedFactor = 1) {
   return [
     `scale=${width}:${height}:force_original_aspect_ratio=increase:flags=lanczos`,
     `crop=${width}:${height}:(iw-ow)*${focus}:(ih-oh)/2`,
     'setsar=1',
     'format=yuv420p',
+    `setpts=PTS/${speedFactor}`,
   ].join(',');
 }
 
-async function encodeH264(input, output, filter, options, crf) {
+async function encodeH264(input, output, filter, options, bitrate) {
   const temporary = temporaryName(output);
   await rm(temporary, { force: true });
   await run('ffmpeg', [
@@ -124,7 +132,9 @@ async function encodeH264(input, output, filter, options, crf) {
     '-an',
     '-c:v', 'libx264',
     '-preset', 'slow',
-    '-crf', String(crf),
+    '-b:v', bitrate,
+    '-maxrate', bitrate,
+    '-bufsize', bitrate,
     '-profile:v', 'high',
     '-level:v', '4.0',
     '-pix_fmt', 'yuv420p',
@@ -138,7 +148,7 @@ async function encodeH264(input, output, filter, options, crf) {
   await rename(temporary, output);
 }
 
-async function encodeVp9(input, output, filter, options, crf) {
+async function encodeVp9(input, output, filter, options, bitrate) {
   const temporary = temporaryName(output);
   await rm(temporary, { force: true });
   await run('ffmpeg', [
@@ -148,8 +158,7 @@ async function encodeVp9(input, output, filter, options, crf) {
     '-vf', filter,
     '-an',
     '-c:v', 'libvpx-vp9',
-    '-crf', String(crf),
-    '-b:v', '0',
+    '-b:v', bitrate,
     '-deadline', 'good',
     '-cpu-used', '3',
     '-row-mt', '1',
@@ -200,25 +209,27 @@ async function main() {
     throw new Error(`Delivery assets already exist. Pass --overwrite to replace them:\n${existing.join('\n')}`);
   }
 
-  const desktopFilter = videoFilter(options.desktopWidth, options.desktopHeight);
-  const mobileFilter = videoFilter(options.mobileWidth, options.mobileHeight, options.mobileFocus);
+  const desktopFilter = videoFilter(options.desktopWidth, options.desktopHeight, 0.5, options.speedFactor);
+  const mobileFilter = videoFilter(options.mobileWidth, options.mobileHeight, options.mobileFocus, options.speedFactor);
+  const desktopPosterFilter = videoFilter(options.desktopWidth, options.desktopHeight);
+  const mobilePosterFilter = videoFilter(options.mobileWidth, options.mobileHeight, options.mobileFocus);
 
   console.log('[1/3] Encoding H.264 desktop and mobile assets');
   await Promise.all([
-    encodeH264(input, files.desktopMp4, desktopFilter, options, 29),
-    encodeH264(input, files.mobileMp4, mobileFilter, options, 30),
+    encodeH264(input, files.desktopMp4, desktopFilter, options, options.desktopMp4Bitrate),
+    encodeH264(input, files.mobileMp4, mobileFilter, options, options.mobileMp4Bitrate),
   ]);
 
   console.log('[2/3] Encoding VP9 desktop and mobile fallbacks');
   await Promise.all([
-    encodeVp9(input, files.desktopWebm, desktopFilter, options, 41),
-    encodeVp9(input, files.mobileWebm, mobileFilter, options, 42),
+    encodeVp9(input, files.desktopWebm, desktopFilter, options, options.desktopWebmBitrate),
+    encodeVp9(input, files.mobileWebm, mobileFilter, options, options.mobileWebmBitrate),
   ]);
 
   console.log('[3/3] Extracting desktop and mobile posters');
   await Promise.all([
-    makePoster(input, files.desktopPoster, desktopFilter, options.posterTime),
-    makePoster(input, files.mobilePoster, mobileFilter, options.posterTime),
+    makePoster(input, files.desktopPoster, desktopPosterFilter, options.posterTime * options.speedFactor),
+    makePoster(input, files.mobilePoster, mobilePosterFilter, options.posterTime * options.speedFactor),
   ]);
 
   console.log(`Hero delivery assets written to ${outputDirectory}`);
