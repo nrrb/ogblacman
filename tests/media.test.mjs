@@ -36,7 +36,7 @@ test('hero delivery asset is a compact silent video', async () => {
     assert.equal(stream.width, expected.width)
     assert.equal(stream.height, expected.height)
     assert.equal(stream.avg_frame_rate, '24/1')
-    assert.ok(Math.abs(Number(details.format.duration) - 156.75) < 0.1)
+    assert.ok(Math.abs(Number(details.format.duration) - 52.333) < 0.1)
     assert.ok(fileStat.size <= expected.maxBytes, `${expected.name} exceeds ${expected.maxBytes} bytes`)
   }
 })
