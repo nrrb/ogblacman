@@ -1,264 +1,201 @@
-# OG Blacman website: a beginner's guide
+# OG Blacman website: make changes with a coding agent
 
-This is the source code for [ogblacman.com](https://www.ogblacman.com/). This guide walks you through running a copy on your Windows PC or Mac, changing it, checking the mobile layout, and eventually updating the live website.
+This is the source code for [ogblacman.com](https://www.ogblacman.com/). This guide is for a complete beginner on **Windows or Mac** who wants to use **OpenAI Codex or Claude Code** to modify the website.
 
-You do **not** need Claude Code, ChatGPT Codex, another AI assistant, or an AI subscription. You can edit this project with a free text editor. You also do not need GitHub or Vercel accounts just to run a copy on your computer, provided you have the project files.
+You describe what you want in plain English. The coding agent reads the project, finds the relevant code, makes changes, and runs checks. You review the website in Chrome and tell it what to adjust. You do not need to know which file to edit before asking for a change.
+
+The workflow is: **describe → let the agent implement → inspect locally → refine → publish when ready**.
 
 ## Contents
 
-- [Understand what runs where](#understand-what-runs-where)
-- [Install the tools](#install-the-tools)
-- [Get the project files](#get-the-project-files)
-- [Run the website on your computer](#run-the-website-on-your-computer)
+- [Choose a coding subscription](#choose-a-coding-subscription)
+- [Install the tools on Windows or Mac](#install-the-tools-on-windows-or-mac)
+- [Get the project onto your computer](#get-the-project-onto-your-computer)
+- [Connect your coding agent](#connect-your-coding-agent)
+- [Ask the agent to start the site](#ask-the-agent-to-start-the-site)
 - [Make your first change](#make-your-first-change)
-- [Find the right file to edit](#find-the-right-file-to-edit)
-- [Common content changes](#common-content-changes)
+- [Example requests for this website](#example-requests-for-this-website)
 - [Develop the mobile layout in Chrome](#develop-the-mobile-layout-in-chrome)
-- [Check your changes before publishing](#check-your-changes-before-publishing)
+- [Ask the agent to check its work](#ask-the-agent-to-check-its-work)
+- [Understand GitHub, Vercel, and GoDaddy](#understand-github-vercel-and-godaddy)
 - [Publish through the existing GitHub and Vercel setup](#publish-through-the-existing-github-and-vercel-setup)
 - [Set up your own hosting if needed](#set-up-your-own-hosting-if-needed)
-- [Troubleshooting](#troubleshooting)
+- [Troubleshooting with your agent](#troubleshooting-with-your-agent)
 
-## Understand what runs where
+## Choose a coding subscription
 
-The existing hosting arrangement is:
+Start with **one** of these $20/month options. You do not need both.
+
+| Subscription | Monthly starting price in USD | Coding tool included | Where to subscribe |
+| --- | --- | --- | --- |
+| **ChatGPT Plus** from OpenAI | **$20/month** | **Codex**, including its VS Code extension | [Get ChatGPT Plus](https://chatgpt.com/explore/plus) — create an account or sign in and choose Plus |
+| **Claude Pro** from Anthropic | **$20/month when billed monthly** | **Claude Code**, including its VS Code extension | [Choose Claude Pro](https://claude.com/pricing) — select Pro and monthly billing, then follow the signup prompts |
+
+These prices and included coding tools were checked on **October 16, 2026** against [OpenAI's official pricing](https://learn.chatgpt.com/docs/pricing) and [Anthropic's official pricing](https://claude.com/pricing). Checkout determines local currency and applicable taxes. Claude's lower advertised monthly equivalent is an annual plan paid up front. Both subscriptions have usage limits; neither promises unlimited coding. Check the current plan details before paying.
+
+The $20 OpenAI plan is called **Plus**; the $20 Anthropic plan is called **Pro**. You do not need the more expensive ChatGPT Pro or Claude Max plan to follow this guide. If you already have one of the two subscriptions, use it first. If you hit a usage limit, you can wait for it to reset before deciding whether to upgrade.
+
+Sign into the coding tool with the same account you subscribed with. Use subscription sign-in for this workflow; a separately billed API account or API key is not required. Buying a subscription does not automatically give an ordinary chat access to your computer: you still need to open the project in the coding tool as explained below.
+
+## Install the tools on Windows or Mac
+
+Use **VS Code with a coding-agent extension** as the shared workflow on both operating systems. VS Code is the application that holds your project and the agent's conversation in one window.
+
+1. Install **[Google Chrome](https://www.google.com/chrome/)** for previewing the site and testing phone-sized layouts.
+2. Install **[Visual Studio Code](https://code.visualstudio.com/download)**, also called VS Code. Choose the Windows or Mac download for your computer. It is different from the larger product named Visual Studio.
+3. Install **[Node.js 24 LTS](https://nodejs.org/en/download)**, including npm. Node runs the site's development tools; npm installs its libraries and runs project commands. Use the regular installer rather than Docker or the source-code download.
+4. Install **[GitHub Desktop](https://desktop.github.com/)** if you will maintain the existing repository. It gives you buttons to download the project, review changes, and upload them.
+
+On **Windows**, use Node's `.msi` installer, keeping npm and the option to add Node to `PATH` enabled. You can use a normal Windows setup for this website; no separate Linux installation is required. If the agent needs command-line Git, install [Git for Windows](https://git-scm.com/install/windows), which also provides Git Bash. GitHub Desktop's bundled Git may not be available to the agent's terminal.
+
+On **Mac**, use Node's `.pkg` installer. Choose Apple Silicon for M-series Macs or Intel for older Intel Macs when an installer offers that choice. If the agent reports that Git is unavailable, follow the [official macOS Git installation guidance](https://git-scm.com/install/mac); macOS may offer to install Command Line Tools.
+
+After installation, fully close and reopen VS Code so the agent and terminal can find the new tools. The project's locked Vite version supports Node `^20.19.0` or `>=22.12.0`; Node 24 is a suitable starting point. The site itself is built with **React and Vite**, even though older planning documents mention Vue.
+
+## Get the project onto your computer
+
+### Recommended: create a GitHub account and clone the repository
+
+A repository, or repo, is the project files plus their change history. Cloning means downloading a working copy with that history.
+
+1. [Create a GitHub account](https://docs.github.com/en/account-and-profile/how-tos/account-management/creating-an-account-on-github) and verify your email address.
+2. Ask the current owner of [nrrb/ogblacman](https://github.com/nrrb/ogblacman) to invite your GitHub username with permission to push changes. Accept the invitation. Your AI subscription and GitHub account do not automatically grant access to this repository.
+3. Open GitHub Desktop, sign in, and choose **File → Clone Repository → URL**.
+4. Enter `https://github.com/nrrb/ogblacman.git`, choose a local folder, and click **Clone**. A location such as `Documents/code/ogblacman`, outside OneDrive/iCloud syncing, is easy to find again.
+5. Open VS Code, choose **File → Open Folder**, and select that project folder. Its top level should contain `package.json`, `src`, and `public`.
+
+GitHub's [illustrated cloning guide](https://docs.github.com/en/desktop/adding-and-cloning-repositories/cloning-and-forking-repositories-from-github-desktop) shows the process. Use the HTTPS URL above; SSH keys are unnecessary for this route.
+
+### If you only have a ZIP copy
+
+You can start locally without a GitHub account if the owner supplies the source files. For a public repository, **Code → Download ZIP** also works. On Windows, right-click the ZIP and choose **Extract All**; on Mac, double-click it. Open the extracted project folder in VS Code. See GitHub's [download instructions](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives).
+
+A ZIP has no Git history. Keep a backup and tell the agent you are using a ZIP. For publishing later, clone the real repository and ask the agent to bring over only your intended changes. Do not overwrite the clone with generated `node_modules` or `dist` folders. A fork is a separate GitHub copy; changing one does not automatically update the live site's connected repository.
+
+## Connect your coding agent
+
+Install the extension for the subscription you chose. You only need one agent running on this project at a time.
+
+### Option A: ChatGPT Plus with Codex
+
+1. In VS Code, open **Extensions** using **Ctrl+Shift+X** on Windows or **Command+Shift+X** on Mac.
+2. Install the official **Codex** extension published by **OpenAI**. OpenAI links to it from the [Codex IDE setup guide](https://learn.chatgpt.com/docs/codex/ide).
+3. Open the Codex icon in the sidebar. If it is missing, open the Command Palette with **Ctrl+Shift+P** on Windows or **Command+Shift+P** on Mac and run **Codex: Open Codex Sidebar**.
+4. Choose ChatGPT sign-in and complete the browser login with your Plus account. Follow any initial setup prompts.
+5. Keep this project folder open and work locally so the agent changes the same files your local website serves.
+
+OpenAI's [getting-started guide](https://learn.chatgpt.com/docs/quickstart) covers account setup and other ways to use Codex. You can use an official desktop app instead; the VS Code route keeps this guide consistent across Windows and Mac.
+
+### Option B: Claude Pro with Claude Code
+
+1. In VS Code, open **Extensions** using **Ctrl+Shift+X** on Windows or **Command+Shift+X** on Mac.
+2. Search for **Claude Code** and install the official extension published by **Anthropic**.
+3. Open its spark icon in the sidebar, or use the Command Palette and search for **Claude Code** to open its panel.
+4. Click **Sign in** and complete authorization in your browser with the Claude Pro account.
+5. Keep this project folder open while you work with the agent.
+
+Anthropic's [VS Code setup guide](https://code.claude.com/docs/en/vs-code) includes screenshots and troubleshooting. The extension bundles its coding runtime; a separate terminal CLI installation is only needed if you want to launch `claude` by typing a command. See the [Windows and Mac setup notes](https://code.claude.com/docs/en/setup) if it needs additional setup.
+
+### Give the agent the project rules
+
+Send this as your first message in the agent panel. Replace the operating system with yours:
 
 ```text
-Your computer: edit and test files
-       |
-       | upload saved changes
-       v
-GitHub repository: stores the source code and its history
-       |
-       | Vercel builds the connected repository
-       v
-Vercel: serves the built website to visitors
-       ^
-       | GoDaddy DNS points the domain here
-       |
-www.ogblacman.com
+I'm a complete beginner using Windows / Mac. Read README.md and AGENTS.md
+and follow this project's working rules. Inspect the project before changing it.
+Explain your work in plain English.
+
+Check whether this folder is a Git clone or a ZIP copy. If it is a clone,
+check for existing uncommitted changes and preserve them. Before feature work,
+create and switch to a dedicated feature branch. Keep coherent changes in
+separate commits after checks pass.
+
+Use the existing architecture and npm lockfile. Ask before adding or replacing
+a production dependency. Do not merge, push, open a pull request, deploy, or
+change DNS until I explicitly ask. First, explain how you will run this site.
 ```
 
-The repository configured in this checkout is [nrrb/ogblacman](https://github.com/nrrb/ogblacman). The live domain is also recorded in `src/content/site.yaml`.
+This explicitly gives either agent the repository's rules, including Claude Code if it does not automatically discover `AGENTS.md`. The agent may ask to read files, make edits, install the project's existing libraries, or run commands. Review what the permission covers and allow the steps needed for your request. Complete account logins yourself in the official browser flow.
 
-| Term | What it means here |
-| --- | --- |
-| Local | On your own computer. Local edits do not automatically change the public website. |
-| React | The JavaScript library used to build the page from reusable pieces called components. |
-| Vite | The tool that runs the local development server and builds the finished site. |
-| Node.js | Software that lets your computer run this project's development tools. |
-| npm | The package manager included with Node.js; it installs the project's required libraries and runs commands. |
-| Repository, or repo | The project files plus their saved change history. |
-| Git / GitHub | Git tracks changes; GitHub stores and shares the repository online. GitHub Desktop gives Git a graphical interface. |
-| Branch | A separate line of work, so you can prepare changes before adding them to the main version. |
-| Commit / push | A commit records a set of changes locally; a push uploads commits to GitHub. |
-| Pull request / merge | A pull request presents a branch for review; merging adds its changes to another branch. |
-| Deployment | A built version of the website hosted by Vercel. A preview is for review; production is the public version. |
-| DNS | The domain's address records, which tell browsers where to find the hosted website. |
+## Ask the agent to start the site
 
-This is a React and Vite project, despite older planning documents mentioning Vue or future CMS work. There is no CMS admin screen, database, or custom server to start. Most editable content is in a YAML text file. The newsletter uses an existing **Kit** signup form; deployed builds also include Vercel Analytics.
+Once it has read the project, send:
 
-## Install the tools
-
-For local editing, install these three tools:
-
-1. **[Google Chrome](https://www.google.com/chrome/)** to view the site and test mobile sizes.
-2. **[Visual Studio Code](https://code.visualstudio.com/download)**, usually called VS Code, to edit files. Choose the installer for your operating system. You can skip account sign-in and AI setup.
-3. **[Node.js](https://nodejs.org/en/download)**, including npm. Choose the **Node.js 24 LTS** installer for Windows or macOS. LTS means long-term support. Use the normal installer rather than Docker or a source-code download. The locked Vite version requires Node `20.19+` or `22.12+`; Node 24 is a suitable starting point.
-
-On Windows, use the `.msi` installer and leave npm and the option to add Node to `PATH` enabled. No WSL or separate Linux setup is needed. On Mac, use the `.pkg` installer appropriate for your computer; Apple Silicon means M-series Macs, and Intel means older Intel Macs. You do not need Homebrew for the basic setup.
-
-After installing Node, fully close and reopen VS Code so its terminal can find it.
-
-If you want to save changes to GitHub and publish later, also install **[GitHub Desktop](https://desktop.github.com/)**. It is optional for the initial local setup. This guide uses its buttons instead of requiring Git commands in a terminal.
-
-## Get the project files
-
-Choose one of the following routes. If you plan to maintain the live site, use the GitHub route from the start.
-
-### Route A: start without a GitHub account
-
-1. Open [the repository](https://github.com/nrrb/ogblacman). If it is publicly accessible, select **Code → Download ZIP**. If you see a sign-in requirement or a 404 page, ask the owner for a ZIP copy of the source, or use Route B with an invitation.
-2. Extract the ZIP: on Windows, right-click it and choose **Extract All**; on Mac, double-click it.
-3. Move the extracted folder somewhere you can find again, such as `Documents/code/ogblacman`. A folder named `ogblacman-main` also works. Prefer a local folder outside OneDrive or iCloud syncing.
-4. Open VS Code, choose **File → Open Folder**, and select the folder containing `package.json`, `src`, and `public`.
-
-GitHub's [source download instructions](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives) show the ZIP button. A ZIP is a snapshot without Git history. Keep a backup before editing. For publishing later, clone the repository using Route B and copy only your changed source files into that clone; do not copy `node_modules` or `dist`.
-
-### Route B: prepare to maintain the existing website
-
-1. [Create a GitHub account](https://docs.github.com/en/account-and-profile/how-tos/account-management/creating-an-account-on-github) and verify your email.
-2. Ask the repository owner to invite your GitHub username with permission to push changes, and accept the invitation. Creating an account alone does not grant access to the existing repository.
-3. Open GitHub Desktop and sign in. Choose **File → Clone Repository**, then its **URL** tab, and enter `https://github.com/nrrb/ogblacman.git`.
-4. Choose a local folder and click **Clone**. Cloning downloads the files and their history. Use HTTPS as shown here; you do not need to configure SSH keys.
-5. Open the cloned folder in VS Code using **File → Open Folder**.
-6. Before editing, use GitHub Desktop's **Current Branch** menu to select `main`, then **Fetch origin** and **Pull origin** if offered. Create a branch through **Branch → New Branch**, for example `feature/update-home-copy`, and switch to it.
-
-GitHub provides illustrated guides to [cloning](https://docs.github.com/en/desktop/adding-and-cloning-repositories/cloning-and-forking-repositories-from-github-desktop) and [working with branches](https://docs.github.com/en/desktop/making-changes-in-a-branch/managing-branches-in-github-desktop). A fork is your own separate copy on GitHub; changing a fork does not automatically update this site's connected repository.
-
-## Run the website on your computer
-
-### 1. Open a terminal in the project
-
-In VS Code, select **Terminal → New Terminal**. A terminal is the panel where you type commands and press Enter. It normally opens in the folder you selected.
-
-Check the file list in VS Code's left sidebar: `package.json` should be at the top level. All commands below run from that folder. Do not double-click `index.html` to run this project.
-
-If you use a separate terminal, change to your actual project location first. These are examples; replace `YOUR-NAME` and adjust the folder if necessary:
-
-**Windows, in Command Prompt:**
-
-```bat
-cd /d "C:\Users\YOUR-NAME\Documents\code\ogblacman"
+```text
+Get this site running locally. Check Node and npm, install the locked project
+libraries with npm ci if needed, and start the development server. Give me
+the exact URL to open in Chrome. If you cannot keep a server running, show
+me the command and explain where to run it. Do not publish anything.
 ```
 
-**Mac, in Terminal:**
+The agent should give you an address such as `http://localhost:5173/`. Open its actual address, including the port number, in Chrome. You should see the OG Blacman website. `localhost` means your own computer; local edits do not update the public site.
 
-```sh
-cd "/Users/YOUR-NAME/Documents/code/ogblacman"
-```
+The current site needs no database, custom server, `.env` file, or API key to run. Existing media and fonts are included. The newsletter loads the real **Kit** service, and external services need internet access. **Submitting the newsletter manually can add a real subscriber**, even from localhost; use your own email only when intentionally testing a signup.
 
-### 2. Check Node and npm
+### If you need to run a command yourself
 
-Run these commands separately:
+In VS Code, choose **Terminal → New Terminal**. A terminal is the panel where you type commands and press Enter. It normally starts in the open project folder. Run these separately, waiting for each to finish:
 
 ```sh
 node --version
 npm --version
-```
-
-Both should print a version number. If Windows PowerShell says `npm.ps1` cannot run because scripts are disabled, use VS Code's terminal dropdown next to the **+** button, choose **Select Default Profile → Command Prompt**, and open a new terminal. You can also use `npm.cmd` in place of `npm` in PowerShell, for example `npm.cmd ci`. There is no need to change your computer's execution policy.
-
-### 3. Install the project's libraries
-
-```sh
 npm ci
-```
-
-Wait for the command to finish and the prompt to return. This downloads the versions recorded in `package-lock.json` into a generated `node_modules` folder. You need internet access for the initial downloads. Keep `package-lock.json`; do not replace it with another package manager's files.
-
-Run `npm ci` again after downloading changes that update the lockfile. You do not need to run it every time you edit text or restart the site.
-
-### 4. Start the development server
-
-```sh
 npm run dev
 ```
 
-Leave that terminal running. Open the **Local** address it prints in Chrome, usually `http://localhost:5173/`. If that port is busy, Vite may print another number; use the printed address.
+`npm ci` installs the versions in `package-lock.json`; it is needed initially and after lockfile updates, not for every text change. `npm run dev` starts the local server. Leave its terminal running and use the printed **Local** URL. If a port is busy, Vite may choose another. Do not double-click `index.html` to run this project.
 
-You should see the OG Blacman website. Saving most source files updates the browser automatically. Changes to build configuration can require stopping and restarting the server. Your computer is now serving a local copy; this command does not publish it.
+On Windows, if PowerShell blocks `npm.ps1`, use `npm.cmd` instead of `npm`, or switch VS Code's terminal profile to **Command Prompt** and open a new terminal. Ask the agent to help if the terminal is in the wrong folder.
 
-To stop the server, click in its terminal and press **Ctrl+C**, on either Windows or Mac. If Windows asks `Terminate batch job (Y/N)?`, type `Y` and press Enter. Next time, reopen the project and run `npm run dev` again.
-
-No `.env` file, API key, Vercel login, or GoDaddy login is required for the current local site. The Kit form and external links still need internet access. **The local newsletter form uses the real Kit service**: submitting it can add an actual subscriber. Use your own email only when intentionally testing a real signup.
+To stop the server, press **Ctrl+C** in its terminal on either Windows or Mac. If Windows asks `Terminate batch job (Y/N)?`, type `Y` and press Enter. To resume later, reopen the same project folder, ask the agent to check the current state, and restart the server.
 
 ## Make your first change
 
-Start with one small, visible text change:
+Start with a small change that is easy to spot. Send this to the coding agent:
 
-1. In VS Code, open `src/content/site.yaml`.
-2. Find `homePage`, then `sections`, then `hero`. Under `hero`, change `scrollPrompt: CLIMB DOWN` to `scrollPrompt: "EXPLORE THE MUSIC"`. Keep the spaces before `scrollPrompt` exactly as they are.
-3. Save with **Ctrl+S** on Windows or **Command+S** on Mac.
-4. Check the opening section in Chrome. The prompt should change. If necessary, refresh the page.
-5. To undo the experiment, change the text back and save. VS Code's Undo command also works before you close the editing session.
-
-That is the basic editing loop: **change a file → save → inspect the local site → check it at different sizes**.
-
-## Find the right file to edit
-
-Paths below start at the project folder. `src` means source code; `public` contains files served directly to the browser.
-
-| What you want to change | Where to look |
-| --- | --- |
-| Headings, descriptions, button labels, release details, show listings, social links, contact details, section visibility | `src/content/site.yaml` — start here for most updates |
-| Page title, search description, canonical website address, social preview image reference | `siteSettings.identity` and `siteSettings.seo` in `src/content/site.yaml` |
-| The five main brand colors | `og-colors.yaml` — use quoted six-digit hex colors such as `"#FDCA00"` |
-| Spacing, font sizes, layout rules, responsive styling | `src/styles/runtime.css`, `src/styles/reference.css`, and component-specific `.css` files |
-| Which media file an asset name refers to; responsive image sizes; Kit embed host; presentation settings | `src/config/presentation.js` |
-| Images, videos, fonts, and audio files | `public/assets/` and `public/music/` |
-| Overall desktop or mobile page structure | `src/components/DesktopExperience.jsx` and `src/components/MobileExperience.jsx` |
-| Telephone music player | `src/components/TelephonePlayer.jsx` and `src/components/TopPickRelease.jsx` |
-| Newsletter form behavior and styling | `src/components/KitSignup.jsx` and `src/components/KitSignup.css` |
-| Mobile scrolling behavior | `src/components/MobileSlider.jsx` |
-| The mobile/desktop switch | `src/App.jsx` |
-| Content validation and media lookup | `src/content/validateContent.js`, `hydrateContent.js`, and `loadContent.js` |
-| HTML metadata template and build setup | `index.html` and `vite.config.js` |
-| Available commands and dependency versions | `package.json` and `package-lock.json` |
-| Vercel asset cache rules | `vercel.json` |
-| Automated checks | `tests/` |
-
-`.jsx` files combine JavaScript with HTML-like markup. CSS controls appearance. YAML holds structured content using indentation. Keep editable wording in `site.yaml`, even when changing components.
-
-`node_modules/` and `dist/` are generated. Do not edit them: reinstalling or rebuilding replaces them. Older `PLAN.md`, `VUE_CONTENT_PLAN.md`, and `REACT_MIGRATION_PLAN.md` describe planning/history; the current code and `package.json` determine what actually runs. `AGENTS.md` records project working rules.
-
-## Common content changes
-
-### Keep YAML formatting intact
-
-- Use spaces, never tabs, and keep sibling fields aligned. This file uses two spaces per level.
-- Change values to the right of `:`; keep field names such as `scrollPrompt` unchanged.
-- Quote text containing `: ` or `#`, for example `description: "New single: Telephone"`. Double quotes also work for apostrophes, as in `body: "You're on the list."`.
-- Keep `true`, `false`, and `null` unquoted when they mean a boolean or an empty value. `[]` means an empty list.
-- Keep dates quoted, such as `releaseDate: "2026-08-26"`, and use full `https://` URLs for external links.
-
-### Edit text, links, and the featured release
-
-In `site.yaml`, social profiles are under `siteSettings.socialLinks`. The release is under `homePage.sections.featuredRelease.release`. Edit the title, description, date, and `primaryLink` values there. The newsletter labels are under `homePage.sections.newsletter.formCopy`.
-
-Page titles, search descriptions, and sharing metadata use `siteSettings.seo`. After editing these, restart `npm run dev` to refresh metadata read by the Vite configuration, and rebuild before checking a production preview.
-
-Changing a release title does not replace its audio, artwork, or video. Those use named asset references such as `telephone`, `telephoneCover`, and `treePhone`, resolved through `presentation.js`.
-
-### Show or hide a section
-
-Each section under `homePage.sections` has `status: visible` or `status: hidden`. Booking is currently hidden. Change its status to `visible` to display the existing booking contact information on both layouts. At least one home section must stay visible.
-
-Keep a hidden section's fields in place: validation and media lookup still read them. A link targeting a hidden section becomes non-interactive. **Hidden content is not private**: its data can still be included in the browser download. Remove confidential information from source files rather than relying on visibility.
-
-### Add a show
-
-Under `homePage.sections.shows`, replace that section's `items: []` with the following example. Keep `items` aligned with `heading`, `emptyState`, and `mobileBackground`; do not replace the whole section. Replace the example venue, date, and ticket URL with real details before publishing.
-
-```yaml
-      items:
-        - _key: philly-show-2027-06-12
-          startAt: "2027-06-12T20:00:00-04:00"
-          timezone: America/New_York
-          venue: "Example Venue"
-          city: "Philadelphia, PA"
-          ticketStatus: available
-          ticketLink:
-            type: external
-            label: Tickets
-            url: https://example.com/tickets
+```text
+Change the opening section's "CLIMB DOWN" prompt to "EXPLORE THE MUSIC".
+Apply it wherever that prompt appears on mobile and desktop. Keep the current
+black, warm-white, and gold design. Run the relevant checks and tell me how
+to review it locally. Do not publish.
 ```
 
-Every show needs a unique `_key`. `startAt` includes the time and UTC offset; the example means 8 p.m. in Philadelphia during daylight saving time. Use the correct offset for your date and an appropriate timezone such as `America/New_York`. Supported ticket statuses are `available`, `soldOut`, `cancelled`, and `unavailable`. The empty-state message is replaced by the list once there are items. Adding a show does not create a ticket-selling service; link to one that already exists.
+Let the agent find and change the relevant code. When it reports completion:
 
-### Add merchandise or replace media
+1. Refresh the local website in Chrome if it has not updated automatically.
+2. Look at the opening section on desktop and in Chrome's mobile view below.
+3. If you want a refinement, reply in the same conversation, for example: **“The new wording wraps awkwardly at 390 pixels. Adjust it so it fits comfortably.”**
+4. Ask **“What changed, which checks passed, and what should I inspect?”** if its handoff is unclear.
 
-The merch list is `homePage.sections.merch.items`. Its items support a unique `_key`, `title`, optional `price`, `availability` (`available`, `comingSoon`, or `soldOut`), an `image` with an `asset` name and `alt` description, and an optional external `productLink`. The current populated merch component displays linked images; it is not a full product catalog or shopping cart. Checkout happens at the linked store.
+If you want the experiment undone, say **“Undo only the prompt change from this task; preserve other work.”** The agent can use the change history to reverse its own work. Avoid asking it to reset everything when you only want one adjustment.
 
-For a new image:
+## Example requests for this website
 
-1. Put the file in `public/assets/`, for example `public/assets/shirt-v1.jpg`.
-2. In `src/config/presentation.js`, add an entry inside the existing `images` object, for example `shirt: { src: '/assets/shirt-v1.jpg?v=shirt-v1' },`. The `?v=` value follows this project's cache-version convention.
-3. Reference that name in YAML, for example `image: { asset: shirt, alt: "Black OG Blacman T-shirt" }` within a merch item. A new filename alone is not a registered asset name.
+Describe the visible result and supply the facts the agent cannot infer. A screenshot helps for visual problems. Add your viewport size, what you expected, and what actually happened.
 
-Public file URLs omit `public`: `public/music/new-song-v1.mp3` is served as `/music/new-song-v1.mp3`. Match letter case exactly; a mismatch can work on your computer and fail on hosting.
+| Goal | Example message to the agent |
+| --- | --- |
+| Update the release | “Feature the new single [title], out [date]. Use this description: [...], this listening link: [...], and the artwork/audio/video files I supplied. Update the release and sharing preview together. Tell me if anything is missing.” |
+| Add a show | “Add a show at [venue] in [city] on [date] at [local time] in [timezone]. Tickets are [URL]. Keep the existing show-list design and verify the displayed date and time.” |
+| Show booking information | “Display the booking section on mobile and desktop using these contact details: [...]. Check the layout and links.” |
+| Add merch | “Show these merch images and link each to this existing store URL: [...]. Keep checkout at that store.” |
+| Fix a phone layout | “At 390 × 844, this heading overlaps the button. Screenshot attached. Fix the spacing and check nearby widths as well as desktop.” |
+| Replace a background video | “Use the video I supplied for the opening background. Prepare suitable mobile/desktop versions and poster images, update references and cache versions, and tell me if a processing tool is needed.” |
+| Update social links | “Replace the Instagram link with [URL] everywhere it appears and verify that it opens correctly.” |
+| Review a problem | “The Telephone player stops working after I resize the browser from mobile to desktop. Reproduce it, fix the cause, and run the relevant interaction check.” |
 
-For existing release artwork, `presentation.js` also lists smaller image variants and a separate social preview image. Update those references together when replacing a cover; otherwise some screens or shared links may still show the old artwork. Videos can have separate desktop/mobile versions, MP4/WebM sources, and poster images. Keep those references consistent too.
+For larger work, first ask: **“Inspect the current implementation and give me a short plan before making changes.”** Then approve or refine the plan. Work on one clear outcome at a time so you can judge the result.
 
-Vercel caches files in `/assets/` and `/music/` for a year. Use a **new filename** when replacing media and update its references. Existing assets also use `assetVersions` in `presentation.js`; update the relevant version when modifying an existing asset set. Icons referenced directly in `index.html` need their references updated there as well. Keeping an unchanged URL can leave visitors with old files after a deployment.
+Useful context to give the agent:
 
-The optimized media and fonts required by the site are already included. You do not need FFmpeg, Python, or the media-processing tools to run the site or edit text. Advanced video work is described in [MONTAGE_TOOL.md](MONTAGE_TOOL.md). Check the actual tool's help, for example `npm run process:hero -- --help`, before running it: original source footage may need to be supplied separately, and historical examples may differ from current defaults. Font generation uses the separate `pyftsubset` tool.
+- Preserve the mobile-first black, warm-white, and heritage-gold design, accessible controls, and keyboard focus states.
+- Text and links have a shared content model. The agent should keep copy there and update validation and tests when changing its structure.
+- Some tests expect the current Telephone release, empty shows/merch, or hidden Booking. For intentional content updates, ask the agent to update the relevant expectations while keeping meaningful checks.
+- Hidden sections are not private storage: their data can still reach the browser. Keep passwords, API secrets, and confidential information out of the project.
+- Existing media has responsive variants and long-lived caching. Ask the agent to update all affected variants, references, and cache versions when replacing assets.
+- Kit account access is needed to manage subscribers or replace the newsletter form. Its public embed identifier belongs in the site; private API credentials do not.
 
-### Understand the newsletter integration
-
-The public Kit form ID is `siteSettings.integrations.kit.formUid` in YAML. Its embed host is in `presentation.integrations.kit` in `src/config/presentation.js`. Keeping the existing form does not require a Kit login to run the site. Managing subscribers or replacing the form requires access to the relevant Kit account. If you use another account's form, update both the host and form ID to match its official embed.
-
-Use public embed identifiers only. Never put Kit API secrets, account passwords, GitHub tokens, or other private credentials into YAML, JavaScript, or `public/`. This site's browser-delivered files are readable by visitors.
+You do not need to learn YAML, JSX, or CSS before making these requests. Ask the agent to explain an unfamiliar term when it affects a decision you need to make.
 
 ## Develop the mobile layout in Chrome
 
@@ -268,7 +205,7 @@ You can work on the mobile site from your desktop browser while `npm run dev` is
 2. Right-click the page and choose **Inspect** to open Developer Tools, also called DevTools.
 3. Click the **phone/tablet icon** in DevTools to toggle the Device Toolbar.
 4. In the **Dimensions** dropdown, choose **Responsive** and enter a width and height, such as **390 × 844**, or choose a phone preset.
-5. Reload after selecting a device. Scroll, click or tap controls, save your edits in VS Code, and inspect the result.
+5. Reload after selecting a device. Scroll, click or tap controls, ask the agent for changes, and inspect the result after it saves them.
 6. Use **Rotate** to check landscape. Toggle the phone/tablet icon off to return to the normal desktop viewport.
 
 Useful [Chrome keyboard shortcuts](https://developer.chrome.com/docs/devtools/shortcuts):
@@ -282,7 +219,7 @@ This project's mobile layout is active at **767 CSS pixels wide or less**; deskt
 
 Try these widths as you edit: **320, 390, 600, 767, 768, 1024, and 1440**. Check that headings fit, buttons remain reachable, there is no unwanted sideways scrolling, the Telephone player starts and stops, and the newsletter is usable. Resize across 767/768 and check that the form still works. If opening DevTools makes the normal viewport narrow, the site may switch to mobile even with Device Toolbar off.
 
-Changes made directly in DevTools' Elements/Styles panels are temporary. Copy changes into the appropriate source file in VS Code and save to keep them.
+Changes made directly in DevTools' Elements/Styles panels are temporary. If you like an experiment, show the agent a screenshot or describe it and ask it to implement the change in the project.
 
 Google's [illustrated Device Mode tutorial](https://developer.chrome.com/docs/devtools/device-mode) covers resizing, device presets, screenshots, and network/CPU throttling. Its [short video tutorial](https://www.youtube.com/watch?v=f7kokNyRe7U) demonstrates the controls. Start without throttling; use it later to check slow connections, then turn it off again.
 
@@ -298,74 +235,80 @@ npm run dev -- --host 0.0.0.0
 
 Open the **Network** URL Vite prints on your phone, such as `http://192.168.1.25:5173/`. Use your computer's actual printed address. `localhost` on a phone means the phone itself. If prompted by Windows Firewall, allow access on your private network. Guest Wi-Fi or a VPN can block the connection. This exposes the development server to that network while it runs; stop it with Ctrl+C when finished. A Vercel preview URL is another way to test on a phone once you have publishing access.
 
-## Check your changes before publishing
+## Ask the agent to check its work
 
-### Validate content and make a production build
+After a change looks right in your development view, send:
 
-Keep the development server running if you like, and open a **second terminal** with the **+** button in VS Code's terminal panel. Run these separately from the project folder:
-
-```sh
-npm run test:content
-npm run build
+```text
+Review this task's changes and run npm run test:content and npm run build.
+If behavior or responsive layout changed, run npm run test:interaction against
+a running production preview too. Update tests only where the intended
+behavior changed; preserve meaningful coverage. Fix failures caused by this
+task. Tell me what passed, what could not be checked, and the preview URL
+I should inspect before publishing.
 ```
 
-The content check validates YAML and project expectations. The build creates `dist/`, the finished files Vercel will serve, and also validates content. Both commands should finish successfully before you publish. A successful build does not automatically run every test.
-
-**Some tests deliberately expect the current content**, including the Telephone release, Kit ID, no show/merch items, and hidden Booking section. Intentional updates to those details may require matching changes in `tests/content.mjs` and `tests/interaction.mjs`. Read the failing assertion and confirm your intended behavior; do not simply delete tests to make them pass. New YAML fields or changes to its structure must also be reflected in `src/content/validateContent.js` and the content tests.
-
-### Inspect the production version locally
-
-After building, run:
+A production build creates `dist/`, the files Vercel serves. A local production preview lets you inspect that built version. The agent can start it with:
 
 ```sh
 npm run preview -- --host 127.0.0.1 --port 4173 --strictPort
 ```
 
-Open `http://127.0.0.1:4173/` and repeat the desktop/mobile checks. This preview serves the last build, so after editing you must rebuild to see new changes here. It is a local preview, not a Vercel deployment. Leave its terminal running while you use it.
+Open `http://127.0.0.1:4173/`. Unlike the development server, it serves the **last build**: ask the agent to rebuild after further changes. Neither building nor running this preview publishes the site.
 
-### Run the interaction check after layout or behavior changes
+The interaction check uses that address by default. If its test browser is missing, the agent can install it with `npx playwright install chromium`. It still needs access to the external Kit embed, although test signup submissions are intercepted. Ask the agent to report blocked checks accurately rather than claim they passed.
 
-With that production preview running, open another terminal. Install the test browser once:
+You should also inspect the result yourself: desktop, mobile widths, the Telephone player, navigation/links, and the newsletter fields. Automated checks help, but you decide whether the wording and design are right.
 
-```sh
-npx playwright install chromium
+## Understand GitHub, Vercel, and GoDaddy
+
+The existing arrangement is:
+
+```text
+You describe a change to the coding agent
+                  |
+                  v
+Agent edits and tests a local project copy
+                  |
+                  | when you authorize an upload
+                  v
+GitHub: stores the source code and change history
+                  |
+                  | connected repository triggers a build
+                  v
+Vercel: builds and hosts the website
+                  ^
+                  | GoDaddy DNS points visitors here
+                  |
+          www.ogblacman.com
 ```
 
-Then run:
+| Term | What it means |
+| --- | --- |
+| Branch | A separate line of work where the agent can prepare a change. `main` is the usual shared version. |
+| Commit | A saved checkpoint of changes on your computer. A commit by itself does not publish. |
+| Push | Upload local commits to GitHub. |
+| Pull request | A page for reviewing a branch before adding it to the shared version. |
+| Merge | Add a branch's work to another branch, such as `main`. |
+| Preview deployment | A hosted version for reviewing a change before production. |
+| Production deployment | The version shown on the public website. |
+| DNS | Address records that connect a domain name to its hosting service. |
 
-```sh
-npm run test:interaction
-```
-
-The test uses `http://127.0.0.1:4173/` by default. It exercises mobile/desktop behavior, media, and the newsletter. It intercepts signup submissions, but still loads the external Kit embed, so it needs network access to Kit. A missing/blocked embed can make this check fail even when local code builds.
-
-If you intentionally use a different preview URL, set it for the test using your terminal's syntax:
-
-**Windows Command Prompt:**
-
-```bat
-set "TEST_URL=http://127.0.0.1:4175/"
-npm run test:interaction
-```
-
-**Windows PowerShell:**
-
-```powershell
-$env:TEST_URL = "http://127.0.0.1:4175/"
-npm run test:interaction
-```
-
-**Mac:**
-
-```sh
-TEST_URL=http://127.0.0.1:4175/ npm run test:interaction
-```
-
-For targeted maintenance, `package.json` also provides `test:bundle`, `test:cache`, `test:fonts`, `test:media`, and `test:montage`. Some inspect the built output; media/montage checks use FFmpeg/FFprobe. There is no generic `npm test` command in this project.
+The existing repository is [nrrb/ogblacman](https://github.com/nrrb/ogblacman). The code uses React and Vite; the newsletter uses Kit, and deployed builds include Vercel Analytics. There is no separate CMS admin panel to maintain.
 
 ## Publish through the existing GitHub and Vercel setup
 
-Local saving, committing, uploading, and going live are separate steps. Use the existing connected repository and Vercel project to update the current website.
+Local editing, committing, uploading, and going live are separate steps. Use the existing connected repository and Vercel project to update the current website. Your coding subscription does not provide access to these accounts.
+
+Once you have reviewed the result and its checks, you can ask the agent:
+
+```text
+The feature is complete. Verify the branch is clean and the relevant checks
+pass. Merge this feature into main and push main to origin. Keep the feature
+branch. Report the commit and push result.
+```
+
+Use that prompt only after confirming that `main` is the project's production branch and you are ready to publish. It explicitly authorizes the upload and may trigger Vercel to update the public site. If your repository requires pull requests, use that review process instead; tell the agent to push the feature branch and open a pull request. If account authentication is needed, complete the browser sign-in yourself.
 
 ### Get access to the existing accounts
 
@@ -377,7 +320,9 @@ GoDaddy access is only needed to manage the domain or DNS. Ordinary text, style,
 
 ### Upload a branch for review
 
-1. Finish and check your edits on your feature branch. In GitHub Desktop's **Changes** tab, inspect the changed lines and select only files belonging to your update.
+This button-based route is available if you prefer GitHub Desktop.
+
+1. Finish and check the agent's changes on your feature branch. If the agent already committed them, inspect the History tab and skip to step 3. Otherwise, inspect the changed lines in the **Changes** tab and select only files belonging to your update.
 2. Enter a short commit message, such as `Update homepage copy`, and click **Commit to feature/...**. A commit is a local checkpoint.
 3. Click **Publish branch** for its first upload, or **Push origin** for later commits. This uploads to GitHub.
 4. Use **Create Pull Request** to open the GitHub review page. Set the base branch to the intended production branch, usually `main`, describe the change and checks, and create the pull request.
@@ -409,7 +354,7 @@ For an independent copy, create a repository under your own GitHub account conta
 | Node.js version | 24.x, matching the recommended local setup |
 | Environment variables | None required by the current source |
 
-Follow Vercel's [Vite deployment guide](https://vercel.com/docs/frameworks/frontend/vite). First test the generated `*.vercel.app` address. For an independent copy, replace the canonical URL in `site.yaml`, review links and branding, and replace or hide the original Kit form before accepting signups.
+Follow Vercel's [Vite deployment guide](https://vercel.com/docs/frameworks/frontend/vite). First test the generated `*.vercel.app` address. For an independent copy, ask the agent to update the canonical website address, review links and branding, and replace or hide the original Kit form before accepting signups.
 
 ### How GoDaddy fits into the domain setup
 
@@ -419,26 +364,32 @@ For a new custom domain, add it to the intended Vercel project's **Domains** set
 
 DNS edits belong at the provider hosting the domain's authoritative nameservers. If those are GoDaddy's, edit records there; if the nameservers were moved elsewhere, edit them at that provider. Preserve unrelated records, especially email records such as MX and TXT. Vercel explains [DNS management and nameservers](https://vercel.com/docs/domains/working-with-dns).
 
-## Troubleshooting
+## Troubleshooting with your agent
 
-| Problem | What to try |
+Copy the error text into the agent conversation and explain what you were doing. Include Windows or Mac, the address you opened, and the viewport size if it is a visual issue. For example:
+
+```text
+I'm on Windows. I asked you to start the local site, but Chrome says it cannot
+connect to http://localhost:5173/. The terminal output is below. Diagnose it
+and get the local site working. Preserve my changes and do not publish.
+
+[paste the error text here]
+```
+
+| Problem | What to tell the agent or do yourself |
 | --- | --- |
-| `node` or `npm` is not recognized / command not found | Install Node.js, close and reopen VS Code, and check both version commands again. |
-| PowerShell blocks `npm.ps1` | Use Command Prompt or `npm.cmd`, as described in local setup. |
-| `ENOENT` or cannot find `package.json` | Open the actual extracted/cloned project folder, not its parent or the ZIP itself. Open a fresh terminal there. |
-| `vite` is not recognized / missing module | Run `npm ci` in the project folder, then retry. |
-| `EBADENGINE` or unsupported Node version | Install Node 24 LTS, restart the terminal, and run `npm ci` again. |
-| `npm ci` says the lockfile and package file disagree | Restore the matching `package.json` and `package-lock.json` from the same revision. If you deliberately changed dependencies, review that change and regenerate the lockfile with `npm install`; do not delete the lockfile as a workaround. Production dependency changes require the project owner's approval. |
-| Browser says it cannot connect | Keep the server terminal open and use its printed URL, including the correct port. |
-| Preview says port 4173 is in use | Stop the old preview with Ctrl+C, or choose a different port and set `TEST_URL` for the interaction test. |
-| Red error overlay or `Content validation failed at ...` | Read the field path in the terminal, check YAML indentation/value types, and undo the last edit if needed. Hidden sections must still have valid fields. |
-| Content test fails after an intentional content update | Check whether it asserts an old release detail or visibility state; update the relevant expectation along with the content. |
-| Dev site updates but production preview does not | Run `npm run build` again. The preview serves `dist`, not the live source files. |
-| Image or video is missing | Confirm its public path, letter case, asset registration, and every responsive variant. |
-| Newsletter does not load | Check your internet connection and whether a privacy/ad-blocking extension blocks Kit. Confirm the configured host and public form ID. |
-| Playwright says its browser executable is missing | Run `npx playwright install chromium`, then retry with the production preview running. |
-| GitHub repository shows 404 / push denied | Sign into the invited account and accept the invitation; ask the owner to confirm repository permissions. |
-| Pushing does not update the live site | Check the repository/branch connection, Vercel permissions, deployment status, and logs. A feature branch normally creates a preview rather than changing production. |
-| Visitors still see an old media file | Give replacement media a new filename, update its references/version, rebuild, and deploy. A local hard refresh alone does not update visitors' caches. |
+| Agent only gives advice instead of changing the project | “You have this project folder open. Please implement the change, run the checks, and give me a local URL to review.” Confirm you opened the coding extension and the correct folder. |
+| Agent asks you to paste the whole project | Confirm it is working locally in the coding tool, with permission to read the open project. An ordinary chat may not have that access. |
+| Paid plan is not recognized | Sign into the extension with the same account you subscribed with. Use the official setup guide for that tool. |
+| Usage limit reached | Wait for the reset or review the provider's options. Ask the agent for a handoff before starting another session. |
+| `node`, `npm`, or `git` cannot be found | Install the relevant tool, fully reopen VS Code, and ask the agent to check versions and its terminal environment. |
+| PowerShell blocks `npm.ps1` | Use `npm.cmd` or a Command Prompt terminal. |
+| Missing `package.json`, `vite`, or another module | Ask the agent to confirm the working folder and install the locked libraries with `npm ci`. |
+| Site fails after a change | Share the terminal/browser error and ask the agent to diagnose it before making more changes. |
+| Local production preview shows old content | Ask the agent to rebuild, then refresh the preview. |
+| Image, video, or newsletter is missing | Share the screenshot and browser error. Ask the agent to check media references, letter case, caching, or Kit network access as appropriate. |
+| GitHub shows 404 or push denied | Sign into the invited account, accept the invitation, and ask the owner to confirm permissions. |
+| Push succeeds but the live site does not update | Ask the agent to inspect the connected repository/branch and Vercel deployment logs using available authorized access; otherwise open those settings with the owner. |
+| The agent's changes look wrong | Describe the specific problem or supply a screenshot. Ask it to revise or undo only this task's changes. |
 
-If you need help, share the command you ran and its error text, your operating system, and the Node version. Include which page or viewport fails. Leave passwords, tokens, and private account information out of screenshots and messages.
+Keep passwords and tokens out of prompts, screenshots, and repository files. Complete sign-ins in the provider's official interface. For normal updates, your job is to describe the result, inspect it, and decide when it is ready to go live.
