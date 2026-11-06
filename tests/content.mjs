@@ -27,14 +27,24 @@ for (const name of sectionNames) {
   toggled.homePage.sections[name].status = name === 'booking' ? 'visible' : 'hidden'
   validateContent(toggled)
 }
-if (visibleSectionNames(sections).join(',') !== 'hero,featuredRelease,shows,merch,newsletter') {
+if (visibleSectionNames(sections).join(',') !== 'hero,familyPack,featuredRelease,shows,merch,newsletter') {
   throw new Error('Visible section order must follow the stable home-page model')
 }
-if (sectionHref('featuredRelease') !== '#featured-release' || sectionHref('newsletter') !== '#mailing-list') {
+if (sectionHref('familyPack') !== '#family-pack' || sectionHref('featuredRelease') !== '#featured-release' || sectionHref('newsletter') !== '#mailing-list') {
   throw new Error('Semantic section links must resolve to rendered section IDs')
 }
 if (sections.booking.status !== 'hidden') throw new Error('Booking should remain hidden by content status')
 if (sections.booking.contact.name !== 'Gabrielle Labolito') throw new Error('Hidden Booking details must remain available')
+
+if (sections.familyPack.purchaseLink.label !== 'join the fam'
+  || sections.familyPack.purchaseLink.url !== 'https://untitled.stream/buy/project/2s9fuRk5Os6Ga2G1YKtLE'
+  || sections.familyPack.purchaseExplanation !== 'director to consumer untitled link') {
+  throw new Error('Family Pack must retain the requested Untitled link and explanation')
+}
+if (sections.familyPack.presaveLink.label !== 'Pre-save your Legacy'
+  || sections.familyPack.presaveLink.url !== 'https://distrokid.com/hyperfollow/ogblacman/family-pack?ref=release') {
+  throw new Error('Family Pack must retain the requested pre-save link')
+}
 
 if (sections.featuredRelease.release.releaseDate !== '2026-08-26') throw new Error('Featured release must use one canonical release date')
 if (sections.featuredRelease.release.release_date !== undefined) throw new Error('Duplicate formatted release date must not remain')
@@ -88,6 +98,11 @@ expanded.homePage.sections.merch.items.push({
 })
 validateContent(expanded)
 const hydrated = hydrateContent(expanded)
+const familyPackImage = new URL(hydrated.homePage.sections.familyPack.coverArt.src, 'https://example.test')
+if (familyPackImage.pathname !== '/assets/family_pack_cover_art.jpg'
+  || !fs.existsSync(new URL(`../public${familyPackImage.pathname}`, import.meta.url))) {
+  throw new Error('Family Pack cover artwork must hydrate to an existing public asset')
+}
 if (hydrated.siteSettings.integrations.kit.embedUrl !== 'https://og-blacman.kit.com/bb5435c1d3/index.js') {
   throw new Error('The public Kit identifier must hydrate through the trusted application host')
 }
@@ -149,6 +164,18 @@ for (const invalidUrl of ['http://example.com', 'not-a-url']) {
     rejected = error.message.includes('siteSettings.socialLinks[0].url')
   }
   if (!rejected) throw new Error(`Invalid social URL was accepted: ${invalidUrl}`)
+}
+
+for (const field of ['purchaseLink', 'presaveLink']) {
+  const invalid = structuredClone(content)
+  invalid.homePage.sections.familyPack[field].url = 'http://example.com'
+  let rejected = false
+  try {
+    validateContent(invalid)
+  } catch (error) {
+    rejected = error.message.includes(`homePage.sections.familyPack.${field}.url`)
+  }
+  if (!rejected) throw new Error(`Insecure Family Pack ${field} URL was accepted`)
 }
 
 console.log('Sanity-ready singleton content, semantic fields, and section visibility passed.')

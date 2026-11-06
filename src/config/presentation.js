@@ -4,6 +4,7 @@ export const assetVersions = Object.freeze({
   hero: 'hero-v3',
   mobileBackgrounds: 'montage-v1',
   reference: 'reference-v1',
+  familyPack: 'family-pack-v1',
   telephone: 'telephone-v1',
   treePhone: 'tree-phone-v2',
 })
@@ -55,6 +56,9 @@ export const presentation = Object.freeze({
     ),
   },
   images: {
+    familyPackCover: {
+      src: versioned('/assets/family_pack_cover_art.jpg', assetVersions.familyPack),
+    },
     telephoneCover: responsiveImage(
       telephoneAsset('/assets/telephone-cover.png'),
       '(max-width: 767px) 81vw, 512px',

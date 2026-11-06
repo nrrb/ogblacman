@@ -49,6 +49,21 @@ homePage:
       backgroundVideo:
         primary: heroDesktop
         mobileOverride: heroMobile
+    familyPack:
+      status: visible
+      heading: { title: Family Pack }
+      coverArt:
+        asset: familyPackCover
+        alt: OG Blacman Family Pack cover artwork
+      purchaseLink:
+        type: external
+        label: join the fam
+        url: https://untitled.stream/buy/project/2s9fuRk5Os6Ga2G1YKtLE
+      purchaseExplanation: director to consumer untitled link
+      presaveLink:
+        type: external
+        label: Pre-save your Legacy
+        url: https://distrokid.com/hyperfollow/ogblacman/family-pack?ref=release
     featuredRelease:
       status: visible
       heading: { title: HOT RELEASE }

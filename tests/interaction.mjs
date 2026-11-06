@@ -7,6 +7,51 @@ const browser = await chromium.launch({
 })
 const page = await browser.newPage({ viewport: { width: 600, height: 844 } })
 const errors = []
+
+async function checkFamilyPack(stacked) {
+  const section = page.locator('#family-pack')
+  await section.scrollIntoViewIfNeeded()
+  const artwork = section.locator('img')
+  await artwork.evaluate(image => image.decode())
+  if (new URL(await artwork.getAttribute('src'), url).pathname !== '/assets/family_pack_cover_art.jpg') {
+    throw new Error('Family Pack cover artwork is missing')
+  }
+  const links = section.locator('a')
+  const expectedLinks = [
+    ['join the fam', 'https://untitled.stream/buy/project/2s9fuRk5Os6Ga2G1YKtLE'],
+    ['Pre-save your Legacy', 'https://distrokid.com/hyperfollow/ogblacman/family-pack?ref=release'],
+  ]
+  if (await links.count() !== 2) throw new Error('Family Pack should have two release links')
+  for (const [index, [label, href]] of expectedLinks.entries()) {
+    const link = links.nth(index)
+    if (await link.innerText() !== label || await link.getAttribute('href') !== href
+      || await link.getAttribute('target') !== '_blank'
+      || await link.getAttribute('rel') !== 'noopener noreferrer') {
+      throw new Error(`Family Pack ${label} link is incorrect`)
+    }
+  }
+  const explanation = section.locator('.release-spotlight__copy')
+  if (await explanation.innerText() !== 'director to consumer untitled link') throw new Error('Family Pack explanation is missing')
+  const artBox = await artwork.boundingBox()
+  const firstBox = await links.first().boundingBox()
+  const explanationBox = await explanation.boundingBox()
+  const secondBox = await links.nth(1).boundingBox()
+  if (!artBox || !firstBox || !explanationBox || !secondBox) throw new Error('Family Pack layout is not measurable')
+  if (stacked ? firstBox.y < artBox.y + artBox.height : firstBox.x < artBox.x + artBox.width) {
+    throw new Error('Family Pack artwork and links do not follow the responsive layout')
+  }
+  if (explanationBox.y < firstBox.y + firstBox.height || secondBox.y < explanationBox.y + explanationBox.height) {
+    throw new Error('Family Pack links and explanation must be stacked in order')
+  }
+  await links.first().focus()
+  await page.keyboard.press('Tab')
+  if (!(await links.nth(1).evaluate(link => link === document.activeElement))) throw new Error('Family Pack keyboard link order is incorrect')
+  if (await links.nth(1).evaluate(link => getComputedStyle(link).outlineStyle) === 'none') {
+    throw new Error('Family Pack links need a visible keyboard focus outline')
+  }
+  if (await section.evaluate(element => element.scrollWidth > element.clientWidth)) throw new Error('Family Pack causes horizontal overflow')
+}
+
 await page.route('**/subscriptions', async route => {
   await route.fulfill({
     status: 200,
@@ -68,7 +113,7 @@ const slider = page.locator('.mobile-slider')
 const continuous = await slider.evaluate(element => element.classList.contains('mobile-slider--continuous'))
 const dots = page.locator('.slider-dot')
 const slides = page.locator('.mobile-slide')
-const expectedSlideIds = ['hero', 'featured-release', 'shows', 'merch', 'mailing-list']
+const expectedSlideIds = ['hero', 'family-pack', 'featured-release', 'shows', 'merch', 'mailing-list']
 const heroBackground = page.locator('#hero .background-media')
 const releaseBackground = page.locator('#featured-release .background-media')
 const showsBackground = page.locator('#shows .background-media')
@@ -77,8 +122,8 @@ const newsletterBackground = page.locator('#mailing-list .background-media')
 
 if (await heroBackground.getAttribute('data-media-loaded') !== 'true') throw new Error('Mobile hero media should load immediately')
 if (await heroBackground.getAttribute('data-media-visible') !== 'true') throw new Error('Mobile hero media should begin visible')
-if (await releaseBackground.getAttribute('data-media-loaded') !== 'true') throw new Error('The approaching release background should preload')
-if (await releaseBackground.getAttribute('data-media-visible') !== 'false') throw new Error('The approaching release background should remain paused')
+if (await releaseBackground.getAttribute('data-media-loaded') !== 'false') throw new Error('The release background should wait until it approaches the viewport')
+if (await releaseBackground.getAttribute('data-media-visible') !== 'false') throw new Error('The off-screen release background should remain paused')
 for (const [name, background] of [
   ['shows', showsBackground],
   ['merch', merchBackground],
@@ -123,6 +168,9 @@ if (continuous) {
   await page.waitForTimeout(350)
   if (await slides.nth(0).getAttribute('aria-hidden') !== 'false') throw new Error('Discrete navigation wrapped before the first slide')
 }
+
+if (!continuous) await dots.nth(expectedSlideIds.indexOf('family-pack')).click()
+await checkFamilyPack(true)
 
 const releaseSlideIndex = expectedSlideIds.indexOf('featured-release')
 const secondSlide = page.locator('#featured-release')
@@ -298,6 +346,10 @@ if (new URL(page.url()).origin !== new URL(url).origin) throw new Error('Kit for
 
 await page.setViewportSize({ width: 900, height: 844 })
 await page.locator('.site--desktop').waitFor({ state: 'visible' })
+await checkFamilyPack(false)
+if (!(await page.locator('#family-pack').evaluate(section => Boolean(section.nextElementSibling?.querySelector('#featured-release'))))) {
+  throw new Error('Family Pack must sit immediately above the section containing Telephone')
+}
 if (await page.locator('.site--desktop .manager-card').count() !== 0) throw new Error('Hidden Booking section should not render on desktop')
 await page.locator('.site--desktop #mailing-list .newsletter-footer').waitFor({ state: 'visible' })
 const desktopRelease = page.locator('.site--desktop .top-pick-release')
