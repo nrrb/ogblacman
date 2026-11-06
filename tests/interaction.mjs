@@ -18,7 +18,7 @@ async function checkFamilyPack(stacked) {
   }
   const links = section.locator('a')
   const expectedLinks = [
-    ['join the fam', 'https://untitled.stream/buy/project/2s9fuRk5Os6Ga2G1YKtLE'],
+    ['Join The Family', 'https://untitled.stream/buy/project/2s9fuRk5Os6Ga2G1YKtLE'],
     ['Pre-save your Legacy', 'https://distrokid.com/hyperfollow/ogblacman/family-pack?ref=release'],
   ]
   if (await links.count() !== 2) throw new Error('Family Pack should have two release links')
@@ -30,18 +30,16 @@ async function checkFamilyPack(stacked) {
       throw new Error(`Family Pack ${label} link is incorrect`)
     }
   }
-  const explanation = section.locator('.release-spotlight__copy')
-  if (await explanation.innerText() !== 'director to consumer untitled link') throw new Error('Family Pack explanation is missing')
+  if (await section.locator('.release-spotlight__copy').count() !== 0) throw new Error('Family Pack explanation should be removed')
   const artBox = await artwork.boundingBox()
   const firstBox = await links.first().boundingBox()
-  const explanationBox = await explanation.boundingBox()
   const secondBox = await links.nth(1).boundingBox()
-  if (!artBox || !firstBox || !explanationBox || !secondBox) throw new Error('Family Pack layout is not measurable')
+  if (!artBox || !firstBox || !secondBox) throw new Error('Family Pack layout is not measurable')
   if (stacked ? firstBox.y < artBox.y + artBox.height : firstBox.x < artBox.x + artBox.width) {
     throw new Error('Family Pack artwork and links do not follow the responsive layout')
   }
-  if (explanationBox.y < firstBox.y + firstBox.height || secondBox.y < explanationBox.y + explanationBox.height) {
-    throw new Error('Family Pack links and explanation must be stacked in order')
+  if (secondBox.y < firstBox.y + firstBox.height) {
+    throw new Error('Family Pack links must be stacked in order')
   }
   await links.first().focus()
   await page.keyboard.press('Tab')

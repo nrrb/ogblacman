@@ -36,10 +36,10 @@ if (sectionHref('familyPack') !== '#family-pack' || sectionHref('featuredRelease
 if (sections.booking.status !== 'hidden') throw new Error('Booking should remain hidden by content status')
 if (sections.booking.contact.name !== 'Gabrielle Labolito') throw new Error('Hidden Booking details must remain available')
 
-if (sections.familyPack.purchaseLink.label !== 'join the fam'
+if (sections.familyPack.purchaseLink.label !== 'Join The Family'
   || sections.familyPack.purchaseLink.url !== 'https://untitled.stream/buy/project/2s9fuRk5Os6Ga2G1YKtLE'
-  || sections.familyPack.purchaseExplanation !== 'director to consumer untitled link') {
-  throw new Error('Family Pack must retain the requested Untitled link and explanation')
+  || sections.familyPack.purchaseExplanation !== undefined) {
+  throw new Error('Family Pack must use the requested Untitled link without an explanation')
 }
 if (sections.familyPack.presaveLink.label !== 'Pre-save your Legacy'
   || sections.familyPack.presaveLink.url !== 'https://distrokid.com/hyperfollow/ogblacman/family-pack?ref=release') {

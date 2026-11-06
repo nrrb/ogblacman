@@ -157,7 +157,6 @@ export function validateContent(content) {
   const familyPack = sections.familyPack
   imageReference(familyPack.coverArt, 'homePage.sections.familyPack.coverArt')
   sectionLink(familyPack.purchaseLink, 'homePage.sections.familyPack.purchaseLink')
-  string(familyPack.purchaseExplanation, 'homePage.sections.familyPack.purchaseExplanation')
   sectionLink(familyPack.presaveLink, 'homePage.sections.familyPack.presaveLink')
 
   const featuredRelease = sections.featuredRelease
