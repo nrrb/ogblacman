@@ -38,10 +38,10 @@ if (sections.booking.contact.name !== 'Gabrielle Labolito') throw new Error('Hid
 
 if (sections.familyPack.purchaseLink.label !== 'Join The Family'
   || sections.familyPack.purchaseLink.url !== 'https://untitled.stream/buy/project/2s9fuRk5Os6Ga2G1YKtLE'
-  || sections.familyPack.purchaseExplanation !== undefined) {
-  throw new Error('Family Pack must use the requested Untitled link without an explanation')
+  || sections.familyPack.purchaseExplanation !== 'Includes Homemade Collectable') {
+  throw new Error('Family Pack must use the requested Untitled link and collectable copy')
 }
-if (sections.familyPack.presaveLink.label !== 'Pre-save your Legacy'
+if (sections.familyPack.presaveLink.label !== 'Pre-Save Legacy'
   || sections.familyPack.presaveLink.url !== 'https://distrokid.com/hyperfollow/ogblacman/family-pack?ref=release') {
   throw new Error('Family Pack must retain the requested pre-save link')
 }

@@ -209,6 +209,10 @@ video {
   text-transform: none;
 }
 
+.family-pack-release .family-pack-release__links .release-spotlight__copy {
+  font-size: 16px;
+}
+
 .top-pick-release {
   display: grid;
   grid-template-columns: minmax(0, 550px);

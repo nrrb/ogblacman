@@ -59,9 +59,10 @@ homePage:
         type: external
         label: Join The Family
         url: https://untitled.stream/buy/project/2s9fuRk5Os6Ga2G1YKtLE
+      purchaseExplanation: Includes Homemade Collectable
       presaveLink:
         type: external
-        label: Pre-save your Legacy
+        label: Pre-Save Legacy
         url: https://distrokid.com/hyperfollow/ogblacman/family-pack?ref=release
     featuredRelease:
       status: visible
