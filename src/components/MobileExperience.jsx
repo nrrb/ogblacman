@@ -1,5 +1,6 @@
 import BackgroundVideo from './BackgroundVideo.jsx'
 import ClientList from './ClientList.jsx'
+import FamilyPackRelease from './FamilyPackRelease.jsx'
 import KitSignup from './KitSignup.jsx'
 import LogoCarousel from './LogoCarousel.jsx'
 import ManagerCard from './ManagerCard.jsx'
@@ -69,6 +70,18 @@ export default function MobileExperience({ content }) {
           <SocialLinks links={siteSettings.socialLinks} />
           {extrasFor(name)}
         </div>
+      )
+    }
+
+    if (name === 'familyPack') {
+      const familyPack = sections.familyPack
+      return (
+        <section id={HOME_SECTION_IDS.familyPack} key={name} className="mobile-slide" aria-label={familyPack.heading.title} {...attributes}>
+          <div className="mobile-slide__content mobile-slide__content--middle">
+            <FamilyPackRelease section={familyPack} />
+          </div>
+          {extrasFor(name)}
+        </section>
       )
     }
 

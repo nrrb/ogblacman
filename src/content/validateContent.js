@@ -154,6 +154,12 @@ export function validateContent(content) {
   string(heroVideo.primary, 'homePage.sections.hero.backgroundVideo.primary')
   optionalString(heroVideo.mobileOverride, 'homePage.sections.hero.backgroundVideo.mobileOverride')
 
+  const familyPack = sections.familyPack
+  imageReference(familyPack.coverArt, 'homePage.sections.familyPack.coverArt')
+  sectionLink(familyPack.purchaseLink, 'homePage.sections.familyPack.purchaseLink')
+  optionalString(familyPack.purchaseExplanation, 'homePage.sections.familyPack.purchaseExplanation')
+  sectionLink(familyPack.presaveLink, 'homePage.sections.familyPack.presaveLink')
+
   const featuredRelease = sections.featuredRelease
   if (featuredRelease.showHeading !== undefined) boolean(featuredRelease.showHeading, 'homePage.sections.featuredRelease.showHeading')
   const release = object(featuredRelease.release, 'homePage.sections.featuredRelease.release')

@@ -1,5 +1,6 @@
 export const HOME_SECTION_ORDER = Object.freeze([
   'hero',
+  'familyPack',
   'featuredRelease',
   'shows',
   'booking',
@@ -9,6 +10,7 @@ export const HOME_SECTION_ORDER = Object.freeze([
 
 export const HOME_SECTION_IDS = Object.freeze({
   hero: 'hero',
+  familyPack: 'family-pack',
   featuredRelease: 'featured-release',
   shows: 'shows',
   booking: 'booking',

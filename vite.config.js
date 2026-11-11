@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import { parse } from 'yaml'
 import { presentation } from './src/config/presentation.js'
 import { hydrateContent } from './src/content/hydrateContent.js'
+import { socialImageSource } from './tools/process-favicons.mjs'
 import { validateContent } from './src/content/validateContent.js'
 
 const rawSiteContent = validateContent(parse(fs.readFileSync(new URL('./src/content/site.yaml', import.meta.url), 'utf8')))
@@ -78,6 +79,7 @@ function siteContentPlugin() {
     '{{SOCIAL_IMAGE_TYPE}}': socialImage.type,
     '{{SOCIAL_IMAGE_WIDTH}}': socialImage.width,
     '{{SOCIAL_IMAGE_HEIGHT}}': socialImage.height,
+    '{{FAVICON_VERSION}}': socialImageSource().hash.slice(0, 10),
     '{{SOCIAL_IMAGE_ALT}}': siteSettings.seo.socialImage.alt,
   }
   const markupReplacements = {

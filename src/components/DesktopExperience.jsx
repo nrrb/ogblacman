@@ -1,5 +1,6 @@
 import BackgroundVideo from './BackgroundVideo.jsx'
 import ClientList from './ClientList.jsx'
+import FamilyPackRelease from './FamilyPackRelease.jsx'
 import KitSignup from './KitSignup.jsx'
 import LogoCarousel from './LogoCarousel.jsx'
 import ManagerCard from './ManagerCard.jsx'
@@ -16,7 +17,7 @@ import { HOME_SECTION_IDS, isSectionVisible } from '../content/sectionVisibility
 export default function DesktopExperience({ content }) {
   const { siteSettings, presentation } = content
   const sections = content.homePage.sections
-  const { hero, featuredRelease, shows, booking, merch, newsletter } = sections
+  const { hero, familyPack, featuredRelease, shows, booking, merch, newsletter } = sections
   const hasPrimaryContent = [featuredRelease, shows, booking].some(isSectionVisible)
 
   return (
@@ -44,6 +45,12 @@ export default function DesktopExperience({ content }) {
           </BackgroundVideo>
         ) : (
           <SocialLinks links={siteSettings.socialLinks} className="social-links--fallback" />
+        )}
+
+        {isSectionVisible(familyPack) && (
+          <section id={HOME_SECTION_IDS.familyPack} className="section section--content" aria-label={familyPack.heading.title}>
+            <FamilyPackRelease section={familyPack} />
+          </section>
         )}
 
         {hasPrimaryContent && (

@@ -46,6 +46,8 @@ export function hydrateContent(rawContent) {
       : null,
   }
 
+  sections.familyPack.coverArt = resolveImage(sections.familyPack.coverArt)
+
   const release = sections.featuredRelease.release
   release.coverArt = resolveImage(release.coverArt)
   release.video = resolveVideo(release.video.asset)

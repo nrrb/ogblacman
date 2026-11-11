@@ -3,6 +3,7 @@ import { parse } from 'yaml'
 import { hydrateContent } from '../src/content/hydrateContent.js'
 import { HOME_SECTION_ORDER, sectionHref, visibleSectionNames } from '../src/content/sectionVisibility.js'
 import { validateContent } from '../src/content/validateContent.js'
+import { socialImageSource } from '../tools/process-favicons.mjs'
 
 const source = fs.readFileSync(new URL('../src/content/site.yaml', import.meta.url), 'utf8')
 const content = validateContent(parse(source))
@@ -14,7 +15,7 @@ if (content.theme !== undefined || content.mobile !== undefined || content.share
   throw new Error('Presentation settings must not remain in editorial content')
 }
 if (content.siteSettings.seo.title !== 'OG BLACMAN') throw new Error('SEO title must be editable in site settings')
-if (content.siteSettings.seo.socialImage.asset !== 'telephoneSocial') throw new Error('SEO social image must use a semantic asset reference')
+if (typeof content.siteSettings.seo.socialImage.asset !== 'string' || !socialImageSource().file) throw new Error('SEO social image must use a semantic asset reference')
 if (content.siteSettings.socialLinks.some((link) => !link.url.startsWith('https://'))) throw new Error('Social URLs must use HTTPS')
 if (content.siteSettings.socialLinks.length !== 5) throw new Error('All five social profiles must be configured')
 if (content.siteSettings.footer.status !== 'visible') throw new Error('Footer visibility must be independently configurable')
@@ -27,14 +28,24 @@ for (const name of sectionNames) {
   toggled.homePage.sections[name].status = name === 'booking' ? 'visible' : 'hidden'
   validateContent(toggled)
 }
-if (visibleSectionNames(sections).join(',') !== 'hero,featuredRelease,shows,merch,newsletter') {
+if (visibleSectionNames(sections).join(',') !== 'hero,familyPack,featuredRelease,shows,merch,newsletter') {
   throw new Error('Visible section order must follow the stable home-page model')
 }
-if (sectionHref('featuredRelease') !== '#featured-release' || sectionHref('newsletter') !== '#mailing-list') {
+if (sectionHref('familyPack') !== '#family-pack' || sectionHref('featuredRelease') !== '#featured-release' || sectionHref('newsletter') !== '#mailing-list') {
   throw new Error('Semantic section links must resolve to rendered section IDs')
 }
 if (sections.booking.status !== 'hidden') throw new Error('Booking should remain hidden by content status')
 if (sections.booking.contact.name !== 'Gabrielle Labolito') throw new Error('Hidden Booking details must remain available')
+
+if (sections.familyPack.purchaseLink.label !== 'Join The Family'
+  || sections.familyPack.purchaseLink.url !== 'https://untitled.stream/buy/project/2s9fuRk5Os6Ga2G1YKtLE'
+  || ![null, undefined, 'Includes Homemade Collectable'].includes(sections.familyPack.purchaseExplanation)) {
+  throw new Error('Family Pack must use the requested Untitled link and an optional (blank allowed) purchase explanation')
+}
+if (sections.familyPack.presaveLink.label !== 'Stream Now'
+  || sections.familyPack.presaveLink.url !== 'https://distrokid.com/hyperfollow/ogblacman/family-pack?ref=release') {
+  throw new Error('Family Pack must retain the requested pre-save link')
+}
 
 if (sections.featuredRelease.release.releaseDate !== '2026-08-26') throw new Error('Featured release must use one canonical release date')
 if (sections.featuredRelease.release.release_date !== undefined) throw new Error('Duplicate formatted release date must not remain')
@@ -88,6 +99,11 @@ expanded.homePage.sections.merch.items.push({
 })
 validateContent(expanded)
 const hydrated = hydrateContent(expanded)
+const familyPackImage = new URL(hydrated.homePage.sections.familyPack.coverArt.src, 'https://example.test')
+if (familyPackImage.pathname !== '/assets/family_pack_cover_art.jpg'
+  || !fs.existsSync(new URL(`../public${familyPackImage.pathname}`, import.meta.url))) {
+  throw new Error('Family Pack cover artwork must hydrate to an existing public asset')
+}
 if (hydrated.siteSettings.integrations.kit.embedUrl !== 'https://og-blacman.kit.com/bb5435c1d3/index.js') {
   throw new Error('The public Kit identifier must hydrate through the trusted application host')
 }
@@ -151,4 +167,21 @@ for (const invalidUrl of ['http://example.com', 'not-a-url']) {
   if (!rejected) throw new Error(`Invalid social URL was accepted: ${invalidUrl}`)
 }
 
+for (const field of ['purchaseLink', 'presaveLink']) {
+  const invalid = structuredClone(content)
+  invalid.homePage.sections.familyPack[field].url = 'http://example.com'
+  let rejected = false
+  try {
+    validateContent(invalid)
+  } catch (error) {
+    rejected = error.message.includes(`homePage.sections.familyPack.${field}.url`)
+  }
+  if (!rejected) throw new Error(`Insecure Family Pack ${field} URL was accepted`)
+}
+
 console.log('Sanity-ready singleton content, semantic fields, and section visibility passed.')
+
+const faviconStamp = JSON.parse(fs.readFileSync(new URL('../tools/favicons.lock.json', import.meta.url), 'utf8'))
+if (faviconStamp.sourceSha256 !== socialImageSource().hash) {
+  throw new Error('Favicons are stale: run `npm run process:favicons` so they match seo.socialImage')
+}
