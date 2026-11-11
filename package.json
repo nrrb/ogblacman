@@ -10,6 +10,7 @@
     "montage": "node tools/montage.mjs",
     "process:hero": "node tools/process-hero.mjs",
     "test:bundle": "node --test tests/bundle.test.mjs",
+    "process:favicons": "node tools/process-favicons.mjs",
     "process:fonts": "node tools/process-fonts.mjs",
     "test:cache": "node --test tests/cache.test.mjs",
     "test:fonts": "node --test tests/fonts.test.mjs",

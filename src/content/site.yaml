@@ -6,8 +6,8 @@ siteSettings:
     title: OG BLACMAN
     description: OG Blacman — music, shows, merch, and more.
     socialImage:
-      asset: telephoneSocial
-      alt: OG Blacman Telephone cover artwork
+      asset: familyPackCover
+      alt: OG Blacman Family Pack cover artwork
     noIndex: false
   socialLinks:
     - _key: instagram
@@ -59,10 +59,10 @@ homePage:
         type: external
         label: Join The Family
         url: https://untitled.stream/buy/project/2s9fuRk5Os6Ga2G1YKtLE
-      purchaseExplanation: Includes Homemade Collectable
+      purchaseExplanation: 
       presaveLink:
         type: external
-        label: Pre-Save Legacy
+        label: Stream Now
         url: https://distrokid.com/hyperfollow/ogblacman/family-pack?ref=release
     featuredRelease:
       status: visible

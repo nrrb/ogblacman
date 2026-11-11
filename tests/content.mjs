@@ -3,6 +3,7 @@ import { parse } from 'yaml'
 import { hydrateContent } from '../src/content/hydrateContent.js'
 import { HOME_SECTION_ORDER, sectionHref, visibleSectionNames } from '../src/content/sectionVisibility.js'
 import { validateContent } from '../src/content/validateContent.js'
+import { socialImageSource } from '../tools/process-favicons.mjs'
 
 const source = fs.readFileSync(new URL('../src/content/site.yaml', import.meta.url), 'utf8')
 const content = validateContent(parse(source))
@@ -14,7 +15,7 @@ if (content.theme !== undefined || content.mobile !== undefined || content.share
   throw new Error('Presentation settings must not remain in editorial content')
 }
 if (content.siteSettings.seo.title !== 'OG BLACMAN') throw new Error('SEO title must be editable in site settings')
-if (content.siteSettings.seo.socialImage.asset !== 'telephoneSocial') throw new Error('SEO social image must use a semantic asset reference')
+if (typeof content.siteSettings.seo.socialImage.asset !== 'string' || !socialImageSource().file) throw new Error('SEO social image must use a semantic asset reference')
 if (content.siteSettings.socialLinks.some((link) => !link.url.startsWith('https://'))) throw new Error('Social URLs must use HTTPS')
 if (content.siteSettings.socialLinks.length !== 5) throw new Error('All five social profiles must be configured')
 if (content.siteSettings.footer.status !== 'visible') throw new Error('Footer visibility must be independently configurable')
@@ -38,10 +39,10 @@ if (sections.booking.contact.name !== 'Gabrielle Labolito') throw new Error('Hid
 
 if (sections.familyPack.purchaseLink.label !== 'Join The Family'
   || sections.familyPack.purchaseLink.url !== 'https://untitled.stream/buy/project/2s9fuRk5Os6Ga2G1YKtLE'
-  || sections.familyPack.purchaseExplanation !== 'Includes Homemade Collectable') {
-  throw new Error('Family Pack must use the requested Untitled link and collectable copy')
+  || ![null, undefined, 'Includes Homemade Collectable'].includes(sections.familyPack.purchaseExplanation)) {
+  throw new Error('Family Pack must use the requested Untitled link and an optional (blank allowed) purchase explanation')
 }
-if (sections.familyPack.presaveLink.label !== 'Pre-Save Legacy'
+if (sections.familyPack.presaveLink.label !== 'Stream Now'
   || sections.familyPack.presaveLink.url !== 'https://distrokid.com/hyperfollow/ogblacman/family-pack?ref=release') {
   throw new Error('Family Pack must retain the requested pre-save link')
 }
@@ -179,3 +180,8 @@ for (const field of ['purchaseLink', 'presaveLink']) {
 }
 
 console.log('Sanity-ready singleton content, semantic fields, and section visibility passed.')
+
+const faviconStamp = JSON.parse(fs.readFileSync(new URL('../tools/favicons.lock.json', import.meta.url), 'utf8'))
+if (faviconStamp.sourceSha256 !== socialImageSource().hash) {
+  throw new Error('Favicons are stale: run `npm run process:favicons` so they match seo.socialImage')
+}
