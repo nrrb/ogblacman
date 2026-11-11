@@ -14,7 +14,9 @@ export default function FamilyPackRelease({ section }) {
       <div className="family-pack-release__links">
         <div>
           <AppLink link={section.purchaseLink} className="release-spotlight__cta" />
-          <p className="release-spotlight__copy">{section.purchaseExplanation}</p>
+          {section.purchaseExplanation && (
+            <p className="release-spotlight__copy">{section.purchaseExplanation}</p>
+          )}
         </div>
         <AppLink link={section.presaveLink} className="release-spotlight__cta" />
       </div>
